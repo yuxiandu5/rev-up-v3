@@ -1,17 +1,24 @@
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PlusIcon } from "lucide-react";
 import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
+import { SelectedMods } from "@/types/modTypes";
+import { applySpecChanges } from "@/utils/modCalculations";
 
 type ModSelectorProps = {
   carSpecs: CarSpecs;
   selectedCar: SelectedCar;
   setPhase: (phase: string) => void;
+  selectedMods: SelectedMods;
+  setSelectedMods: (mods: SelectedMods) => void;
 }
 
-export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelectorProps) {
+export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMods, setSelectedMods}: ModSelectorProps) {
+  // Calculate actual modified specs for display
+  const modifiedSpecs = applySpecChanges(carSpecs, selectedMods);
+
   return (
     <section 
       className="
@@ -27,10 +34,11 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
       {/* Vehicle Header */}
       <header 
         className="
-          flex flex-col items-center justify-center
+          flex items-center justify-center
           text-center
           py-2
           relative
+          border-b border-[var(--bg-dark3)]
         "
       >
         <Button 
@@ -39,7 +47,6 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
             transition-all duration-200 
             absolute top-8 left-0 lg:top-4 lg:left-4
             hover:translate-x-[-2px] hover:shadow-lg
-            focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[var(--bg-dark2)]
             w-6 h-6 lg:w-auto lg:h-auto p-0.5 lg:px-3 lg:py-1.5 min-w-0
           " 
           onClick={() => setPhase("car-selecting")} 
@@ -52,27 +59,38 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
             Back to Car Selection
           </span>
         </Button>
-        <h1 
-          className="
-            text-lg md:text-xl lg:text-2xl 
-            font-bold 
-            text-[var(--text1)]
-            leading-tight
-          "
-          id="vehicle-title"
-        >
-          {selectedCar.make} {selectedCar.model}
-        </h1>
-        <span
-          className="
-            text-xs md:text-sm 
-            text-[var(--text2)]
-            font-medium
-          "
-          aria-describedby="vehicle-title"
-        >
-          {selectedCar.yearRange}
-        </span>
+        <div>
+          <h1 
+            className="
+              text-lg md:text-xl lg:text-2xl 
+              font-bold 
+              text-[var(--text1)]
+              leading-tight
+            "
+            id="vehicle-title"
+          >
+            {selectedCar.make} {selectedCar.model}
+          </h1>
+          <span
+            className="
+              text-xs md:text-sm 
+              text-[var(--text2)]
+              font-medium
+            "
+            aria-describedby="vehicle-title"
+          >
+            {selectedCar.yearRange}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-center gap-2 absolute right-0">
+          <Button variant="secondary" size="sm" >
+            Save
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({})}}>
+            Discard
+          </Button>
+        </div>
       </header>
 
       {/* Main Content Area */}
@@ -131,7 +149,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           >
             <CarSpecDisplay 
               carSpecs={carSpecs}
-
+              modifiedSpecs={modifiedSpecs}
             />
           </div>
         </div>
@@ -151,7 +169,10 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           role="complementary"
           aria-label="Vehicle modification options"
         >
-          <ModsMenu />
+          <ModsMenu 
+            selectedMods={selectedMods}
+            setSelectedMods={setSelectedMods}
+          />
         </aside>
       </section>
     </section>

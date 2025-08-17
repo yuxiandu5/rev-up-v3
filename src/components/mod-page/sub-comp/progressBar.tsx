@@ -1,4 +1,4 @@
-import { ClipboardSignature } from "lucide-react";
+
 
 type ProgressBarProps = {
   label: string;

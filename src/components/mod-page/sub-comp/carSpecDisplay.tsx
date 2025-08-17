@@ -3,7 +3,7 @@ import ProgressBar from "./progressBar";
 
 type CarSpecDisplayProps = {
   carSpecs: CarSpecs;
-  modifiedSpecs?: Partial<CarSpecs>; // Optional modified specs for showing gains/losses
+  modifiedSpecs: CarSpecs;
 }
 
 export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDisplayProps) {
