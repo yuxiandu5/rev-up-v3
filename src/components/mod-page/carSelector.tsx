@@ -18,7 +18,7 @@ export default function CarSelector({selectedCar, setSelectedCar, setPhase, carS
   const carData: CarData = carDataList;
 
   return (
-    <section className="flex flex-col gap-4 items-center justify-center w-full max-h-full pb-10 md:gap-10">
+    <section className="flex flex-col gap-4 items-center justify-center w-full min-h-full pb-10 md:gap-10">
       <header className="flex flex-col items-center justify-center mt-10">
         <h1 className="text-2xl font-bold">Select your car</h1>
       </header>
