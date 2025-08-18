@@ -15,8 +15,8 @@ export default function ModCard({mod, isSelected = false, onSelect}: ModCardProp
       className={`
         w-full p-4 rounded-lg border text-left transition-all duration-200
         ${isSelected 
-          ? 'bg-blue-500/10 border-blue-500 shadow-lg ring-2 ring-blue-500/20' 
-          : 'bg-[var(--bg-dark2)] border-[var(--bg-dark3)] hover:bg-[var(--bg-dark3)] hover:border-blue-400'
+          ? 'bg-[var(--bg-dark3)] border-[var(--highlight)]' 
+          : 'bg-[var(--bg-dark2)] border-[var(--bg-dark3)] hover:bg-[var(--bg-dark3)] hover:border-[var(--highlight)]'
         }
         cursor-pointer
       `}
@@ -41,7 +41,7 @@ export default function ModCard({mod, isSelected = false, onSelect}: ModCardProp
         </p>
 
         {/* Performance Changes */}
-        <div className="grid grid-cols-2 gap-4 text-xs">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-4 text-xs">
           {mod.specChanges.hp !== 0 && (
             <div className="flex justify-between">
               <span className="text-[var(--text2)]">Horsepower:</span>

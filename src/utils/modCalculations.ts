@@ -103,5 +103,7 @@ export function getSelectedMod(selectedMods: SelectedMods, category: string): Mo
  * @returns Formatted price string
  */
 export function formatPrice(price: number): string {
-  return `$${price.toLocaleString()}`;
+  return (
+    `$${price.toLocaleString()}`
+  );
 }

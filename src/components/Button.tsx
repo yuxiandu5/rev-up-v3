@@ -35,9 +35,9 @@ export default function Button({
   };
   
   // Variant classes using your theme colors
-  const variantClasses = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-[var(--bg-dark3)] text-[var(--text1)] hover:bg-gray-600"
+  const variantClasses = {  
+    primary: "bg-[var(--bg-dark1)] text-[var(--highlight)] hover:bg-[var(--bg-dark3)]",
+    secondary: "bg-[var(--bg-dark3)] text-[var(--text1)] hover:bg-[var(--bg-dark3)]/80"
   };
   
   // Width classes

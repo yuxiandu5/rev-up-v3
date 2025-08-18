@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+import { AnimatedNumber } from "@/utils/animatedNumberProps";
 
 
 type ProgressBarProps = {
@@ -15,7 +17,7 @@ export default function ProgressBar({ label, value, maxValue, unit = "", gainedL
     ? Math.min(((maxValue - value) / maxValue) * 100, 100)
     : Math.min((value / maxValue) * 100, 100);
   
-  return (
+  return (  
     <div className="flex flex-col gap-2 w-full">
       {/* Header with label and value */}
       <div className="flex items-center justify-between">
@@ -35,17 +37,22 @@ export default function ProgressBar({ label, value, maxValue, unit = "", gainedL
                 : gainedLost.toFixed(1)}
             </span>
           )}
+          {/* <span className="text-sm font-bold text-[var(--text1)]">
+            {Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1)}{unit}
+          </span> */}
           <span className="text-sm font-bold text-[var(--text1)]">
-            {value}{unit}
+            <AnimatedNumber value={value} duration={0.5} />{unit}
           </span>
         </div>
       </div>
       
       {/* Progress bar */}
       <div className="w-full h-2 bg-[var(--bg-dark3)] rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-blue-500 rounded-full transition-all duration-300 ease-out"
-          style={{ width: `${percentage}%` }}
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="h-full bg-[var(--highlight)] rounded-full"
         />
       </div>
     </div>

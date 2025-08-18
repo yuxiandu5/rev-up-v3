@@ -12,7 +12,7 @@ export default function NavBar() {
   };
   return (
     <nav className="
-      flex justify-between items-center px-4 py-3 md:px-6 lg:px-8
+      flex justify-between items-center px-4 py-0 md:px-6 lg:px-8 lg:py-3
       bg-[var(--bg-dark1)] border-b border-[var(--bg-dark3)]
       fixed top-0 left-0 right-0 z-50 shadow-xl backdrop-blur-sm
     ">
@@ -33,7 +33,7 @@ export default function NavBar() {
           href="/" 
           className="
             text-[var(--text1)] font-medium transition-all duration-200
-            hover:text-blue-400 hover:scale-105 active:scale-95
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
             px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
           "
         >
@@ -43,7 +43,7 @@ export default function NavBar() {
           href="/profile" 
           className="
             text-[var(--text1)] font-medium transition-all duration-200
-            hover:text-blue-400 hover:scale-105 active:scale-95
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
             px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
           "
         >
@@ -53,7 +53,7 @@ export default function NavBar() {
           href="/mod" 
           className="
             text-[var(--text1)] font-medium transition-all duration-200
-            hover:text-blue-400 hover:scale-105 active:scale-95
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
             px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
           "
         >

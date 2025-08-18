@@ -1,11 +1,12 @@
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
-import { ArrowLeftIcon, PlusIcon } from "lucide-react";
+import { ArrowLeftIcon, Save, X } from "lucide-react";
 import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
 import { SelectedMods } from "@/types/modTypes";
 import { applySpecChanges } from "@/utils/modCalculations";
+import CarSpecDisplayMobile from "./sub-comp/carSpecDisplayMobile";
 
 type ModSelectorProps = {
   carSpecs: CarSpecs;
@@ -23,7 +24,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
     <section 
       className="
         flex flex-col gap-2 md:gap-3 lg:gap-4 
-        w-full h-full max-h-screen overflow-hidden
+        w-full h-full max-h-screen   
         p-2 md:p-4 lg:p-6
         bg-[var(--bg-dark2)]
       "
@@ -46,7 +47,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
             flex items-center gap-0 lg:gap-2 
             transition-all duration-200 
             absolute top-8 left-0 lg:top-4 lg:left-4
-            hover:translate-x-[-2px] hover:shadow-lg
+            hover:shadow-lg
             w-6 h-6 lg:w-auto lg:h-auto p-0.5 lg:px-3 lg:py-1.5 min-w-0
           " 
           onClick={() => setPhase("car-selecting")} 
@@ -73,6 +74,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           </h1>
           <span
             className="
+              opacity-0 lg:opacity-100 lg:block
               text-xs md:text-sm 
               text-[var(--text2)]
               font-medium
@@ -83,12 +85,14 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           </span>
         </div>
 
-        <div className="flex items-center justify-center gap-2 absolute right-0">
-          <Button variant="secondary" size="sm" >
-            Save
+        <div className="flex items-center justify-center gap-2 absolute right-0 bottom-2 lg:bottom-4">
+          <Button variant="secondary" size="sm" className="min-h-6">
+            <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
+            <span className="hidden lg:block">Save</span>
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({})}}>
-            Discard
+          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({})}} className="min-h-6">
+            <X className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
+            <span className="hidden lg:block">Discard</span>
           </Button>
         </div>
       </header>
@@ -102,22 +106,23 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           items-start lg:items-stretch
           justify-center
           w-full
-          overflow-hidden
+          overflow-y-auto
         "
         aria-labelledby="vehicle-title"
       >
         {/* Vehicle Display and Specs */}
         <div 
           className="
-            flex flex-col gap-2 md:gap-3
+            hidden md:flex
+            flex-col gap-2 md:gap-3
             w-full lg:w-2/3
             bg-[var(--bg-dark1)]
             rounded-lg
             p-2 md:p-3 lg:p-4
             border border-[var(--bg-dark3)]
             shadow-lg
-            flex-2 min-h-0
-            overflow-hidden
+            min-h-75 lg:flex-2
+            overflow-y-auto scrollbar-hide
           "
           role="region"
           aria-label="Vehicle display and specifications"
@@ -125,12 +130,12 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           {/* Car Display */}
           <div 
             className="
-              flex-1 min-h-0
+              flex-1 min-h-30
+              hidden lg:block
               bg-[var(--bg-dark2)]
               rounded-md
               p-2 md:p-3
               border border-[var(--bg-dark3)]
-              overflow-hidden
             "
           >
             <CarDisplay carSpecs={carSpecs} selectedCar={selectedCar} />
@@ -143,7 +148,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
               rounded-md
               p-2 md:p-3
               border border-[var(--bg-dark3)]
-              min-h-[40%]
+              min-h-30
               shrink-0
             "
           >
@@ -152,6 +157,13 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
               modifiedSpecs={modifiedSpecs}
             />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2 w-full md:hidden">
+          <CarSpecDisplayMobile 
+            carSpecs={carSpecs}
+            modifiedSpecs={modifiedSpecs}
+          />
         </div>
 
         {/* Modifications Menu */}
@@ -163,7 +175,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
             p-2 md:p-3 lg:p-4
             border border-[var(--bg-dark3)]
             shadow-lg
-            flex-1 min-h-0
+            min-h-0
             overflow-hidden
           "
           role="complementary"

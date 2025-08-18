@@ -13,7 +13,7 @@ export default function ModCategory({category, modData, onSelect, isSelected = f
       onClick={onSelect}
       className={`
         w-full p-4 rounded-lg border text-left transition-all duration-200
-      bg-[var(--bg-dark2)] border-[var(--bg-dark3)] hover:bg-[var(--bg-dark3)] hover:border-blue-400
+      bg-[var(--bg-dark2)] border-[var(--bg-dark3)] hover:bg-[var(--bg-dark3)] hover:border-[var(--highlight)]
         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[var(--bg-dark1)]
         cursor-pointer
       `}

@@ -5,6 +5,7 @@ import { carData } from "@/data/carData";
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
 import { SelectedMods } from "@/types/modTypes";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function Mod() {
   const [hydrated, setHydrated] = useState(false);
@@ -60,7 +61,12 @@ export default function Mod() {
   if (!hydrated) return <div>Loading...</div>;
 
   return (
-    <main className="flex flex-col gap-10 items-center justify-center w-[80vw] h-full">
+    <motion.div 
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="flex flex-col gap-10 items-center justify-center w-[95vw] h-full lg:w-[80vw]"
+    >
       {
         phase === "car-selecting" ? 
           <CarSelector 
@@ -70,14 +76,21 @@ export default function Mod() {
             carSpecs={carSpecs}
           /> 
           : 
-          <ModSelector 
-            carSpecs={carSpecs} 
-            selectedCar={selectedCar} 
-            setPhase={setPhase}
-            selectedMods={selectedMods}
-            setSelectedMods={setSelectedMods}
-          />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="w-full h-full"
+          >
+            <ModSelector 
+              carSpecs={carSpecs} 
+              selectedCar={selectedCar} 
+              setPhase={setPhase}
+              selectedMods={selectedMods}
+              setSelectedMods={setSelectedMods}
+              />
+          </motion.div>
       }
-    </main>
+    </motion.div>
   );
 }
