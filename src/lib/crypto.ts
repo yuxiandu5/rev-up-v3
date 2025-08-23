@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'crypto';
-import { hash, verify } from 'argon2';
+import { hash, verify } from '@node-rs/argon2';
 
 // Argon2id password hashing
 export async function hashPassword(password: string): Promise<string> {
