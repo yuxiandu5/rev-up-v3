@@ -114,7 +114,7 @@ enum TokenType {
 
 * Input: `{ email, password }`
 * Flow: create user → send email verify link (OneTimeToken: EMAIL\_VERIFY)
-* Output: 204
+* Output: 201
 
 ### POST `/api/auth/login`
 
