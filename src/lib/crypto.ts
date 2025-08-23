@@ -1,19 +1,15 @@
 import { createHash, randomBytes } from 'crypto';
-import * as argon2 from 'argon2';
+import { hash, verify } from 'argon2';
 
 // Argon2id password hashing
 export async function hashPassword(password: string): Promise<string> {
-  return argon2.hash(password, {
-    type: argon2.argon2id,
-    memoryCost: parseInt(process.env.ARGON2_MEMORY || '65536'),
-    timeCost: parseInt(process.env.ARGON2_ITERATIONS || '3'),
-    parallelism: parseInt(process.env.ARGON2_PARALLELISM || '1'),
-  });
+  // @node-rs/argon2 defaults to argon2id with secure parameters
+  return hash(password);
 }
 
-export async function verifyPassword(hash: string, password: string): Promise<boolean> {
+export async function verifyPassword(hashed: string, password: string): Promise<boolean> {
   try {
-    return await argon2.verify(hash, password);
+    return await verify(hashed, password);
   } catch {
     return false;
   }
@@ -21,11 +17,11 @@ export async function verifyPassword(hash: string, password: string): Promise<bo
 
 // Token generation and hashing
 export function generateToken(): string {
-  return randomBytes(32).toString('base64url');
+  return randomBytes(32).toString("base64url");
 }
 
 export function hashToken(token: string): string {
-  return createHash('sha256').update(token).digest('hex');
+  return createHash("sha256").update(token).digest("hex");
 }
 
 // Helper function to add days to a date
