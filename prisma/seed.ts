@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import * as argon2 from 'argon2';
+import { hash } from '@node-rs/argon2';
 
 const prisma = new PrismaClient();
 
@@ -12,12 +12,7 @@ async function main() {
     update: {},
     create: {
       email: 'john.doe@example.com',
-      passwordHash: await argon2.hash('password123', {
-        type: argon2.argon2id,
-        memoryCost: 65536, // 64 MB
-        timeCost: 3,
-        parallelism: 1,
-      }),
+      passwordHash: await hash('password123'),
       emailVerifiedAt: new Date(),
       isActive: true,
       lastLoginAt: new Date(),
@@ -29,12 +24,7 @@ async function main() {
     update: {},
     create: {
       email: 'jane.smith@example.com',
-      passwordHash: await argon2.hash('securepass456', {
-        type: argon2.argon2id,
-        memoryCost: 65536, // 64 MB
-        timeCost: 3,
-        parallelism: 1,
-      }),
+      passwordHash: await hash('securepass456'),
       emailVerifiedAt: null, // Not verified yet
       isActive: true,
       lastLoginAt: null, // Never logged in
