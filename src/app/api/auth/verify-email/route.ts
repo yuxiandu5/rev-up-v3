@@ -1,21 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ZodError } from 'zod';
-import { verifyEmailSchema } from '@/lib/validations';
-import { hashToken } from '@/lib/crypto';
-import { prisma } from '@/lib/prisma';
-import { TokenType } from '@prisma/client';
+import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
+import { verifyEmailSchema } from "@/lib/validations";
+import { hashToken } from "@/lib/crypto";
+import { prisma } from "@/lib/prisma";
+import { TokenType } from "@prisma/client";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    // Parse and validate input from query parameters
-    const { searchParams } = new URL(request.url);
-    const token = searchParams.get('token');
-    
-    // Validate token using Zod
-    const { token: validatedToken } = verifyEmailSchema.parse({ token });
+    // Parse and validate input from request body
+    const body = await request.json();
+    const { token } = verifyEmailSchema.parse(body);
 
     // Hash the plaintext token
-    const tokenHash = hashToken(validatedToken);
+    const tokenHash = hashToken(token);
 
     // Find the token in database
     const oneTimeToken = await prisma.oneTimeToken.findUnique({
@@ -26,7 +23,7 @@ export async function GET(request: NextRequest) {
     // Validate token exists and is for email verification
     if (!oneTimeToken || oneTimeToken.type !== TokenType.EMAIL_VERIFY) {
       return NextResponse.json(
-        { error: 'Invalid or expired verification token' },
+        { error: "Invalid or expired verification token" },
         { status: 400 }
       );
     }
@@ -34,7 +31,7 @@ export async function GET(request: NextRequest) {
     // Check if token is already consumed
     if (oneTimeToken.consumedAt) {
       return NextResponse.json(
-        { error: 'Verification token has already been used' },
+        { error: "Verification token has already been used" },
         { status: 400 }
       );
     }
@@ -42,7 +39,7 @@ export async function GET(request: NextRequest) {
     // Check if token is expired
     if (oneTimeToken.expiresAt < new Date()) {
       return NextResponse.json(
-        { error: 'Verification token has expired' },
+        { error: "Verification token has expired" },
         { status: 400 }
       );
     }
@@ -50,7 +47,7 @@ export async function GET(request: NextRequest) {
     // Check if email is already verified
     if (oneTimeToken.user.emailVerifiedAt) {
       return NextResponse.json(
-        { error: 'Email is already verified' },
+        { error: "Email is already verified" },
         { status: 400 }
       );
     }
@@ -69,22 +66,22 @@ export async function GET(request: NextRequest) {
       })
     ]);
 
-    // Return success (200 OK)
-    return NextResponse.json({ message: 'Email verified successfully' }, { status: 200 });
+    // Return success (204 No Content)
+    return new NextResponse(null, { status: 204 });
 
   } catch (error) {
-    console.error('Email verification error:', error);
+    console.error("Email verification error:", error);
 
     // Handle validation errors
     if (error instanceof ZodError) {
       return NextResponse.json(
-        { error: 'Invalid token format' },
+        { error: "Invalid token format" },
         { status: 400 }
       );
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
