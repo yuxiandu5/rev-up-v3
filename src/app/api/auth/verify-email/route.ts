@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { verifyEmailSchema } from "@/lib/validations";
 import { hashToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 import { TokenType } from "@prisma/client";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     // Parse and validate input from request body
-    const body = await request.json();
-    const { token } = verifyEmailSchema.parse(body);
+    const token = request.nextUrl.searchParams.get("token");
+    if (!token) {
+      return NextResponse.json(
+        { error: "Token is required" },
+        { status: 400 }
+      );
+    }
 
     // Hash the plaintext token
     const tokenHash = hashToken(token);
