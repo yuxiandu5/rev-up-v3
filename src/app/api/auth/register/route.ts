@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { ZodError } from 'zod';
-import { registerSchema } from '@/lib/validations';
-import { hashPassword, generateToken, hashToken, addDays } from '@/lib/crypto';
-import { sendEmail, generateVerificationEmail } from '@/lib/email';
-import { prisma } from '@/lib/prisma';
-import { TokenType } from '@prisma/client';
+import { NextRequest, NextResponse } from "next/server";
+import { ZodError } from "zod";
+import { registerSchema } from "@/lib/validations";
+import { hashPassword, generateToken, hashToken, addDays } from "@/lib/crypto";
+import { sendEmail, generateVerificationEmail } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
+import { TokenType } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse and validate input
+    // Parse and validate input 
     const body = await request.json();
     const { email, password } = registerSchema.parse(body);
     
@@ -23,14 +23,14 @@ export async function POST(request: NextRequest) {
     const tokenHash = hashToken(verificationToken);
 
     // Create user and verification token in a transaction to prevent race conditions
-    const user = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       // Check if user already exists (within transaction)
       const existingUser = await tx.user.findUnique({
         where: { email: normalizedEmail }
       });
 
       if (existingUser) {
-        throw new Error('User with this email already exists');
+        throw new Error("User with this email already exists");
       }
 
       // Create user
@@ -49,10 +49,10 @@ export async function POST(request: NextRequest) {
           type: TokenType.EMAIL_VERIFY,
           tokenHash,
           expiresAt: addDays(new Date(), 1), // 24 hours
-          userAgent: request.headers.get('user-agent'),
-          ipAddress: request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
-                    'unknown',
+          userAgent: request.headers.get("user-agent"),
+          ipAddress: request.headers.get("x-forwarded-for") || 
+                    request.headers.get("x-real-ip") || 
+                    "unknown",
         }
       });
 
@@ -64,31 +64,31 @@ export async function POST(request: NextRequest) {
     await sendEmail(emailOptions);
 
     // Return success (201 Created)
-    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
+    return NextResponse.json({ message: "User created successfully" }, { status: 201 });
 
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error("Registration error:", error);
 
     // Handle validation errors
     if (error instanceof ZodError) {
       return NextResponse.json(
-        { error: 'Invalid input data' },
+        { error: "Invalid input data" },
         { status: 400 }
       );
     }
 
     // Handle database errors and duplicate email
     if (error instanceof Error && 
-        (error.message.includes('Unique constraint') || 
-          error.message.includes('User with this email already exists'))) {
+        (error.message.includes("Unique constraint") || 
+          error.message.includes("User with this email already exists"))) {
       return NextResponse.json(
-        { error: 'User with this email already exists' },
+        { error: "User with this email already exists" },
         { status: 409 }
       );
     }
 
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

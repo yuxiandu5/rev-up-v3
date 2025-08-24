@@ -13,7 +13,7 @@ export default function YearSelector({carData, selectedCar, setSelectedCar, disa
     setSelectedCar({...selectedCar, 
       yearRange: e.target.value,
     });
-  }
+  };
 
   return (
     <div className="flex flex-col w-full max-w-xs">

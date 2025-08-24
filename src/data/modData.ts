@@ -1,4 +1,4 @@
-import { ModificationCategory } from '../types/modTypes';
+import { ModificationCategory } from "../types/modTypes";
 
 export const modData: ModificationCategory = {
   "Engine & Power": [
@@ -239,4 +239,4 @@ export const modData: ModificationCategory = {
       description: "Complete carbon fiber body kit including front lip, side skirts, and rear diffuser for improved aerodynamics.",
     },
   ],
-}
+};

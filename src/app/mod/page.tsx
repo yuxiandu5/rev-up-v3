@@ -48,7 +48,7 @@ export default function Mod() {
   }, []);
 
   useEffect(() => {
-    setSelectedMods({})
+    setSelectedMods({});
   }, [selectedCar]);
   
   // set stored car and phase in session storage

@@ -37,7 +37,7 @@ export function AnimatedNumber({
       },
     });
     return () => controls.stop();
-  }, [value, duration, decimals]);
+  }, [value, duration, decimals, motionValue]);
 
   return <span>{type === "price" ? formatPrice(Number(displayValue)) : displayValue}</span>;
 }

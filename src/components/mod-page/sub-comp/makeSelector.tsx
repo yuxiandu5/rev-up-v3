@@ -15,7 +15,7 @@ export default function MakeSelector({carData, selectedCar, setSelectedCar, disa
       model: "", 
       yearRange: "", 
     });
-  }
+  };
 
   return (
     <div className="flex flex-col w-full max-w-xs">

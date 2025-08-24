@@ -14,7 +14,7 @@ export default function ModelSelector({carData, selectedCar, setSelectedCar, dis
       model: e.target.value, 
       yearRange: "",
     });
-  }
+  };
 
   return (
     <div className="flex flex-col w-full max-w-xs">

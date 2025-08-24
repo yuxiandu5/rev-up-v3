@@ -27,11 +27,11 @@ export default function ProgressBar({ label, value, maxValue, unit = "", gainedL
             <span 
               className={`text-xs font-medium ${
                 gainedLost > 0 
-                  ? inverted ? 'text-red-400' : 'text-green-400' 
-                  : inverted ? 'text-green-400' : 'text-red-400'
+                  ? inverted ? "text-red-400" : "text-green-400" 
+                  : inverted ? "text-green-400" : "text-red-400"
               }`}
             >
-              {gainedLost > 0 ? '+' : ''}
+              {gainedLost > 0 ? "+" : ""}
               {Number.isInteger(gainedLost) 
                 ? gainedLost.toFixed(0) 
                 : gainedLost.toFixed(1)}

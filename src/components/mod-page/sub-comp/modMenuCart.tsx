@@ -1,6 +1,6 @@
 import { SelectedMods } from "@/types/modTypes";
 import { AnimatedPrice } from "@/utils/animatedNumberProps";
-import { formatPrice, getSelectedMod } from "@/utils/modCalculations";
+import { getSelectedMod } from "@/utils/modCalculations";
 
 type ModMenuCartProps = {
   totalPrice: number;
@@ -32,8 +32,8 @@ export default function ModMenuCart({totalPrice, selectedMods, className}: ModMe
         {/* Selected Mods Count */}
         <div className="text-sm text-[var(--text2)]">
           {hasSelectedMods 
-            ? `${selectedModsList.length} modification${selectedModsList.length !== 1 ? 's' : ''} selected`
-            : 'No modifications selected'
+            ? `${selectedModsList.length} modification${selectedModsList.length !== 1 ? "s" : ""} selected`
+            : "No modifications selected"
           }
         </div>
       </div>

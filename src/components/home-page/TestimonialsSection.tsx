@@ -96,7 +96,7 @@ function TestimonialCard({ testimonial, isActive }: { testimonial: typeof testim
         {[...Array(5)].map((_, i) => (
           <svg
             key={i}
-            className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-600'}`}
+            className={`w-5 h-5 ${i < testimonial.rating ? "text-yellow-400" : "text-gray-600"}`}
             fill="currentColor"
             viewBox="0 0 20 20"
             aria-hidden="true"
@@ -181,8 +181,8 @@ export default function TestimonialsSection() {
                   cursor-pointer
                   w-3 h-3 rounded-full transition-all duration-300
                   ${dotIndex === currentIndex 
-                    ? 'bg-[var(--primary)] scale-125' 
-                    : 'bg-[var(--bg-dark3)] hover:bg-[var(--primary)]/50'
+                    ? "bg-[var(--primary)] scale-125" 
+                    : "bg-[var(--bg-dark3)] hover:bg-[var(--primary)]/50"
                   }
                 `}
                 aria-label={`View testimonials page ${dotIndex + 1}`}

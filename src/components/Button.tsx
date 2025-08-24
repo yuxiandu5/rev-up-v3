@@ -1,28 +1,28 @@
 
-import React from 'react';
+import React from "react";
 
 type ButtonProps = {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   loading?: boolean;
   fullWidth?: boolean;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   className?: string;
 };
 
 export default function Button({
   children,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   disabled = false,
   loading = false,
   fullWidth = false,
   onClick,
-  type = 'button',
-  className = '',
+  type = "button",
+  className = "",
 }: ButtonProps) {
   // Base responsive classes
   const baseClasses = "inline-flex items-center justify-center rounded-md font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed";
