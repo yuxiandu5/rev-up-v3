@@ -90,7 +90,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
             <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Save</span>
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({})}} className="min-h-6">
+          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({});}} className="min-h-6">
             <X className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Discard</span>
           </Button>

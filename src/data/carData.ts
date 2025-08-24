@@ -1,4 +1,4 @@
-import { CarData } from '../types/carTypes';
+import { CarData } from "../types/carTypes";
 
 export const carData: CarData = {
   BMW: {

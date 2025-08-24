@@ -5,7 +5,7 @@ import { modData } from "@/data/modData";
 import ModCard from "./modCard";
 import ModMenuCart from "./modMenuCart";
 import { calculateTotalPrice, formatPrice } from "@/utils/modCalculations";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 type ModsMenuProps = {
   selectedMods: SelectedMods;

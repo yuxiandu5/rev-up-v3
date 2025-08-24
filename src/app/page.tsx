@@ -1,4 +1,3 @@
-
 import HeroSection from "@/components/home-page/HeroSection";
 import FeaturesSection from "@/components/home-page/FeaturesSection";
 import SupportedBrandsSection from "@/components/home-page/SupportedBrandsSection";

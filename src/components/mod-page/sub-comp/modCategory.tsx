@@ -26,7 +26,7 @@ export default function ModCategory({category, modData, onSelect, isSelected = f
           {category}
         </h3>
         <span className="text-sm text-[var(--text2)]">
-          {modData.length} modification{modData.length !== 1 ? 's' : ''} available
+          {modData.length} modification{modData.length !== 1 ? "s" : ""} available
         </span>
       </div>
     </button>
