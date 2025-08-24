@@ -12,7 +12,7 @@
     "db-reset": "prisma migrate reset",
     "studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
-    "vercel:prod": "vercel build && npx serve .vercel/output -l 3000",
+    "vercel:prod": "vercel build && next start",
     "vercel:dev-prod": "vercel dev --environment=production"
   },
   "dependencies": {
