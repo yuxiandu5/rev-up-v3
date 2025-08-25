@@ -88,7 +88,10 @@ export async function POST(request: NextRequest) {
     });
 
     // Set refresh token cookie
-    const response = NextResponse.json({ accessToken }, { status: 200 });
+    const response = NextResponse.json(
+      { accessToken, user: { id: user.id, email: user.email } },
+      { status: 200 }
+    );
     
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,

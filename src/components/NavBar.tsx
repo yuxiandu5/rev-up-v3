@@ -3,12 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { LogOut } from "lucide-react";
 
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout, isLoading } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setIsMobileMenuOpen(false); // Close mobile menu after logout
   };
   return (
     <nav className="
@@ -27,8 +35,8 @@ export default function NavBar() {
         />
       </div>
 
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center space-x-8 lg:space-x-12">
+      {/* Desktop Center Navigation */}
+      <div className="hidden md:flex items-center space-x-8 lg:space-x-12 flex-1 justify-center">
         <Link 
           href="/" 
           className="
@@ -59,6 +67,68 @@ export default function NavBar() {
         >
           Mod
         </Link>
+      </div>
+
+      {/* Desktop Auth Links */}
+      <div className="hidden md:flex items-center space-x-4">
+        {isLoading ? (
+          // Loading state
+          <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+        ) : user ? (
+          // Authenticated user
+          <div className="flex items-center space-x-3">
+            <Link 
+              href="/profile"
+              className="
+                w-8 h-8 bg-blue-500 rounded-full transition-all duration-200
+                hover:bg-blue-600 hover:scale-105 active:scale-95
+                flex items-center justify-center cursor-pointer
+              "
+              title={`Profile - ${user.email}`}
+            >
+              <span className="text-white text-sm font-medium">
+                {user.email.charAt(0).toUpperCase()}
+              </span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="
+                p-2 text-[var(--text1)] hover:text-red-500 transition-all duration-200
+                hover:bg-[var(--bg-dark2)] rounded-md hover:scale-105 active:scale-95
+                cursor-pointer
+              "
+              title="Logout"
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
+        ) : (
+          // Guest user
+          <>
+            <Link 
+              href="/login" 
+              className="
+                text-[var(--text1)] font-medium transition-all duration-200
+                hover:text-[var(--highlight)] hover:scale-105 active:scale-95
+                px-4 py-2 rounded-md hover:bg-[var(--bg-dark2)]
+                cursor-pointer
+              "
+            >
+              Sign In
+            </Link>
+            <Link 
+              href="/register" 
+              className="
+                bg-[var(--accent)] text-white font-medium transition-all duration-200
+                hover:bg-[var(--highlight)] hover:scale-105 active:scale-95
+                px-4 py-2 rounded-md
+                cursor-pointer
+              "
+            >
+              Sign Up
+            </Link>
+          </>
+        )}
       </div>
 
       {/* Mobile Menu Button */}
@@ -94,7 +164,7 @@ export default function NavBar() {
               href="/" 
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
-                hover:text-blue-400 hover:bg-[var(--bg-dark2)]
+                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
                 px-4 py-3 rounded-md block text-center
               "
               onClick={() => setIsMobileMenuOpen(false)}
@@ -105,7 +175,7 @@ export default function NavBar() {
               href="/profile" 
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
-                hover:text-blue-400 hover:bg-[var(--bg-dark2)]
+                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
                 px-4 py-3 rounded-md block text-center
               "
               onClick={() => setIsMobileMenuOpen(false)}
@@ -116,13 +186,80 @@ export default function NavBar() {
               href="/mod" 
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
-                hover:text-blue-400 hover:bg-[var(--bg-dark2)]
+                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
                 px-4 py-3 rounded-md block text-center
               "
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Mod
             </Link>
+            
+            {/* Mobile Auth Links */}
+            <div className="border-t border-[var(--bg-dark3)] pt-4 mt-4 space-y-1">
+              {isLoading ? (
+                // Loading state
+                <div className="flex justify-center">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
+                </div>
+              ) : user ? (
+                // Authenticated user
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center space-x-3 px-4 py-2">
+                    <Link 
+                      href="/profile"
+                      className="
+                        w-10 h-10 bg-blue-500 rounded-full transition-all duration-200
+                        hover:bg-blue-600 flex items-center justify-center
+                      "
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      title={`Profile - ${user.email}`}
+                    >
+                      <span className="text-white font-medium">
+                        {user.email.charAt(0).toUpperCase()}
+                      </span>
+                    </Link>
+                    <span className="text-[var(--text1)] text-sm">{user.email}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="
+                      w-full flex items-center justify-center space-x-2
+                      text-red-500 font-medium transition-all duration-200
+                      hover:bg-[var(--bg-dark2)] px-4 py-3 rounded-md
+                    "
+                  >
+                    <LogOut size={20} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : (
+                // Guest user
+                <>
+                  <Link 
+                    href="/login" 
+                    className="
+                      text-[var(--text1)] font-medium transition-all duration-200
+                      hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
+                      px-4 py-3 rounded-md block text-center
+                    "
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link 
+                    href="/register" 
+                    className="
+                      bg-[var(--accent)] text-white font-medium transition-all duration-200
+                      hover:bg-[var(--highlight)]
+                      px-4 py-3 rounded-md block text-center
+                    "
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
