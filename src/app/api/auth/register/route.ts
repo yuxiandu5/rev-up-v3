@@ -1,75 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { registerSchema } from "@/lib/validations";
-import { hashPassword, generateToken, hashToken, addDays } from "@/lib/crypto";
-import { sendEmail, generateVerificationEmail } from "@/lib/email";
+import { hashPassword } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
-import { TokenType } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
     // Parse and validate input 
     const body = await request.json();
-    const { email, password } = registerSchema.parse(body);
+    const { userName, password, recoverQuestion, answer } = registerSchema.parse(body);
+
     
-    // Normalize email to lowercase for consistent storage
-    const normalizedEmail = email.toLowerCase().trim();
-
-    // Hash password with Argon2id first (expensive operation)
-    const passwordHash = await hashPassword(password);
-
-    // Generate email verification token
-    const verificationToken = generateToken();
-    const tokenHash = hashToken(verificationToken);
-
-    // Create user and verification token in a transaction to prevent race conditions
-    await prisma.$transaction(async (tx) => {
-      // Check if user already exists (within transaction)
-      const existingUser = await tx.user.findUnique({
-        where: { email: normalizedEmail }
-      });
-
-      if (existingUser) {
-        throw new Error("User with this email already exists");
-      }
-
-      // Create user
-      const newUser = await tx.user.create({
-        data: {
-          email: normalizedEmail,
-          passwordHash,
-          isActive: true,
-        }
-      });
-
-      // Create OneTimeToken for EMAIL_VERIFY
-      await tx.oneTimeToken.create({
-        data: {
-          userId: newUser.id,
-          type: TokenType.EMAIL_VERIFY,
-          tokenHash,
-          expiresAt: addDays(new Date(), 1), // 24 hours
-          userAgent: request.headers.get("user-agent"),
-          ipAddress: request.headers.get("x-forwarded-for") || 
-                    request.headers.get("x-real-ip") || 
-                    "unknown",
-        }
-      });
-
-      return newUser;
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { userName }
     });
 
-    // Send verification email
-    const emailOptions = generateVerificationEmail(normalizedEmail, verificationToken);
-    await sendEmail(emailOptions);
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "User with this username already exists" },
+        { status: 409 }
+      );
+    }
 
-    // Return success (201 Created)
-    return NextResponse.json({ message: "User created successfully" }, { status: 201 });
+    // Hash password with Argon2id
+    const passwordHash = await hashPassword(password);
+    const normalizedAnswer = answer.toLowerCase().trim();
+    const answerHash = await hashPassword(normalizedAnswer);
+
+    // Create user
+    await prisma.user.create({
+      data: {
+        userName,
+        recoverQuestion,
+        answer: answerHash,
+        passwordHash,
+        isActive: true,
+      }
+    });
+
+    return NextResponse.json({ 
+      message: "Account created successfully! You can now sign in." 
+    }, { status: 201 });
 
   } catch (error) {
-    console.error("Registration error:", error);
-
-    // Handle validation errors
     if (error instanceof ZodError) {
       return NextResponse.json(
         { error: "Invalid input data" },
@@ -77,12 +51,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Handle database errors and duplicate email
     if (error instanceof Error && 
         (error.message.includes("Unique constraint") || 
-          error.message.includes("User with this email already exists"))) {
+          error.message.includes("User with this username already exists"))) {
       return NextResponse.json(
-        { error: "User with this email already exists" },
+        { error: "User with this user name already exists" },
         { status: 409 }
       );
     }

@@ -7,64 +7,56 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/auth/Input";
 import Button from "@/components/Button";
-import { resetPasswordFormSchema, type ResetPasswordFormInput } from "@/lib/validations";
+import { requestPasswordResetFormSchema, type RequestPasswordResetFormInput } from "@/lib/validations";
+import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
-  const [resetState, setResetState] = useState<"form" | "success" | "error">("form");
-  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+  
+  const [resetState, setResetState] = useState<"form" | "success">("form");
+  const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const userName = sessionStorage.getItem("userName");
+    if (!userName) {
+      router.push("/forgot-password");
+    } else {
+      setUserName(userName);
+    }
+  }, []); 
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    setValue,
-    getValues,
-    reset,
+    formState: { errors },
     setError,
-  } = useForm<ResetPasswordFormInput>({
-    resolver: zodResolver(resetPasswordFormSchema),
+  } = useForm<RequestPasswordResetFormInput>({
+    resolver: zodResolver(requestPasswordResetFormSchema),
     mode: "onBlur",
   });
 
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const token = url.searchParams.get("token") || "";
-    if (token) {
-      setValue("token", token);
-    }
-  }, [setValue]);
 
-  const onSubmit = async (data: ResetPasswordFormInput) => {
+  const onSubmit = async (data: RequestPasswordResetFormInput) => {
     try {
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          token: getValues("token"), 
+          userName: userName, 
           newPassword: data.newPassword 
         }),
       });
-
+      
       if (response.ok) {
+        setIsLoading(true);
         setResetState("success");
-        reset();
       } else {
-        const errorData = await response.json();
-        
-        if (response.status === 400 || response.status === 401) {
-          // Invalid or expired token
-          setResetState("error");
-          setErrorMessage(errorData.error || "Invalid or expired reset token");
-        } else {
-          // Other errors - show in form
-          setError("root", {
-            message: errorData.error || "Failed to reset password"
-          });
-        }
+        throw new Error("Failed to reset password");
       }
-    } catch {
+    } catch (error) {
       setError("root", {
-        message: "Network error. Please check your connection and try again."
+        message: "Failed to reset password"
       });
     }
   };
@@ -103,60 +95,6 @@ export default function ResetPasswordPage() {
                 Sign in with new password
               </Button>
             </Link>
-          </div>
-        </div>
-      </AuthLayout>
-    );
-  }
-
-  if (resetState === "error") {
-    return (
-      <AuthLayout
-        title="Reset failed"
-        subtitle="There was a problem resetting your password."
-        footer={
-          <p>
-            Need help?{" "}
-            <Link href="/contact" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
-              Contact support
-            </Link>
-          </p>
-        }
-      >
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 mx-auto bg-red-500/20 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-medium text-[var(--text1)]">Reset failed</h3>
-            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-            <p className="mt-2 text-sm text-[var(--text2)]">
-              The reset link may be expired or invalid. You can request a new password reset.
-            </p>
-          </div>
-
-          <div className="space-y-3 pt-4">
-            <Link href="/forgot-password">
-              <Button variant="secondary" size="lg" fullWidth>
-                Request new reset link
-              </Button>
-            </Link>
-            
-            <Button
-              variant="secondary"
-              size="lg"
-              fullWidth
-              onClick={() => {
-                setResetState("form");
-                reset();
-                setErrorMessage("");
-              }}
-            >
-              Try again
-            </Button>
           </div>
         </div>
       </AuthLayout>
@@ -222,8 +160,8 @@ export default function ResetPasswordPage() {
           variant="secondary"
           size="lg"
           fullWidth
-          loading={isSubmitting}
-          disabled={isSubmitting}
+          loading={isLoading}
+          disabled={isLoading}
         >
           Reset password
         </Button>

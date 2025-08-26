@@ -8,15 +8,15 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/auth/Input";
 import Button from "@/components/Button";
 import { registerFormSchema, type RegisterFormInput } from "@/lib/validations";
+import GreenTick from "@/components/GreenTick";
 
 export default function RegisterPage() {
   const [showSuccess, setShowSuccess] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { errors },
     setError,
   } = useForm<RegisterFormInput>({
     resolver: zodResolver(registerFormSchema),
@@ -28,30 +28,30 @@ export default function RegisterPage() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, password: data.password }),
-      });
-
-      if (response.ok) {
-        setShowSuccess(true);
-        reset();
+        body: JSON.stringify({ 
+          userName: data.userName, 
+          password: data.password, 
+          confirmPassword: data.confirmPassword, 
+          recoverQuestion: data.recoverQuestion, 
+          answer: data.answer }),
+        });
+        
+        if (response.ok) {
+          setIsLoading(true);
+          setShowSuccess(true);
       } else {
         const errorData = await response.json();
         
         if (response.status === 409) {
-          setError("email", {
-            message: errorData.error || "Email already exists"
+          setError("userName", {
+            message: errorData.error || "Username already exists"
           });
-        } else {
-          setError("root", {
-            message: errorData.error || "Something went wrong. Please try again."
-          });
-        }
+        } 
+        throw new Error("Failed to create account");
       }
-
-      
-    } catch {
+    } catch (error) {
       setError("root", {
-        message: "Network error. Please check your connection and try again."
+        message: "Failed to create account"
       });
     }
   };
@@ -59,35 +59,19 @@ export default function RegisterPage() {
   if (showSuccess) {
     return (
       <AuthLayout
-        title="Check your email"
-        subtitle="We've sent a verification link to your email address."
-        footer={
-          <p>
-            Already have an account?{" "}
-            <Link href="/login" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
-              Sign in
-            </Link>
-          </p>
-        }
+        title="Account created successfully!"
       >
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 mx-auto bg-[var(--green)]/20 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-[var(--green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-medium text-[var(--text1)]">Account created successfully!</h3>
-            <p className="mt-2 text-sm text-[var(--text2)]">
-              Please check your email and click the verification link to complete your registration.
-            </p>
-          </div>
+          <GreenTick />
+          <h3 className="text-lg font-medium text-[var(--text1)]">Account created successfully!</h3>
+          <p className="mt-2 text-sm text-[var(--text2)]">
+            Your account has been successfully created. You can now sign in with your new account.
+          </p>
 
           <div className="pt-4">
             <Link href="/login">
-              <Button variant="primary" size="lg" fullWidth>
-                Go to Sign In
+              <Button variant="secondary" size="lg" fullWidth>
+                Sign in
               </Button>
             </Link>
           </div>
@@ -108,7 +92,7 @@ export default function RegisterPage() {
         </p>
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {errors.root && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
             <div className="flex items-center">
@@ -123,11 +107,11 @@ export default function RegisterPage() {
         )}
 
         <Input
-          label="Email address"
-          type="email"
-          placeholder="Enter your email"
-          {...register("email")}
-          error={errors.email?.message}
+          label="Username"
+          type="text"
+          placeholder="Enter your username"
+          {...register("userName")}
+          error={errors.userName?.message}
           required
         />
 
@@ -146,6 +130,24 @@ export default function RegisterPage() {
           placeholder="Confirm your password"
           {...register("confirmPassword")}
           error={errors.confirmPassword?.message}
+          required
+        />
+
+        <Input
+          label="Recover question"
+          type="text"
+          placeholder="Enter your recover question"
+          {...register("recoverQuestion")}
+          error={errors.recoverQuestion?.message}
+          required
+        />
+
+        <Input
+          label="Answer"
+          type="text"
+          placeholder="Enter your answer"
+          {...register("answer")}
+          error={errors.answer?.message}
           required
         />
 
@@ -174,8 +176,8 @@ export default function RegisterPage() {
           variant="secondary"
           size="lg"
           fullWidth
-          loading={isSubmitting}
-          disabled={isSubmitting}
+          loading={isLoading}
+          disabled={isLoading}
         >
           Create account
         </Button>

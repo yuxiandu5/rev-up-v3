@@ -1,15 +1,15 @@
 "use client";
 
-import { AuthProvider } from "@/contexts/AuthContext";
+import { AuthInitializer } from "@/components/AuthInitializer";
 import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="flex flex-col h-screen w-screen">
-        <AuthProvider>
+        <AuthInitializer>
           {children}
-        </AuthProvider>
+        </AuthInitializer>
       </body>
     </html>
   );

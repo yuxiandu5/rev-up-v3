@@ -1,7 +1,9 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "next/navigation";
 
 export const useApiClient = () => {
-  const { accessToken, refreshAccessToken, logout } = useAuth();
+  const router = useRouter();
+  const { accessToken, refreshAccessToken, logout } = useAuthStore();
 
   const apiCall = async (url: string, options: RequestInit = {}) => {
     // Add authorization header if we have a token
@@ -36,7 +38,8 @@ export const useApiClient = () => {
           });
         } else {
           // Refresh failed, logout user
-          logout();
+          await logout();
+          router.push("/");
           throw new Error("Session expired. Please login again.");
         }
       }

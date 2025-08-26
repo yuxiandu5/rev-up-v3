@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,16 +9,17 @@ import Input from "@/components/auth/Input";
 import Button from "@/components/Button";
 import { loginFormSchema, type LoginFormInput } from "@/lib/validations";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function LoginPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  const { login } = useAuthStore();
   
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setError,
   } = useForm<LoginFormInput>({
     resolver: zodResolver(loginFormSchema),
@@ -30,21 +31,19 @@ export default function LoginPage() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, password: data.password }),
+        body: JSON.stringify({ userName: data.userName, password: data.password }),
       });
-
+      
       if (response.ok) {
+        setIsLoading(true);
         const result = await response.json();
         
         login(result.accessToken, result.user);
         router.push("/");
       } else {
-        const errorData = await response.json();
-        setError("root", {
-          message: errorData.error || "Invalid email or password"
-        });
+        throw new Error("Invalid email or password");
       }
-    } catch {
+    } catch (error) {
       setError("root", {
         message: "Invalid email or password"
       });
@@ -53,7 +52,7 @@ export default function LoginPage() {
 
   return (
     <AuthLayout
-      title="Sign in"
+      title="Sign in to your account"
       footer={
         <p>
           Don&apos;t have an account?{" "}
@@ -63,25 +62,8 @@ export default function LoginPage() {
         </p>
       }
     >
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Input
-          label="Email address"
-          type="email"
-          placeholder="Enter your email"
-          {...register("email")}
-          error={errors.email?.message}
-          required
-        />
-
-        <Input
-          label="Password"
-          type="password"
-          placeholder="Enter your password"
-          {...register("password")}
-          error={errors.password?.message}
-          required
-        />
-
         {errors.root && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
             <div className="flex items-center">
@@ -95,12 +77,27 @@ export default function LoginPage() {
           </div>
         )}
 
-        <div className="flex items-center justify-end">
-          <Link
-            href="/forgot-password"
-            className="text-sm font-medium text-[var(--accent)] hover:text-[var(--highlight)]"
-          >
-            Forgot your password?
+        <Input
+          label="User name"
+          type="text"
+          placeholder="Enter your user name"
+          {...register("userName")}
+          error={errors.userName?.message}
+          required
+        />
+
+        <Input
+          label="Password"
+          type="password"
+          placeholder="Enter your password"
+          {...register("password")}
+          error={errors.password?.message}
+          required
+        />
+
+        <div className="text-sm text-[var(--text2)] text-right">
+          <Link href="/forgot-password" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+            Forgot password?
           </Link>
         </div>
 
@@ -109,8 +106,8 @@ export default function LoginPage() {
           variant="secondary"
           size="lg"
           fullWidth
-          loading={isSubmitting}
-          disabled={isSubmitting}
+          loading={isLoading}
+          disabled={isLoading}
         >
           Sign in
         </Button>

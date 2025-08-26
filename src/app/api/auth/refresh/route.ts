@@ -101,12 +101,12 @@ export async function POST(request: NextRequest) {
     // Issue new access JWT
     const accessToken = await issueAccessJWT({
       sub: token.user.id,
-      email: token.user.email,
+      userName: token.user.userName,
     });
 
     // Set new refresh token cookie
     const response = NextResponse.json(
-      { accessToken, user: { id: token.user.id, email: token.user.email } }, 
+      { accessToken, user: { id: token.user.id, userName: token.user.userName } }, 
       { status: 200 });
     
     response.cookies.set("refreshToken", newRefreshToken, {

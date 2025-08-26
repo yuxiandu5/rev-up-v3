@@ -1,11 +1,19 @@
 "use client";
 
-import { useAuth } from "@/contexts/AuthContext";
+import Button from "@/components/Button";
+import { useAuthStore } from "@/stores/authStore";
 import { User, Mail, Shield, Calendar } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
-  const { user, logout, isLoading } = useAuth();
-
+  const { user, logout, isLoading } = useAuthStore();
+  const router = useRouter();
+  
+  const handleLogout = async () => {
+    await logout();
+    router.push("/");
+  };
+  
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -16,18 +24,18 @@ export default function Profile() {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-[var(--text1)] mb-4">
-            Please sign in to view your profile
-          </h1>
-        </div>
-      </div>
+      <Button 
+      onClick={() => router.push("/login")}
+      variant="secondary"
+      size="lg"
+      >
+        Sign in to view your profile
+      </Button>
     );
   }
 
   return (
-    <div className="min-h-full bg-[var(--bg-dark2)] p-6">
+    <div className="min-h-full w-full bg-[var(--bg-dark2)] p-6">
       <div className="max-w-4xl mx-auto">
         {/* Profile Header */}
         <div className="bg-[var(--bg-dark1)] rounded-xl p-8 mb-8 border border-[var(--bg-dark3)]">
@@ -35,7 +43,7 @@ export default function Profile() {
             {/* Avatar */}
             <div className="w-20 h-20 bg-[var(--accent)] rounded-full flex items-center justify-center">
               <span className="text-white text-2xl font-bold">
-                {user.email.charAt(0).toUpperCase()}
+                {user.userName.charAt(0).toUpperCase()}
               </span>
             </div>
             
@@ -49,7 +57,7 @@ export default function Profile() {
               </p>
               <div className="flex items-center space-x-2 text-[var(--text2)]">
                 <Mail size={16} />
-                <span>{user.email}</span>
+                <span>{user.userName}</span>
               </div>
             </div>
           </div>
@@ -71,10 +79,10 @@ export default function Profile() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-[var(--text2)] mb-1">
-                  Email Address
+                  Username
                 </label>
                 <div className="p-3 bg-[var(--bg-dark3)] rounded-lg border border-[var(--bg-dark3)]">
-                  <span className="text-[var(--text1)]">{user.email}</span>
+                  <span className="text-[var(--text1)]">{user.userName}</span>
                 </div>
               </div>
               
@@ -131,8 +139,8 @@ export default function Profile() {
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <button className="p-4 bg-[var(--bg-dark3)] hover:bg-[var(--bg-dark2)] rounded-lg border border-[var(--bg-dark3)] transition-colors text-left">
-              <h3 className="font-medium text-[var(--text1)] mb-1">Update Email</h3>
-              <p className="text-sm text-[var(--text2)]">Change your email address</p>
+              <h3 className="font-medium text-[var(--text1)] mb-1">Update Username</h3>
+              <p className="text-sm text-[var(--text2)]">Change your username</p>
             </button>
             
             <button className="p-4 bg-[var(--bg-dark3)] hover:bg-[var(--bg-dark2)] rounded-lg border border-[var(--bg-dark3)] transition-colors text-left">
@@ -141,7 +149,7 @@ export default function Profile() {
             </button>
             
             <button 
-              onClick={logout}
+              onClick={handleLogout}
               className="p-4 bg-red-500/10 hover:bg-red-500/20 rounded-lg border border-red-500/20 transition-colors text-left"
             >
               <h3 className="font-medium text-red-500 mb-1">Sign Out</h3>

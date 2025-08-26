@@ -37,7 +37,7 @@ export default function AuthLayout({ children, title, subtitle, footer }: AuthLa
 
         {/* Footer */}
         {footer && (
-          <div className="text-center text-sm text-[var(--text2)]">
+          <div className="text-center text-sm text-[var(--text2)] mt-0">
             {footer}
           </div>
         )}

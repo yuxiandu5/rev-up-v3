@@ -3,12 +3,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 import { LogOut } from "lucide-react";
 
 export default function NavBar() {
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, logout, isLoading } = useAuth();
+  const { user, logout, isLoading } = useAuthStore();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -16,6 +18,7 @@ export default function NavBar() {
 
   const handleLogout = async () => {
     await logout();
+    router.push("/");
     setIsMobileMenuOpen(false); // Close mobile menu after logout
   };
   return (
@@ -84,10 +87,10 @@ export default function NavBar() {
                 hover:bg-blue-600 hover:scale-105 active:scale-95
                 flex items-center justify-center cursor-pointer
               "
-              title={`Profile - ${user.email}`}
+              title={`Profile - ${user.userName}`}
             >
               <span className="text-white text-sm font-medium">
-                {user.email.charAt(0).toUpperCase()}
+                {user.userName.charAt(0).toUpperCase()}
               </span>
             </Link>
             <button
@@ -212,13 +215,13 @@ export default function NavBar() {
                         hover:bg-blue-600 flex items-center justify-center
                       "
                       onClick={() => setIsMobileMenuOpen(false)}
-                      title={`Profile - ${user.email}`}
+                      title={`Profile - ${user.userName}`}
                     >
                       <span className="text-white font-medium">
-                        {user.email.charAt(0).toUpperCase()}
+                        {user.userName.charAt(0).toUpperCase()}
                       </span>
                     </Link>
-                    <span className="text-[var(--text1)] text-sm">{user.email}</span>
+                    <span className="text-[var(--text1)] text-sm">{user.userName}</span>
                   </div>
                   <button
                     onClick={handleLogout}

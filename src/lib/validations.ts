@@ -2,67 +2,72 @@ import { z } from "zod";
 
 // Backend schemas (for API validation)
 export const registerSchema = z.object({
-  email: z.string().email().max(254),
+  userName: z.string().max(254),
   password: z.string().min(8).max(128),
+  recoverQuestion: z.string().max(254),
+  answer: z.string().max(254),
 });
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  userName: z.string().max(254),
   password: z.string(),
 });
 
-export const verifyEmailSchema = z.object({
-  token: z.string().min(20),
-});
-
-export const resetPasswordSchema = z.object({
-  token: z.string().min(20),
-  newPassword: z.string().min(8).max(128),
+export const verifyAnswerSchema = z.object({
+  userName: z.string().max(254),
+  answer: z.string().max(254),
 });
 
 export const requestPasswordResetSchema = z.object({
-  email: z.string().email(),
+  userName: z.string().max(254),
+  answer: z.string().max(254),
 });
 
 // Frontend schemas (with additional UI requirements)
 export const registerFormSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address")
-    .max(254, "Email is too long"),
+  userName: z.string()
+    .min(1, "User name is required")
+    .max(254, "User name is too long"),
   password: z.string()
     .min(1, "Password is required")
     .min(8, "Password must be at least 8 characters")
     .max(128, "Password is too long"),
   confirmPassword: z.string()
     .min(1, "Please confirm your password"),
+  recoverQuestion: z.string()
+    .min(1, "Recover question is required")
+    .max(254, "Recover question is too long"),
+  answer: z.string()
+    .min(1, "Answer is required")
+    .max(254, "Answer is too long"),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
 });
 
 export const loginFormSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
+  userName: z.string()
+    .min(1, "User name is required")
+    .max(254, "User name is too long"),
   password: z.string()
     .min(1, "Password is required"),
 });
 
-export const requestPasswordResetFormSchema = z.object({
-  email: z.string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
+export const verifyUsernameSchema = z.object({
+  userName: z.string().max(254),
 });
 
-export const resetPasswordFormSchema = z.object({
-  token: z.string().min(20),
+export const verifyAnswerFormSchema = z.object({
+  answer: z.string().max(254),
+}); 
+
+export const requestPasswordResetFormSchema = z.object({
   newPassword: z.string()
-    .min(1, "Password is required")
-    .min(8, "Password must be at least 8 characters")
-    .max(128, "Password is too long"),
+    .min(1, "New password is required")
+    .min(8, "New password must be at least 8 characters")
+    .max(128, "New password is too long"),
   confirmPassword: z.string()
-    .min(1, "Please confirm your password"),
+    .min(1, "Please confirm your new password"),
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -71,11 +76,9 @@ export const resetPasswordFormSchema = z.object({
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
-export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
-export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
-export type RequestPasswordResetInput = z.infer<typeof requestPasswordResetSchema>;
-
 export type RegisterFormInput = z.infer<typeof registerFormSchema>;
 export type LoginFormInput = z.infer<typeof loginFormSchema>;
+export type VerifyUsernameInput = z.infer<typeof verifyUsernameSchema>;
+export type VerifyAnswerInput = z.infer<typeof verifyAnswerSchema>;
+export type VerifyAnswerFormInput = z.infer<typeof verifyAnswerFormSchema>;
 export type RequestPasswordResetFormInput = z.infer<typeof requestPasswordResetFormSchema>;
-export type ResetPasswordFormInput = z.infer<typeof resetPasswordFormSchema>;
