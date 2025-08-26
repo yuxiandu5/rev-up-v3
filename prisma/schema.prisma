@@ -9,16 +9,16 @@ datasource db {
 
 model User {
   id              String    @id @default(cuid())
-  email           String    @unique
+  userName        String    @unique
   passwordHash    String
-  emailVerifiedAt DateTime?
   isActive        Boolean   @default(true)
+  recoverQuestion String
+  answer          String
   lastLoginAt     DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
   refreshTokens RefreshToken[]
-  oneTimeTokens OneTimeToken[]
 }
 
 // Rotating, single‑use refresh tokens. Store **hashes** only.
@@ -36,25 +36,4 @@ model RefreshToken {
   revokedAt     DateTime?
 
   @@index([userId, expiresAt])
-}
-
-// Hashed one‑time tokens for email verify & password reset
-model OneTimeToken {
-  id         String    @id @default(cuid())
-  userId     String
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type       TokenType
-  tokenHash  String    @unique // sha256(plaintext token)
-  createdAt  DateTime  @default(now())
-  expiresAt  DateTime
-  consumedAt DateTime?
-  userAgent  String?
-  ipAddress  String?
-
-  @@index([userId, type, expiresAt])
-}
-
-enum TokenType {
-  EMAIL_VERIFY
-  PASSWORD_RESET
 }

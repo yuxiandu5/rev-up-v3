@@ -8,7 +8,7 @@ const ACCESS_TTL_MIN = parseInt(process.env.ACCESS_TTL_MIN || "15");
 
 export interface JWTPayload {
   sub: string; // user id
-  email: string;
+  userName: string;
   role?: string;
   jti: string; // unique token id
 }
@@ -33,13 +33,13 @@ export async function verifyAccessJWT(token: string): Promise<JWTPayload> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
     
-    if (!payload.sub || !payload.email || !payload.jti) {
+    if (!payload.sub || !payload.userName || !payload.jti) {
       throw new Error("Invalid token payload");
     }
 
     return {
       sub: payload.sub as string,
-      email: payload.email as string,
+      userName: payload.userName as string,
       role: payload.role as string | undefined,
       jti: payload.jti as string,
     };

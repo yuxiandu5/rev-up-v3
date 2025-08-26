@@ -1,69 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { requestPasswordResetSchema } from "@/lib/validations";
-import { generateToken, hashToken } from "@/lib/crypto";
-import { sendEmail, generatePasswordResetEmail } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
-import { TokenType } from "@prisma/client";
+import { hashPassword } from "@/lib/crypto";
 
 export async function POST(request: NextRequest) {
   try {
     // Parse and validate input
     const body = await request.json();
-    const { email } = requestPasswordResetSchema.parse(body);
-    
-    // Normalize email
-    const normalizedEmail = email.toLowerCase().trim();
+    const { userName, answer } = requestPasswordResetSchema.parse(body);
 
-    // Find user by email
+    // Find user by userName
     const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail }
+      where: { userName }
     });
 
-    // Always return success to prevent email enumeration
-    // but only send email if user exists
     if (user && user.isActive) {
-      // Generate password reset token
-      const resetToken = generateToken();
-      const tokenHash = hashToken(resetToken);
+      const normalizedAnswer = answer.toLowerCase().trim();
+      const answerHash = await hashPassword(normalizedAnswer);
 
-      // Get client info
-      const userAgent = request.headers.get("user-agent") || null;
-      const ipAddress = request.headers.get("x-forwarded-for") || 
-                        request.headers.get("x-real-ip") || 
-                        "unknown";
-
-      // Revoke any existing password reset tokens for this user
-      // and create new one in a transaction
-      await prisma.$transaction([
-        // Mark any existing PASSWORD_RESET tokens as consumed
-        prisma.oneTimeToken.updateMany({
-          where: {
-            userId: user.id,
-            type: TokenType.PASSWORD_RESET,
-            consumedAt: null,
-          },
-          data: { consumedAt: new Date() }
-        }),
-        // Create new password reset token
-        prisma.oneTimeToken.create({
-          data: {
-            userId: user.id,
-            type: TokenType.PASSWORD_RESET,
-            tokenHash,
-            expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
-            userAgent,
-            ipAddress,
-          }
-        })
-      ]);
-
-      // Send password reset email
-      const emailOptions = generatePasswordResetEmail(normalizedEmail, resetToken);
-      await sendEmail(emailOptions);
+      if (answerHash === user.answer) {
+        return NextResponse.json({ message: "Password reset request successful" }, { status: 200 });
+      } else {
+        return NextResponse.json({ error: "Invalid answer" }, { status: 400 });
+      }
     }
 
-    // Always return success (204) to prevent email enumeration
     return new NextResponse(null, { status: 204 });
 
   } catch (error) {

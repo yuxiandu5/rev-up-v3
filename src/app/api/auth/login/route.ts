@@ -9,28 +9,17 @@ const REFRESH_TTL_DAYS = parseInt(process.env.REFRESH_TTL_DAYS || "14");
 
 export async function POST(request: NextRequest) {
   try {
-    // Parse and validate input
     const body = await request.json();
-    const { email, password } = loginSchema.parse(body);
-    
-    // Normalize email
-    const normalizedEmail = email.toLowerCase().trim();
+    const { userName, password } = loginSchema.parse(body);
 
-    // Find user by email
+    // Find user by userName
     const user = await prisma.user.findUnique({
-      where: { email: normalizedEmail }
+      where: { userName }
     });
 
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
-        { status: 401 }
-      );
-    }
-
-    if (!user.emailVerifiedAt) {
-      return NextResponse.json(
-        { error: "Email not verified" },
+        { error: "Invalid username or password" },
         { status: 401 }
       );
     }
@@ -39,7 +28,7 @@ export async function POST(request: NextRequest) {
     const isValidPassword = await verifyPassword(user.passwordHash, password);
     if (!isValidPassword) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
+        { error: "Invalid username or password" },
         { status: 401 }
       );
     }
@@ -84,11 +73,14 @@ export async function POST(request: NextRequest) {
     // Issue access JWT
     const accessToken = await issueAccessJWT({
       sub: user.id,
-      email: user.email,
+      userName: user.userName,
     });
 
     // Set refresh token cookie
-    const response = NextResponse.json({ accessToken }, { status: 200 });
+    const response = NextResponse.json(
+      { accessToken, user: { id: user.id, userName: user.userName } },
+      { status: 200 }
+    );
     
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,
