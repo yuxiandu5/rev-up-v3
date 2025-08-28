@@ -27,6 +27,7 @@
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.7",
     "bcryptjs": "^3.0.2",
+    "cross-env": "^10.0.0",
     "dotenv": "^17.2.1",
     "framer-motion": "^12.23.12",
     "jose": "^6.0.13",

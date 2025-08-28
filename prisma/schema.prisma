@@ -37,3 +37,167 @@ model RefreshToken {
 
   @@index([userId, expiresAt])
 }
+
+// ----------------------
+// Car hierarchy
+// ----------------------
+model Make {
+  id     String  @id @default(cuid())
+  name   String  @unique // e.g. "BMW"
+  slug   String  @unique // "bmw"
+  models Model[]
+}
+
+model Model {
+  id     String  @id @default(cuid())
+  name   String // e.g. "3 Series"
+  slug   String
+  makeId String
+  make   Make    @relation(fields: [makeId], references: [id])
+  badges Badge[]
+
+  @@unique([makeId, name])
+}
+
+model Badge {
+  id              String             @id @default(cuid())
+  name            String // e.g. "330i", "320i"
+  slug            String
+  modelId         String
+  model           Model              @relation(fields: [modelId], references: [id])
+  yearRanges      ModelYearRange[]
+  compatibilities ModCompatibility[]
+  media           MediaAsset[]
+  UserBuild       UserBuild[]
+
+  @@unique([modelId, name])
+}
+
+model ModelYearRange {
+  id          String @id @default(cuid())
+  badgeId     String
+  badge       Badge   @relation(fields: [badgeId], references: [id])
+
+  startYear   Int
+  endYear     Int?       // null = ongoing
+  chassis     String?    // e.g. "F30"
+
+  hp          Int
+  torque      Int
+  zeroToHundred Int?     // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
+  handling    Int        // arbitrary score, standardize scale out of 10
+}
+
+
+// ----------------------
+// Mods
+// ----------------------
+
+model ModCategory {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g. "Intake"
+  slug        String  @unique // e.g. "intake"
+  description String?
+  mods        Mod[]
+}
+
+model Mod {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  brand       String
+  category    String // intake, exhaust, tune, suspension, etc.
+  description String?
+  price       Int?
+  media       MediaAsset[]
+
+  // Relations
+  compatibilities ModCompatibility[]
+  dependencies    ModRequirement[]   @relation("Requirement_dependent")
+  prerequisitesOf ModRequirement[]   @relation("Requirement_prerequisite")
+  UserBuildMod    UserBuildMod[]
+  ModCategory     ModCategory?       @relation(fields: [modCategoryId], references: [id])
+  modCategoryId   String?
+}
+
+model ModCompatibility {
+  id       String @id @default(cuid())
+  
+  modId    String
+  mod      Mod    @relation(fields: [modId], references: [id])
+
+  badgeId  String
+  badge    Badge  @relation(fields: [badgeId], references: [id])
+
+  // denormalized for faster queries
+  modelId  String
+  makeId   String
+
+  yearStart       Int?
+  yearEnd         Int?
+
+  // performance deltas (all optional)
+  hpGain          Int?   // +hp
+  nmGain          Int?   // +torque
+  handlingDelta   Int?   // e.g. suspension mods
+  zeroToHundredDelta Int? // in tenths of a second, negative = faster
+
+  notes           String?
+}
+
+model ModRequirement {
+  id String @id @default(cuid())
+
+  // dependent mod (e.g. Stage 2 Tune)
+  dependentId String
+  dependent   Mod    @relation("Requirement_dependent", fields: [dependentId], references: [id])
+
+  // prerequisite mod (e.g. Downpipe)
+  prerequisiteId String
+  prerequisite   Mod    @relation("Requirement_prerequisite", fields: [prerequisiteId], references: [id])
+}
+
+// ----------------------
+// Media
+// ----------------------
+model MediaAsset {
+  id  String  @id @default(cuid())
+  url String
+  alt String?
+
+  // For mods (product photos)
+  modId String?
+  mod   Mod?    @relation(fields: [modId], references: [id])
+
+  // For badges (reference images of trims/cars)
+  badgeId String?
+  badge   Badge?  @relation(fields: [badgeId], references: [id])
+}
+
+// ----------------------
+// User builds (saved configurations)
+// ----------------------
+model UserBuild {
+  id        String   @id @default(cuid())
+  userId    String // who owns the build
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  year      Int // e.g. 2017
+  nickname  String? // "Track Build"
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mods UserBuildMod[]
+}
+
+model UserBuildMod {
+  id      String    @id @default(cuid())
+  buildId String
+  build   UserBuild @relation(fields: [buildId], references: [id])
+
+  modId String
+  mod   Mod    @relation(fields: [modId], references: [id])
+
+  installedAt DateTime?
+}
