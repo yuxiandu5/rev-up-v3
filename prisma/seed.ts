@@ -1,54 +1,22 @@
-import { PrismaClient } from "@prisma/client";
-import { hash } from "@node-rs/argon2";
-
-const prisma = new PrismaClient();
+// prisma/seed.ts
+import { execSync } from "child_process";
 
 async function main() {
-  console.log("🌱 Starting seed...");
+  try {
+    console.log("🌱 Running user seed...");
+    execSync("npx tsx prisma/seedUsers.ts", { stdio: "inherit" });
 
-  // Create sample users with hashed passwords
-  const user1 = await prisma.user.upsert({
-    where: {
-      userName: "john.doe",
-    },
-    update: {},
-    create: {
-      userName: "john.doe",
-      passwordHash: await hash("password123"),
-      recoverQuestion: "What is your mother's maiden name?",
-      answer: "Smith",
-      isActive: true,
-      lastLoginAt: new Date(),
-    },
-  });
+    console.log("🌱 Running car seed...");
+    execSync("npx tsx prisma/seedCars.ts", { stdio: "inherit" });
 
-  const user2 = await prisma.user.upsert({
-    where: {
-      userName: "jane.smith",
-    },
-    update: {},
-    create: {
-      userName: "jane.smith",
-      passwordHash: await hash("securepass456"),
-      recoverQuestion: "What is your mother's maiden name?",
-      answer: "Smith",
-      isActive: true,
-      lastLoginAt: null, // Never logged in
-    },
-  });
+    console.log("🌱 Running mod seed...");
+    execSync("npx tsx prisma/seedMods.ts", { stdio: "inherit" });
 
-  console.log("✅ Created users:");
-  console.log(`📧 User 1: ${user1.userName} (ID: ${user1.id})`);
-  console.log(`📧 User 2: ${user2.userName} (ID: ${user2.id})`);
-  
-  console.log("🌱 Seeding completed!");
+    console.log("✅ All seeds completed successfully");
+  } catch (err) {
+    console.error("❌ Seed failed:", err);
+    process.exit(1);
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error("❌ Seeding failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main();
