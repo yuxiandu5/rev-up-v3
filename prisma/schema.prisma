@@ -67,7 +67,6 @@ model Badge {
   model           Model              @relation(fields: [modelId], references: [id])
   yearRanges      ModelYearRange[]
   compatibilities ModCompatibility[]
-  media           MediaAsset[]
   UserBuild       UserBuild[]
 
   @@unique([modelId, name])
@@ -86,6 +85,8 @@ model ModelYearRange {
   torque      Int
   zeroToHundred Int?     // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
   handling    Int        // arbitrary score, standardize scale out of 10
+
+  mediaAsset  MediaAsset[]
 }
 
 
@@ -170,8 +171,8 @@ model MediaAsset {
   mod   Mod?    @relation(fields: [modId], references: [id])
 
   // For badges (reference images of trims/cars)
-  badgeId String?
-  badge   Badge?  @relation(fields: [badgeId], references: [id])
+  modelYearRangeId String?
+  modelYearRange   ModelYearRange?  @relation(fields: [modelYearRangeId], references: [id])
 }
 
 // ----------------------
