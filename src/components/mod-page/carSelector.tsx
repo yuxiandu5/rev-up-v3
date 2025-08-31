@@ -1,21 +1,27 @@
-import { carData as carDataList } from "@/data/carData";
-import { CarData, CarSpecs, SelectedCar } from "@/types/carTypes";
 import MakeSelector from "./sub-comp/makeSelector";
 import ModelSelector from "./sub-comp/modelSelector";
-import YearSelector from "./sub-comp/yearSelector";
+import BadgeSelector from "./sub-comp/badgeSelector";
+import YearRangeSelector from "./sub-comp/yearRangeSelector";
 import Button from "../Button";
 import CarDisplay from "./sub-comp/carDisplay";
+import { useCarStore } from "@/stores/carStore";
+import { useEffect } from "react";
 
 
 type CarSelectorProps = {
-  selectedCar: SelectedCar;
-  setSelectedCar: (car: SelectedCar) => void;
   setPhase: (phase: string) => void;
-  carSpecs: CarSpecs;
 }
 
-export default function CarSelector({selectedCar, setSelectedCar, setPhase, carSpecs}: CarSelectorProps) {
-  const carData: CarData = carDataList;
+export default function CarSelector({ setPhase }: CarSelectorProps) {
+  const { makes, selectMake, selectedCar, models, selectModel, fetchMakes, badges, selectBadge, yearRanges, selectYearRange, carSpecs, fetchModels, fetchBadges, fetchYearRanges } = useCarStore();
+
+
+  useEffect(() => {
+    fetchMakes();
+    fetchModels(selectedCar.makeId);
+    fetchBadges(selectedCar.modelId);
+    fetchYearRanges(selectedCar.badgeId);
+  }, []);
 
   return (
     <section className="flex flex-col gap-4 items-center justify-center w-full min-h-full pb-10 md:gap-10">
@@ -24,26 +30,33 @@ export default function CarSelector({selectedCar, setSelectedCar, setPhase, carS
       </header>
 
       <div className="flex items-center justify-center flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl px-4 mt-0">
-        <MakeSelector 
-          carData={carData} 
+        <MakeSelector  
           selectedCar={selectedCar} 
-          setSelectedCar={setSelectedCar} 
+          selectMake={selectMake} 
+          makes={makes} 
           disabled={false}
         />
 
         <ModelSelector 
-          carData={carData} 
+          models={models} 
           selectedCar={selectedCar} 
-          setSelectedCar={setSelectedCar} 
+          selectModel={selectModel} 
           disabled={selectedCar.make === ""}
         />    
 
-        <YearSelector 
-          carData={carData} 
+        <BadgeSelector 
+          badges={badges} 
           selectedCar={selectedCar} 
-          setSelectedCar={setSelectedCar} 
+          selectBadge={selectBadge} 
           disabled={selectedCar.make === "" || selectedCar.model === ""}
-          />
+        />
+
+        <YearRangeSelector 
+          yearRanges={yearRanges} 
+          selectedCar={selectedCar} 
+          selectYearRange={selectYearRange} 
+          disabled={selectedCar.make === "" || selectedCar.model === "" || selectedCar.badge === ""}
+        />
       </div>
 
       <div className="flex flex-col gap-10 items-center justify-center w-[70%] h-[60%] bg-[var(--bg-dark1)] rounded-md">

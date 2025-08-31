@@ -1,8 +1,8 @@
-import { CarSpecs } from "@/types/carTypes";
+import { CarSpecs } from "@/types/carTypes2";
 
 type CarSpecDisplayMobileProps = {
   carSpecs: CarSpecs;
-  modifiedSpecs: CarSpecs;
+  modifiedSpecs: CarSpecs | null;
 }
 
 export default function CarSpecDisplayMobile({ carSpecs, modifiedSpecs }: CarSpecDisplayMobileProps) {
@@ -45,9 +45,9 @@ export default function CarSpecDisplayMobile({ carSpecs, modifiedSpecs }: CarSpe
     },
     {
       label: "0-100",
-      value: modifiedSpecs?.zeroTo100 || carSpecs.zeroTo100,
+      value: modifiedSpecs?.zeroToHundred || carSpecs.zeroToHundred,
       unit: "s",
-      gainedLost: getGainedLost(carSpecs.zeroTo100, modifiedSpecs?.zeroTo100),
+      gainedLost: getGainedLost(carSpecs.zeroToHundred, modifiedSpecs?.zeroToHundred),
       inverted: true
     },
     {

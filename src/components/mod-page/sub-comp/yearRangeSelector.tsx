@@ -1,25 +1,26 @@
-import { Model, SelectedCar } from "@/types/carTypes2";
+import { YearRange, SelectedCar } from "@/types/carTypes2";
 
-type ModelSelectorProps = {
-  models: Model[];
+type YearRangeSelectorProps = {
+  yearRanges: YearRange[];
   selectedCar: SelectedCar;
-  selectModel: (model: Model) => void;
+  selectYearRange: (yearRange: YearRange) => void;
   disabled: boolean;
 }
 
-export default function ModelSelector({models, selectedCar, selectModel, disabled}: ModelSelectorProps) {
+export default function YearRangeSelector({yearRanges, selectedCar, selectYearRange, disabled}: YearRangeSelectorProps) {
+
   return (
     <div className="flex flex-col w-full max-w-xs">
-      <label htmlFor="modelSelector" className="text-[var(--text1)] text-sm font-medium mb-2">
-        Model
+      <label htmlFor="yearSelector" className="text-[var(--text1)] text-sm font-medium mb-2">
+        Year Range
       </label>
       <div className="relative">
         <select 
-        name="modelSelector" 
-        id="modelSelector" 
+        name="yearSelector" 
+        id="yearSelector" 
         disabled={disabled} 
-        onChange={(e) => selectModel(models.find(model => model.name === e.target.value)!)}
-        value={selectedCar.model}
+        onChange={(e) => selectYearRange(yearRanges.find(yearRange => yearRange.id === e.target.value)!)}
+        value={selectedCar.yearRangeId}
         className="
           appearance-none bg-[var(--bg-dark1)] text-[var(--text1)] 
           border border-[var(--bg-dark3)] rounded-lg px-4 py-3 
@@ -30,10 +31,12 @@ export default function ModelSelector({models, selectedCar, selectModel, disable
           pr-10
         "
       >
-        {selectedCar.modelId === "" && <option value="">Select Model</option>}
+        {selectedCar.yearRangeId === "" && <option value="">Select Year Range</option>}
         {
-          models.map((model) => (  
-            <option key={model.id} value={model.name} className="bg-[var(--bg-dark1)] text-[var(--text1)]">{model.name}</option>  
+          yearRanges.map((yearRange) => (  
+            <option key={yearRange.id} value={yearRange.id} className="bg-[var(--bg-dark1)] text-[var(--text1)]">
+              {yearRange.startYear} - {yearRange.endYear ? yearRange.endYear : "Current"}
+            </option>
           ))
         }
         </select>
