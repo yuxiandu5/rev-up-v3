@@ -1,22 +1,16 @@
-import { CarData, SelectedCar } from "@/types/carTypes";
+"use client";
+
+import { Make, SelectedCar } from "@/types/carTypes2";
+
 
 type MakeSelectorProps = {
-  carData: CarData;
   selectedCar: SelectedCar;
-  setSelectedCar: (car: SelectedCar) => void;
+  makes: Make[];
+  selectMake: (make: Make) => void;
   disabled: boolean;
 }
 
-export default function MakeSelector({carData, selectedCar, setSelectedCar, disabled}: MakeSelectorProps) {
-
-  const handleMakeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCar({...selectedCar, 
-      make: e.target.value, 
-      model: "", 
-      yearRange: "", 
-    });
-  };
-
+export default function MakeSelector({disabled, selectedCar, makes, selectMake}: MakeSelectorProps) {  
   return (
     <div className="flex flex-col w-full max-w-xs">
       <label htmlFor="makeSelector" className="text-[var(--text1)] text-sm font-medium mb-2">
@@ -27,7 +21,7 @@ export default function MakeSelector({carData, selectedCar, setSelectedCar, disa
         name="makeSelector" 
         id="makeSelector" 
         disabled={disabled} 
-        onChange={handleMakeChange}
+        onChange={(e) => selectMake(makes.find(make => make.name === e.target.value)!)}
         value={selectedCar.make}
         className="
           appearance-none bg-[var(--bg-dark1)] text-[var(--text1)] 
@@ -39,10 +33,10 @@ export default function MakeSelector({carData, selectedCar, setSelectedCar, disa
           pr-10
         "
       >
-        <option value="">Select Make</option>
+        {selectedCar.makeId === "" && <option value="">Select Make</option>}
         {
-          Object.keys(carData).map((make) => (  
-            <option key={make} value={make} className="bg-[var(--bg-dark1)] text-[var(--text1)]">{make}</option>
+          makes.map((make) => (  
+            <option key={make.id} value={make.name} className="bg-[var(--bg-dark1)] text-[var(--text1)]">{make.name}</option>
           ))
         }
         </select>

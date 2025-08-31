@@ -1,32 +1,28 @@
-import { CarData, SelectedCar } from "@/types/carTypes";
+"use client";
 
-type YearSelectorProps = {
-  carData: CarData;
+import { Badge, SelectedCar } from "@/types/carTypes2";
+
+
+type BadgeSelectorProps = {
   selectedCar: SelectedCar;
-  setSelectedCar: (car: SelectedCar) => void;
+  badges: Badge[];
+  selectBadge: (badge: Badge) => void;
   disabled: boolean;
 }
 
-export default function YearSelector({carData, selectedCar, setSelectedCar, disabled}: YearSelectorProps) {
-
-  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCar({...selectedCar, 
-      yearRange: e.target.value,
-    });
-  };
-
+export default function BadgeSelector({disabled, selectedCar, badges, selectBadge}: BadgeSelectorProps) {  
   return (
     <div className="flex flex-col w-full max-w-xs">
-      <label htmlFor="yearSelector" className="text-[var(--text1)] text-sm font-medium mb-2">
-        Year Range
+      <label htmlFor="badgeSelector" className="text-[var(--text1)] text-sm font-medium mb-2">
+        Badge
       </label>
       <div className="relative">
         <select 
-        name="yearSelector" 
-        id="yearSelector" 
+        name="badgeSelector" 
+        id="badgeSelector" 
         disabled={disabled} 
-        onChange={handleYearChange}
-        value={selectedCar.yearRange}
+        onChange={(e) => selectBadge(badges.find(badge => badge.name === e.target.value)!)}
+        value={selectedCar.badge}
         className="
           appearance-none bg-[var(--bg-dark1)] text-[var(--text1)] 
           border border-[var(--bg-dark3)] rounded-lg px-4 py-3 
@@ -37,10 +33,10 @@ export default function YearSelector({carData, selectedCar, setSelectedCar, disa
           pr-10
         "
       >
-        <option value="">Select Year</option>
-        { selectedCar.make && selectedCar.model &&
-          Object.keys(carData[selectedCar.make][selectedCar.model]).map((yearRange) => (  
-            <option key={yearRange} value={yearRange} className="bg-[var(--bg-dark1)] text-[var(--text1)]">{yearRange}</option>
+        {selectedCar.badgeId === "" && <option value="">Select Badge</option>}
+        {
+          badges.map((badge) => (  
+            <option key={badge.id} value={badge.name} className="bg-[var(--bg-dark1)] text-[var(--text1)]">{badge.name}</option>
           ))
         }
         </select>

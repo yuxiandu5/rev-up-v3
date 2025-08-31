@@ -1,9 +1,9 @@
-import { CarSpecs, SelectedCar } from "@/types/carTypes";
+import { CarSpecs, SelectedCar } from "@/types/carTypes2";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
 type CarDisplayProps = {
-  carSpecs: CarSpecs;
+  carSpecs: CarSpecs | null;
   selectedCar: SelectedCar;
 }
 
@@ -18,7 +18,7 @@ export default function CarDisplay({carSpecs, selectedCar}: CarDisplayProps) {
           className=" w-full max-w-lg aspect-[4/3] md:aspect-[3/2] flex flex-col items-center justify-center relative h-full"
         >
           <Image 
-            src={carSpecs.image} 
+            src={carSpecs?.url || ""} 
             alt={`${selectedCar.make} ${selectedCar.model}`} 
             fill
             className="object-contain"

@@ -1,4 +1,4 @@
-import { CarSpecs, SelectedCar } from "@/types/carTypes";
+import { CarSpecs, SelectedCar } from "@/types/carTypes2";
 import { ArrowLeftIcon, Save, X } from "lucide-react";
 import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
@@ -18,7 +18,7 @@ type ModSelectorProps = {
 
 export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMods, setSelectedMods}: ModSelectorProps) {
   // Calculate actual modified specs for display
-  const modifiedSpecs = applySpecChanges(carSpecs, selectedMods);
+  // const modifiedSpecs = applySpecChanges(carSpecs, selectedMods);
 
   return (
     <section 
@@ -70,7 +70,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
             "
             id="vehicle-title"
           >
-            {selectedCar.make} {selectedCar.model}
+            {selectedCar.make} {selectedCar.model} {selectedCar.badge}
           </h1>
           <span
             className="
@@ -154,7 +154,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           >
             <CarSpecDisplay 
               carSpecs={carSpecs}
-              modifiedSpecs={modifiedSpecs}
+              modifiedSpecs={null}
             />
           </div>
         </div>
@@ -162,7 +162,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
         <div className="flex flex-col gap-2 w-full md:hidden">
           <CarSpecDisplayMobile 
             carSpecs={carSpecs}
-            modifiedSpecs={modifiedSpecs}
+            modifiedSpecs={null}
           />
         </div>
 

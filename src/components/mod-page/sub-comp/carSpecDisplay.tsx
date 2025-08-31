@@ -1,9 +1,9 @@
-import { CarSpecs } from "@/types/carTypes";
+import { CarSpecs } from "@/types/carTypes2";
 import ProgressBar from "./progressBar";
 
 type CarSpecDisplayProps = {
   carSpecs: CarSpecs;
-  modifiedSpecs: CarSpecs;
+  modifiedSpecs: CarSpecs | null;
 }
 
 export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDisplayProps) {
@@ -17,7 +17,7 @@ export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDispl
   const maxValues = {
     hp: 1000,        // Max horsepower for progress bar
     torque: 800,     // Max torque (Nm)
-    zeroTo100: 10,   // Max 0-100 time (seconds) - lower is better
+    zeroToHundred: 10,   // Max 0-100 time (seconds) - lower is better
     handling: 10     // Max handling score (1-10 scale)
   };
 
@@ -47,10 +47,10 @@ export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDispl
         {/* Note: For 0-100 time, lower is better, so we invert the progress */}
         <ProgressBar
           label="0-100 km/h"
-          value={modifiedSpecs?.zeroTo100 || carSpecs.zeroTo100}
-          maxValue={maxValues.zeroTo100}
+          value={modifiedSpecs?.zeroToHundred || carSpecs.zeroToHundred * 0.1}
+          maxValue={maxValues.zeroToHundred}
           unit="s"
-          gainedLost={getGainedLost(carSpecs.zeroTo100, modifiedSpecs?.zeroTo100)}
+          gainedLost={getGainedLost(carSpecs.zeroToHundred, modifiedSpecs?.zeroToHundred)}
           inverted={true}
         />
         
