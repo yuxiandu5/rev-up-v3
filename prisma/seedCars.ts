@@ -1,11 +1,27 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
+// Helper function to generate media assets for a year range
+function generateMediaAssetForYearRange(
+  url: string,
+  make: string,
+  model: string,
+  badge: string,
+  startYear: number,
+  endYear: number | null,
+  chassis?: string
+) {
+  const yearRangeStr = endYear ? `${startYear}-${endYear}` : `${startYear}-current`;
+  
+  return {
+    url: url,
+    alt: `${make} ${model} ${badge} (${yearRangeStr}${chassis ? ` - ${chassis}` : ""})`,
+  };
+}
+
 async function main() {
-  // --------------------------
   // BMW
-  // --------------------------
-  const bmw = await prisma.make.upsert({
+  await prisma.make.upsert({
     where: { slug: "bmw" },
     update: {},
     create: {
@@ -31,6 +47,9 @@ async function main() {
                         torque: 270,
                         zeroToHundred: 74, // 7.4s
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-3series-2013-2018.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctM3Nlcmllcy0yMDEzLTIwMTgucG5nIiwiaWF0IjoxNzU2NjQwMTM1LCJleHAiOjE3ODgxNzYxMzV9.FsZg_iI9cJ7YXZHaRI3sNqbk3TJrZHAO47hUg4V_Lx4", "BMW", "3 Series", "320i", 2013, 2018, "F30")],
+                        },
                       },
                       {
                         startYear: 2019,
@@ -40,6 +59,9 @@ async function main() {
                         torque: 300,
                         zeroToHundred: 74, // 7.4s
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-3series-2019-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctM3Nlcmllcy0yMDE5LXByZXNlbnQucG5nIiwiaWF0IjoxNzU2NjQwNDgxLCJleHAiOjE3ODgxNzY0ODF9.e-iJe1F2VJzSdcw_Rs1-nBXpHJsge9fxPeatunYnSRE", "BMW", "3 Series", "320i", 2019, null, "G20")],
+                        },
                       },
                     ],
                   },
@@ -57,6 +79,9 @@ async function main() {
                         torque: 350,
                         zeroToHundred: 56, // 5.6s
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-3series-2013-2018.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctM3Nlcmllcy0yMDEzLTIwMTgucG5nIiwiaWF0IjoxNzU2NjQwMTM1LCJleHAiOjE3ODgxNzYxMzV9.FsZg_iI9cJ7YXZHaRI3sNqbk3TJrZHAO47hUg4V_Lx4", "BMW", "3 Series", "330i", 2013, 2018, "F30")],
+                        },
                       },
                       {
                         startYear: 2019,
@@ -66,6 +91,9 @@ async function main() {
                         torque: 400,
                         zeroToHundred: 59, // 5.9s
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-3series-2019-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctM3Nlcmllcy0yMDE5LXByZXNlbnQucG5nIiwiaWF0IjoxNzU2NjQwNDgxLCJleHAiOjE3ODgxNzY0ODF9.e-iJe1F2VJzSdcw_Rs1-nBXpHJsge9fxPeatunYnSRE", "BMW", "3 Series", "330i", 2019, null, "G20")],
+                        },
                       },
                     ],
                   },
@@ -83,6 +111,9 @@ async function main() {
                         torque: 500,
                         zeroToHundred: 44, // 4.4s
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-m340i-2019-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctbTM0MGktMjAxOS1wcmVzZW50LnBuZyIsImlhdCI6MTc1NjY0MDQ1OCwiZXhwIjoxNzg4MTc2NDU4fQ.ssqMj8PtmV3iGfBXq1QL-OjEG2yX41fOY_Yq2ohiI7Y", "BMW", "3 Series", "M340i", 2019, null, "G20")],
+                        },
                       },
                     ],
                   },
@@ -108,6 +139,9 @@ async function main() {
                         torque: 270,
                         zeroToHundred: 71, // 7.1s
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-2series-2014-2021.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctMnNlcmllcy0yMDE0LTIwMjEucG5nIiwiaWF0IjoxNzU2NjQwNjAxLCJleHAiOjE3ODgxNzY2MDF9.8cTA2bpPXCnUo4sCdrfUh03QdNFcTHLA7RhkBGHhP1s", "BMW", "2 Series", "220i", 2014, 2021, "F22")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -117,6 +151,9 @@ async function main() {
                         torque: 300,
                         zeroToHundred: 72, // 7.2s
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-2series-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctMnNlcmllcy0yMDIxLXByZXNlbnQucG5nIiwiaWF0IjoxNzU2NjQxMjIyLCJleHAiOjE3ODgxNzcyMjJ9.ByTsQko89s54CdaXAHc0l5BKZfyDNGGQbzCJuDUeWqE", "BMW", "2 Series", "220i", 2021, null, "G42")],
+                        },
                       },
                     ],
                   },
@@ -134,6 +171,9 @@ async function main() {
                         torque: 350,
                         zeroToHundred: 57,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-2series-2014-2021.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctMnNlcmllcy0yMDE0LTIwMjEucG5nIiwiaWF0IjoxNzU2NjQwNjAxLCJleHAiOjE3ODgxNzY2MDF9.8cTA2bpPXCnUo4sCdrfUh03QdNFcTHLA7RhkBGHhP1s", "BMW", "2 Series", "230i", 2016, 2021, "F22")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -143,6 +183,9 @@ async function main() {
                         torque: 400,
                         zeroToHundred: 58,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-2series-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctMnNlcmllcy0yMDIxLXByZXNlbnQucG5nIiwiaWF0IjoxNzU2NjQxMjIyLCJleHAiOjE3ODgxNzcyMjJ9.ByTsQko89s54CdaXAHc0l5BKZfyDNGGQbzCJuDUeWqE", "BMW", "2 Series", "230i", 2021, null, "G42")],
+                        },
                       },
                     ],
                   },
@@ -160,6 +203,9 @@ async function main() {
                         torque: 500,
                         zeroToHundred: 46,
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-240i-2016-2021.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctMjQwaS0yMDE2LTIwMjEucG5nIiwiaWF0IjoxNzU2NjQzNDc3LCJleHAiOjE3ODgxNzk0Nzd9.b3pwzI1RvVCXp4dKuMuIMve3a-iNOyNSzYS8xDIJLcA", "BMW", "2 Series", "M240i", 2016, 2021, "F22")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -169,6 +215,9 @@ async function main() {
                         torque: 500,
                         zeroToHundred: 44,
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/bmw-m240i-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9ibXctbTI0MGktMjAyMS1wcmVzZW50LnBuZyIsImlhdCI6MTc1NjY0MTUzMywiZXhwIjoxNzg4MTc3NTMzfQ.lmm7Tsl4KGdpz6myAMPHaKGi7HBDtha0ACEOJPrR9-s", "BMW", "2 Series", "M240i", 2021, null, "G42")],
+                        },
                       },
                     ],
                   },
@@ -181,10 +230,8 @@ async function main() {
     },
   });
 
-  // --------------------------
   // Mercedes
-  // --------------------------
-  const mercedes = await prisma.make.upsert({
+  await prisma.make.upsert({
     where: { slug: "mercedes" },
     update: {},
     create: {
@@ -210,6 +257,9 @@ async function main() {
                         torque: 300,
                         zeroToHundred: 77,
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/mercedes-c300-coupe-2016-2023.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9tZXJjZWRlcy1jMzAwLWNvdXBlLTIwMTYtMjAyMy5wbmciLCJpYXQiOjE3NTY2Mzk1NTgsImV4cCI6MTc4ODE3NTU1OH0.3QZjXAjrZnztYvESC4nv9rmF8rPOwbfzCBm7jOV8TOA", "Mercedes-Benz", "C-Class", "C200", 2014, 2021, "W205")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -219,6 +269,9 @@ async function main() {
                         torque: 300,
                         zeroToHundred: 75,
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/Mercedes-c-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9NZXJjZWRlcy1jLTIwMjEtcHJlc2VudC5wbmciLCJpYXQiOjE3NTY2NDQwNzAsImV4cCI6MTc4ODE4MDA3MH0.UjyuKvPrl3Q-AY7HDeW2qoScsWCf74w0ekNsS5sin1E", "Mercedes-Benz", "C-Class", "C200", 2021, null, "W206")],
+                        },
                       },
                     ],
                   },
@@ -236,6 +289,9 @@ async function main() {
                         torque: 370,
                         zeroToHundred: 59,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/mercedes-c300-coupe-2016-2023.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9tZXJjZWRlcy1jMzAwLWNvdXBlLTIwMTYtMjAyMy5wbmciLCJpYXQiOjE3NTY2Mzk1NTgsImV4cCI6MTc4ODE3NTU1OH0.3QZjXAjrZnztYvESC4nv9rmF8rPOwbfzCBm7jOV8TOA", "Mercedes-Benz", "C-Class", "C300", 2015, 2021, "W205")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -245,6 +301,9 @@ async function main() {
                         torque: 400,
                         zeroToHundred: 60,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/Mercedes-c-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9NZXJjZWRlcy1jLTIwMjEtcHJlc2VudC5wbmciLCJpYXQiOjE3NTY2NDQwNzAsImV4cCI6MTc4ODE4MDA3MH0.UjyuKvPrl3Q-AY7HDeW2qoScsWCf74w0ekNsS5sin1E", "Mercedes-Benz", "C-Class", "C300", 2021, null, "W206")],
+                        },
                       },
                     ],
                   },
@@ -262,6 +321,9 @@ async function main() {
                         torque: 520,
                         zeroToHundred: 47,
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/Mercedes-c-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9NZXJjZWRlcy1jLTIwMjEtcHJlc2VudC5wbmciLCJpYXQiOjE3NTY2NDQwNzAsImV4cCI6MTc4ODE4MDA3MH0.UjyuKvPrl3Q-AY7HDeW2qoScsWCf74w0ekNsS5sin1E", "Mercedes-Benz", "C-Class", "C43 AMG", 2016, 2021, "W205")],
+                        },
                       },
                       {
                         startYear: 2021,
@@ -271,6 +333,9 @@ async function main() {
                         torque: 520,
                         zeroToHundred: 47,
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/Mercedes-c-2021-present.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9NZXJjZWRlcy1jLTIwMjEtcHJlc2VudC5wbmciLCJpYXQiOjE3NTY2NDQwNzAsImV4cCI6MTc4ODE4MDA3MH0.UjyuKvPrl3Q-AY7HDeW2qoScsWCf74w0ekNsS5sin1E", "Mercedes-Benz", "C-Class", "C43 AMG", 2021, null, "W206")],
+                        },
                       },
                     ],
                   },
@@ -296,6 +361,9 @@ async function main() {
                         torque: 200,
                         zeroToHundred: 91,
                         handling: 6,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Mercedes-Benz", "A-Class", "A180", 2018, null, "W177")],
+                        },
                       },
                     ],
                   },
@@ -313,6 +381,9 @@ async function main() {
                         torque: 250,
                         zeroToHundred: 82,
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Mercedes-Benz", "A-Class", "A200", 2018, null, "W177")],
+                        },
                       },
                     ],
                   },
@@ -330,6 +401,9 @@ async function main() {
                         torque: 350,
                         zeroToHundred: 62,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Mercedes-Benz", "A-Class", "A250", 2018, null, "W177")],
+                        },
                       },
                     ],
                   },
@@ -342,10 +416,8 @@ async function main() {
     },
   });
 
-  // --------------------------
   // Audi
-  // --------------------------
-  const audi = await prisma.make.upsert({
+  await prisma.make.upsert({
     where: { slug: "audi" },
     update: {},
     create: {
@@ -371,6 +443,9 @@ async function main() {
                         torque: 320,
                         zeroToHundred: 74,
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Audi", "A4", "A4 40 TFSI", 2016, null, "B9")],
+                        },
                       },
                     ],
                   },
@@ -388,6 +463,9 @@ async function main() {
                         torque: 370,
                         zeroToHundred: 58,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Audi", "A4", "A4 45 TFSI", 2019, null, "B9.5")],
+                        },
                       },
                     ],
                   },
@@ -405,6 +483,9 @@ async function main() {
                         torque: 500,
                         zeroToHundred: 48,
                         handling: 9,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Audi", "A4", "S4", 2016, null, "B9")],
+                        },
                       },
                     ],
                   },
@@ -430,6 +511,9 @@ async function main() {
                         torque: 320,
                         zeroToHundred: 76,
                         handling: 7,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/audi-a5-45-2017-2024.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9hdWRpLWE1LTQ1LTIwMTctMjAyNC5wbmciLCJpYXQiOjE3NTY2NDAyNDQsImV4cCI6MTc4ODE3NjI0NH0.dd4wOKxH1ylDEm_lPjH-2_B1feRNSAZ98rYBppkQjhA", "Audi", "A5", "A5 40 TFSI", 2017, null, "B9")],
+                        },
                       },
                     ],
                   },
@@ -440,13 +524,16 @@ async function main() {
                   yearRanges: {
                     create: [
                       {
-                        startYear: 2019,
+                        startYear: 2017,
                         endYear: null,
                         chassis: "B9.5",
                         hp: 265,
                         torque: 370,
                         zeroToHundred: 59,
                         handling: 8,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("https://nfewejtwlvnejuffyane.supabase.co/storage/v1/object/sign/images/car-sketch/audi-a5-45-2017-2024.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZWRlMzAxMS04OTI3LTQxNTctYWFmZC05YWViOGMxN2QxNWYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMvY2FyLXNrZXRjaC9hdWRpLWE1LTQ1LTIwMTctMjAyNC5wbmciLCJpYXQiOjE3NTY2NDAyNDQsImV4cCI6MTc4ODE3NjI0NH0.dd4wOKxH1ylDEm_lPjH-2_B1feRNSAZ98rYBppkQjhA", "Audi", "A5", "A5 45 TFSI", 2019, null, "B9.5")],
+                        },
                       },
                     ],
                   },
@@ -459,10 +546,8 @@ async function main() {
     },
   });
 
-  // --------------------------
   // Porsche
-  // --------------------------
-  const porsche = await prisma.make.upsert({
+  await prisma.make.upsert({
     where: { slug: "porsche" },
     update: {},
     create: {
@@ -488,6 +573,9 @@ async function main() {
                         torque: 450,
                         zeroToHundred: 42,
                         handling: 10,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Porsche", "911", "Carrera", 2019, null, "992")],
+                        },
                       },
                     ],
                   },
@@ -505,6 +593,9 @@ async function main() {
                         torque: 530,
                         zeroToHundred: 39,
                         handling: 10,
+                        mediaAsset: {
+                          create: [generateMediaAssetForYearRange("", "Porsche", "911", "Carrera S", 2019, null, "992")],
+                        },
                       },
                     ],
                   },
