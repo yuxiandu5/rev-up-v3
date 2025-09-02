@@ -91,7 +91,6 @@ CREATE TABLE "public"."Mod" (
     "brand" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "description" TEXT,
-    "price" INTEGER,
     "modCategoryId" TEXT,
 
     CONSTRAINT "Mod_pkey" PRIMARY KEY ("id")
@@ -104,12 +103,13 @@ CREATE TABLE "public"."ModCompatibility" (
     "badgeId" TEXT NOT NULL,
     "modelId" TEXT NOT NULL,
     "makeId" TEXT NOT NULL,
-    "yearStart" INTEGER,
-    "yearEnd" INTEGER,
+    "modelYearRange" TEXT NOT NULL,
+    "modelYearRangeId" TEXT NOT NULL,
     "hpGain" INTEGER,
     "nmGain" INTEGER,
     "handlingDelta" INTEGER,
     "zeroToHundredDelta" INTEGER,
+    "price" INTEGER,
     "notes" TEXT,
 
     CONSTRAINT "ModCompatibility_pkey" PRIMARY KEY ("id")
@@ -118,8 +118,8 @@ CREATE TABLE "public"."ModCompatibility" (
 -- CreateTable
 CREATE TABLE "public"."ModRequirement" (
     "id" TEXT NOT NULL,
-    "dependentId" TEXT NOT NULL,
     "prerequisiteId" TEXT NOT NULL,
+    "dependentId" TEXT NOT NULL,
 
     CONSTRAINT "ModRequirement_pkey" PRIMARY KEY ("id")
 );
@@ -130,7 +130,7 @@ CREATE TABLE "public"."MediaAsset" (
     "url" TEXT NOT NULL,
     "alt" TEXT,
     "modId" TEXT,
-    "badgeId" TEXT,
+    "modelYearRangeId" TEXT,
 
     CONSTRAINT "MediaAsset_pkey" PRIMARY KEY ("id")
 );
@@ -211,19 +211,16 @@ ALTER TABLE "public"."Mod" ADD CONSTRAINT "Mod_modCategoryId_fkey" FOREIGN KEY (
 ALTER TABLE "public"."ModCompatibility" ADD CONSTRAINT "ModCompatibility_modId_fkey" FOREIGN KEY ("modId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."ModCompatibility" ADD CONSTRAINT "ModCompatibility_badgeId_fkey" FOREIGN KEY ("badgeId") REFERENCES "public"."Badge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_prerequisiteId_fkey" FOREIGN KEY ("prerequisiteId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_dependentId_fkey" FOREIGN KEY ("dependentId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_prerequisiteId_fkey" FOREIGN KEY ("prerequisiteId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_modId_fkey" FOREIGN KEY ("modId") REFERENCES "public"."Mod"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_badgeId_fkey" FOREIGN KEY ("badgeId") REFERENCES "public"."Badge"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_modelYearRangeId_fkey" FOREIGN KEY ("modelYearRangeId") REFERENCES "public"."ModelYearRange"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."UserBuild" ADD CONSTRAINT "UserBuild_badgeId_fkey" FOREIGN KEY ("badgeId") REFERENCES "public"."Badge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
