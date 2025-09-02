@@ -66,7 +66,6 @@ model Badge {
   modelId         String
   model           Model              @relation(fields: [modelId], references: [id])
   yearRanges      ModelYearRange[]
-  compatibilities ModCompatibility[]
   UserBuild       UserBuild[]
 
   @@unique([modelId, name])
@@ -100,6 +99,7 @@ model ModCategory {
   slug        String  @unique // e.g. "intake"
   description String?
   mods        Mod[]
+  prerequisiteFor ModRequirement[] @relation("Requirement_prerequisite")
 }
 
 model Mod {
@@ -109,13 +109,11 @@ model Mod {
   brand       String
   category    String // intake, exhaust, tune, suspension, etc.
   description String?
-  price       Int?
   media       MediaAsset[]
 
   // Relations
   compatibilities ModCompatibility[]
-  dependencies    ModRequirement[]   @relation("Requirement_dependent")
-  prerequisitesOf ModRequirement[]   @relation("Requirement_prerequisite")
+  dependentOn     ModRequirement[]   @relation("Requirement_dependent")
   UserBuildMod    UserBuildMod[]
   ModCategory     ModCategory?       @relation(fields: [modCategoryId], references: [id])
   modCategoryId   String?
@@ -127,21 +125,22 @@ model ModCompatibility {
   modId    String
   mod      Mod    @relation(fields: [modId], references: [id])
 
-  badgeId  String
-  badge    Badge  @relation(fields: [badgeId], references: [id])
-
   // denormalized for faster queries
+  badgeId  String
   modelId  String
   makeId   String
 
-  yearStart       Int?
-  yearEnd         Int?
+  modelYearRange   String
+  modelYearRangeId String
 
   // performance deltas (all optional)
-  hpGain          Int?   // +hp
-  nmGain          Int?   // +torque
-  handlingDelta   Int?   // e.g. suspension mods
-  zeroToHundredDelta Int? // in tenths of a second, negative = faster
+  hpGain          Int?   
+  nmGain          Int?
+  handlingDelta   Int?   
+  zeroToHundredDelta Int? 
+
+  // pricing per car compatibility
+  price           Int?
 
   notes           String?
 }
@@ -149,13 +148,13 @@ model ModCompatibility {
 model ModRequirement {
   id String @id @default(cuid())
 
+  // prerequisite mod category (e.g. "Intake" category)
+  prerequisiteCategoryId String
+  prerequisiteCategory   ModCategory @relation("Requirement_prerequisite", fields: [prerequisiteCategoryId], references: [id])
+
   // dependent mod (e.g. Stage 2 Tune)
   dependentId String
   dependent   Mod    @relation("Requirement_dependent", fields: [dependentId], references: [id])
-
-  // prerequisite mod (e.g. Downpipe)
-  prerequisiteId String
-  prerequisite   Mod    @relation("Requirement_prerequisite", fields: [prerequisiteId], references: [id])
 }
 
 // ----------------------
