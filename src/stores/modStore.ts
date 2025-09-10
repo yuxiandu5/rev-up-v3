@@ -2,69 +2,20 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-// Types for the mod store
-type ModCategory = {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-};
-
-type Mod = {
-  id: string;
-  name: string;
-  slug: string;
-  brand: string;
-  category: string;
-  description?: string;
-  price?: number;
-  modCategoryId?: string;
-};
-
-type ModCompatibility = {
-  id: string;
-  modId: string;
-  badgeId: string;
-  modelId: string;
-  makeId: string;
-  yearStart?: number;
-  yearEnd?: number;
-  hpGain?: number;
-  nmGain?: number;
-  handlingDelta?: number;
-  zeroToHundredDelta?: number;
-  notes?: string;
-};
-
-type SelectedMods = {
-  [categoryId: string]: string | undefined; // Maps category ID to selected mod ID
-};
-
-type BuildData = {
-  id?: string;
-  name: string;
-  notes?: string;
-  selectedMods: SelectedMods;
-  isDraft: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
-type LoadingState = {
-  categories: boolean;
-  mods: boolean;
-  compatibility: boolean;
-  saving: boolean;
-  loading: boolean;
-};
+import type { 
+  ModCategory, 
+  Mod, 
+  SelectedModsByCategory, 
+  BuildData, 
+  LoadingState,
+} from "@/types/modTypes";
 
 interface ModState {
   // Data
   categories: ModCategory[];
   mods: Mod[];
-  compatibleMods: ModCompatibility[];
-  selectedMods: SelectedMods;
+  currentCategory: string;
+  selectedMods: SelectedModsByCategory;
   currentBuild: BuildData;
   
   // Loading states
@@ -72,9 +23,11 @@ interface ModState {
   
   // Actions
   fetchCategories: () => Promise<void>;
-  fetchModsForCar: (badgeId: string) => Promise<void>;
+  fetchModsForCategory: (categoryId: string, yearRangeId: string) => Promise<void>;
+  setCurrentCategory: (category: string) => void;
   selectMod: (categoryId: string, mod: Mod) => void;
   deselectMod: (categoryId: string) => void;
+  toggleMod: (categoryId: string, mod: Mod) => void;
   clearAllMods: () => void;
   
   // Build management
@@ -85,20 +38,20 @@ interface ModState {
   startNewBuild: () => void;
   
   // Calculations
-  getTotalSpecs: () => {
-    hp: number;
-    torque: number;
-    handling: number;
-    zeroToHundred: number;
+  getTotalSpecsGained: () => {
+    hpGain: number;
+    torqueGain: number;
+    handlingGain: number;
+    zeroToHundredGain: number;
   };
   getTotalPrice: () => number;
-  getSelectedModsForCategory: (categoryId: string) => Mod | null;
+  formatPrice: (price: number) => string;
 }
 
 const initialBuild: BuildData = {
   name: "",
   notes: "",
-  selectedMods: {},
+  selectedMods: {} as SelectedModsByCategory,
   isDraft: true,
 };
 
@@ -108,13 +61,12 @@ export const useModStore = create<ModState>()(
       // Initial state
       categories: [],
       mods: [],
-      compatibleMods: [],
-      selectedMods: {},
+      currentCategory: "",
+      selectedMods: {} as SelectedModsByCategory,
       currentBuild: initialBuild,
       loading: {
         categories: false,
         mods: false,
-        compatibility: false,
         saving: false,
         loading: false,
       },
@@ -126,7 +78,7 @@ export const useModStore = create<ModState>()(
         }));
         
         try {
-          const response = await fetch("/api/mod-categories");
+          const response = await fetch("/api/mod");
           if (!response.ok) throw new Error("Failed to fetch categories");
           
           const categories = await response.json();
@@ -140,28 +92,31 @@ export const useModStore = create<ModState>()(
         }
       },
 
-      fetchModsForCar: async (badgeId: string) => {
+      fetchModsForCategory: async (categoryId: string, yearRangeId: string) => {
         set((state) => ({ 
-          loading: { ...state.loading, mods: true, compatibility: true } 
+          loading: { ...state.loading, mods: true } 
         }));
         
         try {
           // Fetch compatible mods for this car
-          const response = await fetch(`/api/mods/compatible?badgeId=${badgeId}`);
+          const response = await fetch(`/api/mod/?categoryId=${categoryId}&yearRangeId=${yearRangeId}`);
           if (!response.ok) throw new Error("Failed to fetch compatible mods");
-          
+
           const data = await response.json();
           set({ 
-            mods: data.mods || [],
-            compatibleMods: data.compatibilities || []
+            mods: data || [],
           });
         } catch (error) {
           console.error("Error fetching mods:", error);
         } finally {
           set((state) => ({ 
-            loading: { ...state.loading, mods: false, compatibility: false } 
+            loading: { ...state.loading, mods: false } 
           }));
         }
+      },
+
+      setCurrentCategory: (category: string) => {
+        set({ currentCategory: category });
       },
 
       // Mod selection
@@ -170,7 +125,7 @@ export const useModStore = create<ModState>()(
         
         const newSelectedMods = {
           ...selectedMods,
-          [categoryId]: mod.id,
+          [categoryId]: mod,
         };
         
         set({
@@ -189,6 +144,27 @@ export const useModStore = create<ModState>()(
         const newSelectedMods = { ...selectedMods };
         delete newSelectedMods[categoryId];
         
+        // Check for dependent mods that need to be deselected
+        const modsToDeselect: string[] = [];
+        
+        Object.entries(newSelectedMods).forEach(([catId, mod]) => {
+          if (mod && mod.dependentOn && mod.dependentOn.length > 0) {
+            // Check if this mod depends on the category we're deselecting
+            const dependsOnDeselectedCategory = mod.dependentOn.some(
+              (dependency) => dependency.prerequisiteCategory.id === categoryId
+            );
+            
+            if (dependsOnDeselectedCategory) {
+              modsToDeselect.push(catId);
+            }
+          }
+        });
+        
+        // Remove all dependent mods
+        modsToDeselect.forEach(catId => {
+          delete newSelectedMods[catId];
+        });
+        
         set({
           selectedMods: newSelectedMods,
           currentBuild: {
@@ -199,14 +175,26 @@ export const useModStore = create<ModState>()(
         });
       },
 
+      toggleMod: (categoryId: string, mod: Mod) => {
+        const { selectedMods } = get();
+        
+        // If the mod is already selected in this category, deselect it
+        if (selectedMods[categoryId]?.id === mod.id) {
+          get().deselectMod(categoryId);
+        } else {
+          // Otherwise, select this mod
+          get().selectMod(categoryId, mod);
+        }
+      },
+
       clearAllMods: () => {
         const { currentBuild } = get();
         
         set({
-          selectedMods: {},
+          selectedMods: {} as SelectedModsByCategory,
           currentBuild: {
             ...currentBuild,
-            selectedMods: {},
+            selectedMods: {} as SelectedModsByCategory,
             isDraft: true,
           }
         });
@@ -299,58 +287,53 @@ export const useModStore = create<ModState>()(
       startNewBuild: () => {
         set({
           currentBuild: { ...initialBuild },
-          selectedMods: {},
+          selectedMods: {} as SelectedModsByCategory,
         });
       },
 
       // Calculations
-      getTotalSpecs: () => {
-        const { selectedMods, compatibleMods } = get();
+      getTotalSpecsGained: () => {
+        const { selectedMods } = get();
         
         let totalHp = 0;
         let totalTorque = 0;
         let totalHandling = 0;
         let totalZeroToHundred = 0;
         
-        Object.values(selectedMods).forEach(modId => {
-          if (modId) {
-            const compatibility = compatibleMods.find(comp => comp.modId === modId);
-            if (compatibility) {
-              totalHp += compatibility.hpGain || 0;
-              totalTorque += compatibility.nmGain || 0;
-              totalHandling += compatibility.handlingDelta || 0;
-              totalZeroToHundred += compatibility.zeroToHundredDelta || 0;
-            }
+        Object.values(selectedMods).forEach((mod: Mod | undefined) => {
+          if (mod && mod.compatibilities && mod.compatibilities.length > 0) {
+            const compatibility = mod.compatibilities[0];
+            totalHp += compatibility.hpGain || 0;
+            totalTorque += compatibility.nmGain || 0;
+            totalHandling += compatibility.handlingDelta || 0;
+            totalZeroToHundred += compatibility.zeroToHundredDelta || 0;
           }
         });
-        
+
         return {
-          hp: totalHp,
-          torque: totalTorque,
-          handling: totalHandling,
-          zeroToHundred: totalZeroToHundred,
+          hpGain: totalHp,
+          torqueGain: totalTorque,
+          handlingGain: totalHandling,
+          zeroToHundredGain: totalZeroToHundred,
         };
       },
 
       getTotalPrice: () => {
-        const { selectedMods, mods } = get();
-        
-        return Object.values(selectedMods).reduce((total, modId) => {
-          if (modId) {
-            const mod = mods.find(m => m.id === modId);
-            return total + (mod?.price || 0);
+        const { selectedMods } = get();
+
+        let totalPrice = 0;
+        Object.values(selectedMods).forEach((mod: Mod | undefined) => {
+          if (mod && mod.compatibilities && mod.compatibilities.length > 0) {
+            const compatibility = mod.compatibilities[0];
+            totalPrice += compatibility.price || 0;
           }
-          return total;
-        }, 0);
+        });
+
+        return totalPrice;
       },
 
-      getSelectedModsForCategory: (categoryId: string) => {
-        const { selectedMods, mods } = get();
-        const modId = selectedMods[categoryId];
-        
-        if (!modId) return null;
-        
-        return mods.find(mod => mod.id === modId) || null;
+      formatPrice: (price: number) => {
+        return `$${price.toLocaleString()}`;
       },
     }),
     {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMotionValue, animate } from "framer-motion";
-import { formatPrice } from "@/utils/modCalculations";
+import { useModStore } from "@/stores/modStore";
 
 type AnimatedPriceProps = {
   price: number;
@@ -20,6 +20,7 @@ export function AnimatedNumber({
   decimals,
   type = "number"
 }: AnimatedNumberProps) {
+  const { formatPrice } = useModStore();
   const motionValue = useMotionValue(value);
   const [displayValue, setDisplayValue] = useState(value.toString());
 

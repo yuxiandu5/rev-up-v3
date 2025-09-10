@@ -19,8 +19,10 @@ export async function GET(request: NextRequest) {
       const mods = await prisma.modCategory.findMany({
         select: {
           name: true,
+          description: true,
           id: true,
           slug: true,
+          mods: true,
         },
       });
       return NextResponse.json(mods);
@@ -35,6 +37,7 @@ export async function GET(request: NextRequest) {
           name: true,
           id: true,
           slug: true,
+          description: true,
           compatibilities: {
             where: {
               modelYearRangeId: yearRangeId
