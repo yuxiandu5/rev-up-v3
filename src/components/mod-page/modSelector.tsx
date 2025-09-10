@@ -4,21 +4,17 @@ import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
-import { SelectedMods } from "@/types/modTypes";
-import { applySpecChanges } from "@/utils/modCalculations";
 import CarSpecDisplayMobile from "./sub-comp/carSpecDisplayMobile";
+import { useModStore } from "@/stores/modStore";
 
 type ModSelectorProps = {
   carSpecs: CarSpecs;
   selectedCar: SelectedCar;
   setPhase: (phase: string) => void;
-  selectedMods: SelectedMods;
-  setSelectedMods: (mods: SelectedMods) => void;
 }
 
-export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMods, setSelectedMods}: ModSelectorProps) {
-  // Calculate actual modified specs for display
-  // const modifiedSpecs = applySpecChanges(carSpecs, selectedMods);
+export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelectorProps) {
+  const { selectedMods, selectMod, deselectMod, clearAllMods, getTotalSpecsGained } = useModStore();
 
   return (
     <section 
@@ -90,7 +86,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
             <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Save</span>
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => {setSelectedMods({});}} className="min-h-6">
+          <Button variant="secondary" size="sm" onClick={() => {clearAllMods();}} className="min-h-6">
             <X className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Discard</span>
           </Button>
@@ -154,7 +150,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
           >
             <CarSpecDisplay 
               carSpecs={carSpecs}
-              modifiedSpecs={null}
+              specGained={getTotalSpecsGained()}
             />
           </div>
         </div>
@@ -183,7 +179,8 @@ export default function ModSelector({carSpecs, selectedCar, setPhase, selectedMo
         >
           <ModsMenu 
             selectedMods={selectedMods}
-            setSelectedMods={setSelectedMods}
+            selectMod={selectMod}
+            deselectMod={deselectMod}
           />
         </aside>
       </section>

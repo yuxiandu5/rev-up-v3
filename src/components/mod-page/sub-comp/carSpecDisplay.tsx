@@ -3,14 +3,18 @@ import ProgressBar from "./progressBar";
 
 type CarSpecDisplayProps = {
   carSpecs: CarSpecs;
-  modifiedSpecs: CarSpecs | null;
+  specGained: {
+    hpGain: number;
+    torqueGain: number;
+    handlingGain: number;
+    zeroToHundredGain: number;
+  };
 }
 
-export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDisplayProps) {
+export default function CarSpecDisplay({ carSpecs, specGained }: CarSpecDisplayProps) {
   // Calculate gained/lost values if modified specs are provided
-  const getGainedLost = (original: number, modified?: number) => {
-    if (modified === undefined) return undefined;
-    return modified - original;
+  const modifiedSpecs = (original: number, modified: number) => {
+    return modified + original;
   };
 
   // Define max values for each stat to calculate progress percentages
@@ -30,36 +34,36 @@ export default function CarSpecDisplay({ carSpecs, modifiedSpecs }: CarSpecDispl
       <div className="flex flex-col gap-4">
         <ProgressBar
           label="Horsepower"
-          value={modifiedSpecs?.hp || carSpecs.hp}
+          value={modifiedSpecs(carSpecs.hp, specGained.hpGain)}
           maxValue={maxValues.hp}
           unit="hp"
-          gainedLost={getGainedLost(carSpecs.hp, modifiedSpecs?.hp)}
+          gainedLost={specGained.hpGain}
         />
         
         <ProgressBar
           label="Torque"
-          value={modifiedSpecs?.torque || carSpecs.torque}
+          value={modifiedSpecs(carSpecs.torque, specGained.torqueGain)}
           maxValue={maxValues.torque}
           unit="Nm"
-          gainedLost={getGainedLost(carSpecs.torque, modifiedSpecs?.torque)}
+          gainedLost={specGained.torqueGain}
         />
         
         {/* Note: For 0-100 time, lower is better, so we invert the progress */}
         <ProgressBar
           label="0-100 km/h"
-          value={modifiedSpecs?.zeroToHundred || carSpecs.zeroToHundred * 0.1}
+          value={modifiedSpecs(carSpecs.zeroToHundred * 0.1, specGained.zeroToHundredGain * 0.1)}
           maxValue={maxValues.zeroToHundred}
           unit="s"
-          gainedLost={getGainedLost(carSpecs.zeroToHundred, modifiedSpecs?.zeroToHundred)}
+          gainedLost={specGained.zeroToHundredGain * 0.1}
           inverted={true}
         />
         
         <ProgressBar
           label="Handling"
-          value={modifiedSpecs?.handling || carSpecs.handling}
+          value={modifiedSpecs(carSpecs.handling, specGained.handlingGain)}
           maxValue={maxValues.handling}
           unit=""
-          gainedLost={getGainedLost(carSpecs.handling, modifiedSpecs?.handling)}
+          gainedLost={specGained.handlingGain}
         />
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { SelectedMods } from "@/types/modTypes";
 import { AnimatedPrice } from "@/utils/animatedNumberProps";
-import { getSelectedMod } from "@/utils/modCalculations";
 
 type ModMenuCartProps = {
   totalPrice: number;
@@ -9,12 +8,8 @@ type ModMenuCartProps = {
 }
 
 export default function ModMenuCart({totalPrice, selectedMods, className}: ModMenuCartProps) {
-  const selectedModsList = Object.entries(selectedMods).map(([category]) => {
-    const mod = getSelectedMod(selectedMods, category);
-    return mod ? { category, mod } : null;
-  }).filter(Boolean);
-
-  const hasSelectedMods = selectedModsList.length > 0;
+  const modList = Object.values(selectedMods);
+  const hasSelectedMods = Object.keys(selectedMods).length > 0;
 
   return (
     <div className={`bg-[var(--bg-dark2)] rounded-lg p-4 border border-[var(--bg-dark3)] sticky top-0 z-10 ${className}`}>
@@ -32,7 +27,7 @@ export default function ModMenuCart({totalPrice, selectedMods, className}: ModMe
         {/* Selected Mods Count */}
         <div className="text-sm text-[var(--text2)]">
           {hasSelectedMods 
-            ? `${selectedModsList.length} modification${selectedModsList.length !== 1 ? "s" : ""} selected`
+            ? `${modList.length} modification${modList.length !== 1 ? "s" : ""} selected`
             : "No modifications selected"
           }
         </div>

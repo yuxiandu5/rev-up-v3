@@ -1,37 +1,33 @@
-import { SelectedMods } from "@/types/modTypes";
+import { Mod, SelectedMods } from "@/types/modTypes";
 import ModCategory from "./modCategory";
-import { useState } from "react";
-import { modData } from "@/data/modData";
 import ModCard from "./modCard";
 import ModMenuCart from "./modMenuCart";
-import { calculateTotalPrice, formatPrice } from "@/utils/modCalculations";
+import { useModStore } from "@/stores/modStore";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
+import { useCarStore } from "@/stores/carStore";
 
 type ModsMenuProps = {
   selectedMods: SelectedMods;
-  setSelectedMods: (mods: SelectedMods) => void;
+  selectMod: (categoryId: string, mod: Mod) => void;
+  deselectMod: (categoryId: string) => void;
 }
 
-export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const totalPrice = calculateTotalPrice(selectedMods);
+export default function ModsMenu({selectedMods}: ModsMenuProps) {
 
-  const handleModSelect = (category: string, modId: string) => {
-    const updatedMods = { ...selectedMods };
-    if (updatedMods[category] === modId) {
-      delete updatedMods[category];
-    } else {
-      updatedMods[category] = modId;
+  const { getTotalPrice, setCurrentCategory, fetchCategories, categories, currentCategory, fetchModsForCategory, mods, toggleMod, formatPrice } = useModStore();
+  const { selectedCar } = useCarStore();
+  const totalPrice = getTotalPrice();
+
+  useEffect(() => {
+    fetchCategories();
+    if (currentCategory !== "") {
+      fetchModsForCategory(currentCategory, selectedCar.yearRangeId);
     }
-    setSelectedMods(updatedMods);
-  };
-
-  const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-  };
+  }, [currentCategory, selectedCar.yearRangeId]);
 
   const handleBackToCategories = () => {
-    setSelectedCategory("");
+    setCurrentCategory("");
   };
 
   return (
@@ -44,7 +40,7 @@ export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps)
         />
         {/* Content Area */}
         <div className="px-2 overflow-y-auto mt-4 scrollbar-hide md:px-0">
-          {selectedCategory === "" 
+          {currentCategory === "" 
           ? (
             // Category Selection View
               <motion.div 
@@ -70,14 +66,13 @@ export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps)
                 </header>
                 
                 <div className="flex flex-col gap-3">
-                  {Object.entries(modData).map(([category, mods]) => (
+                  {categories.map((category) => (
                     <ModCategory 
-                      key={category}
+                      key={category.id}
                       category={category}
-                      onSelect={() => handleCategorySelect(category)}
-                      modData={mods}
-                      isSelected={selectedCategory === category}
-                    />
+                      onSelect={() => setCurrentCategory(category.id)}
+                      hasSelectedMod={Object.keys(selectedMods).includes(category.id)}
+                      />
                   ))}
                 </div>
               </motion.div>
@@ -85,7 +80,7 @@ export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps)
           : (
             // Mod Selection View
               <motion.div 
-                key={selectedCategory}
+                key={currentCategory}
                 initial={{ opacity: 0}}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
@@ -94,7 +89,7 @@ export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps)
                 <header className="mb-2 sticky top-0 bg-[var(--bg-dark1)] z-10 pb-2">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-bold text-[var(--text1)]">
-                      {selectedCategory}
+                      {categories.find((category) => category.id === currentCategory)?.name}
                     </h2>
                     <button
                     onClick={handleBackToCategories}
@@ -118,12 +113,13 @@ export default function ModsMenu({selectedMods, setSelectedMods}: ModsMenuProps)
                 </header>
                 
                 <div className="flex flex-col gap-3">
-                  {modData[selectedCategory]?.map((mod) => (
+                  {mods.map((mod) => (
                     <ModCard 
                       key={mod.id}
                       mod={mod}
-                      isSelected={selectedMods[selectedCategory] === mod.id}
-                      onSelect={() => handleModSelect(selectedCategory, mod.id)}
+                      modSpec={mod.compatibilities?.[0]}
+                      isSelected={selectedMods[currentCategory]?.id === mod.id}
+                      onSelect={() => toggleMod(currentCategory, mod)}
                     />
                   ))}
                 </div>
