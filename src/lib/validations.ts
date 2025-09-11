@@ -73,6 +73,23 @@ export const requestPasswordResetFormSchema = z.object({
   path: ["confirmPassword"],
 });
 
+// Build validation schemas
+export const createBuildSchema = z.object({
+  selectedCar: z.record(z.string(), z.any()), // JSON object
+  baseSpecs: z.record(z.string(), z.any()),   // JSON object
+  selectedMods: z.record(z.string(), z.any()), // JSON object
+  nickname: z.string().max(100).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+export const updateBuildSchema = z.object({
+  selectedCar: z.record(z.string(), z.any()).optional(),
+  baseSpecs: z.record(z.string(), z.any()).optional(),
+  selectedMods: z.record(z.string(), z.any()).optional(),
+  nickname: z.string().max(100).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -82,3 +99,5 @@ export type VerifyUsernameInput = z.infer<typeof verifyUsernameSchema>;
 export type VerifyAnswerInput = z.infer<typeof verifyAnswerSchema>;
 export type VerifyAnswerFormInput = z.infer<typeof verifyAnswerFormSchema>;
 export type RequestPasswordResetFormInput = z.infer<typeof requestPasswordResetFormSchema>;
+export type CreateBuildInput = z.infer<typeof createBuildSchema>;
+export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
