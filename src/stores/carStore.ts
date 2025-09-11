@@ -4,6 +4,13 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { Make, Model, Badge, YearRange, SelectedCar, CarSpecs, LoadingState } from "@/types/carTypes2";
 
+// Import mod store to clear mods when car changes
+let clearModsCallback: (() => void) | null = null;
+
+export const setModClearCallback = (callback: () => void) => {
+  clearModsCallback = callback;
+};
+
 interface CarState {
   // Data
   makes: Make[];
@@ -165,6 +172,11 @@ export const useCarStore = create<CarState>()(
           carSpecs: initialCarSpecs, // Clear specs when make changes
         });
         
+        // Clear all selected mods when car changes
+        if (clearModsCallback) {
+          clearModsCallback();
+        }
+        
         clearDependentData("models");
         fetchModels(make.id);
       },
@@ -186,6 +198,11 @@ export const useCarStore = create<CarState>()(
           carSpecs: initialCarSpecs, // Clear specs when model changes
         });
         
+        // Clear all selected mods when car changes
+        if (clearModsCallback) {
+          clearModsCallback();
+        }
+        
         clearDependentData("badges");
         fetchBadges(model.id);
       },
@@ -204,6 +221,11 @@ export const useCarStore = create<CarState>()(
           },
           carSpecs: initialCarSpecs, // Clear specs when badge changes
         });
+        
+        // Clear all selected mods when car changes
+        if (clearModsCallback) {
+          clearModsCallback();
+        }
         
         clearDependentData("yearRanges");
         fetchYearRanges(badge.id);
@@ -224,6 +246,11 @@ export const useCarStore = create<CarState>()(
           url: yearRange.url,
           chassis: yearRange.chassis,
         };
+        
+        // Clear all selected mods when car changes
+        if (clearModsCallback) {
+          clearModsCallback();
+        }
           
         set({
           selectedCar: {

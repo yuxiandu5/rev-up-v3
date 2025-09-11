@@ -15,6 +15,7 @@ model User {
   recoverQuestion String
   answer          String
   lastLoginAt     DateTime?
+  builds          UserBuild[]
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -66,7 +67,6 @@ model Badge {
   modelId         String
   model           Model              @relation(fields: [modelId], references: [id])
   yearRanges      ModelYearRange[]
-  UserBuild       UserBuild[]
 
   @@unique([modelId, name])
 }
@@ -114,7 +114,6 @@ model Mod {
   // Relations
   compatibilities ModCompatibility[]
   dependentOn     ModRequirement[]   @relation("Requirement_dependent")
-  UserBuildMod    UserBuildMod[]
   ModCategory     ModCategory?       @relation(fields: [modCategoryId], references: [id])
   modCategoryId   String?
 }
@@ -178,26 +177,19 @@ model MediaAsset {
 // User builds (saved configurations)
 // ----------------------
 model UserBuild {
-  id        String   @id @default(cuid())
-  userId    String // who owns the build
-  badgeId   String
-  badge     Badge    @relation(fields: [badgeId], references: [id])
-  year      Int // e.g. 2017
-  nickname  String? // "Track Build"
-  notes     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  userId       String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  selectedCar  Json     
+  baseSpecs    Json     
+  selectedMods Json  
+  
+  nickname     String?
+  notes        String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  mods UserBuildMod[]
-}
-
-model UserBuildMod {
-  id      String    @id @default(cuid())
-  buildId String
-  build   UserBuild @relation(fields: [buildId], references: [id])
-
-  modId String
-  mod   Mod    @relation(fields: [modId], references: [id])
-
-  installedAt DateTime?
+  @@index([userId])
 }

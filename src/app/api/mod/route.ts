@@ -31,7 +31,14 @@ export async function GET(request: NextRequest) {
 
     if (categoryId && yearRangeId) {
       const mods = await prisma.mod.findMany({
-        where: { modCategoryId: categoryId, },
+        where: { 
+          modCategoryId: categoryId,
+          compatibilities: {
+            some: {
+              modelYearRangeId: yearRangeId
+            }
+          }
+        },
         select: {
           category: true,
           name: true,

@@ -4,10 +4,13 @@ import ModSelector from "@/components/mod-page/modSelector";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useCarStore } from "@/stores/carStore";
+import { useStoreConnection } from "@/hooks/useStoreConnection";
 
 export default function Mod() {
   const { selectedCar, carSpecs } = useCarStore();
   const [phase, setPhase] = useState<string>("car-selecting");
+
+  useStoreConnection();
 
   return (
     <motion.div 

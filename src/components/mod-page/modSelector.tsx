@@ -1,11 +1,12 @@
 import { CarSpecs, SelectedCar } from "@/types/carTypes2";
-import { ArrowLeftIcon, Save, X } from "lucide-react";
+import { ArrowLeftIcon, ChartBarStacked, Save, X } from "lucide-react";
 import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
 import CarSpecDisplayMobile from "./sub-comp/carSpecDisplayMobile";
 import { useModStore } from "@/stores/modStore";
+import { useAuthStore } from "@/stores/authStore";
 
 type ModSelectorProps = {
   carSpecs: CarSpecs;
@@ -15,6 +16,7 @@ type ModSelectorProps = {
 
 export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelectorProps) {
   const { selectedMods, selectMod, deselectMod, clearAllMods, getTotalSpecsGained } = useModStore();
+  const {user} = useAuthStore();
 
   return (
     <section 
@@ -82,7 +84,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
         </div>
 
         <div className="flex items-center justify-center gap-2 absolute right-0 bottom-2 lg:bottom-4">
-          <Button variant="secondary" size="sm" className="min-h-6">
+          <Button variant="secondary" size="sm" className={`min-h-6 ${!user && "opacity-50 cursor-not-allowed"}`} disabled={!user}>
             <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Save</span>
           </Button>
