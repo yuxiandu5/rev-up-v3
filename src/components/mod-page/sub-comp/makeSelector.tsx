@@ -1,6 +1,6 @@
 "use client";
 
-import { Make, SelectedCar } from "@/types/carTypes2";
+import { Make, SelectedCar } from "@/types/carTypes";
 
 
 type MakeSelectorProps = {

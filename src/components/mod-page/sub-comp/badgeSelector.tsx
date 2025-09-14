@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, SelectedCar } from "@/types/carTypes2";
+import { Badge, SelectedCar } from "@/types/carTypes";
 
 
 type BadgeSelectorProps = {

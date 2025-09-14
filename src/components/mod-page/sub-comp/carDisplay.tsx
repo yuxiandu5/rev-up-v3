@@ -1,4 +1,4 @@
-import { CarSpecs, SelectedCar } from "@/types/carTypes2";
+import { CarSpecs, SelectedCar } from "@/types/carTypes";
 import Image from "next/image";
 import { motion } from "framer-motion";
 

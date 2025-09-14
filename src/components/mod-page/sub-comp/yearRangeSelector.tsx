@@ -1,4 +1,4 @@
-import { YearRange, SelectedCar } from "@/types/carTypes2";
+import { YearRange, SelectedCar } from "@/types/carTypes";
 
 type YearRangeSelectorProps = {
   yearRanges: YearRange[];
