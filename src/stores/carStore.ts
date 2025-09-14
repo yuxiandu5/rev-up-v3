@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { Make, Model, Badge, YearRange, SelectedCar, CarSpecs, LoadingState } from "@/types/carTypes2";
+import { Make, Model, Badge, YearRange, SelectedCar, CarSpecs, LoadingState } from "@/types/carTypes";
 
 // Import mod store to clear mods when car changes
 let clearModsCallback: (() => void) | null = null;

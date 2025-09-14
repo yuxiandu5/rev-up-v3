@@ -1,4 +1,4 @@
-import { CarSpecs } from "@/types/carTypes2";
+import { CarSpecs } from "@/types/carTypes";
 
 type CarSpecDisplayMobileProps = {
   carSpecs: CarSpecs;

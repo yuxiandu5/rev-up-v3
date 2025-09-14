@@ -1,4 +1,4 @@
-import { Model, SelectedCar } from "@/types/carTypes2";
+import { Model, SelectedCar } from "@/types/carTypes";
 
 type ModelSelectorProps = {
   models: Model[];

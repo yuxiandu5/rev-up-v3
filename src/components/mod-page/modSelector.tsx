@@ -1,12 +1,15 @@
-import { CarSpecs, SelectedCar } from "@/types/carTypes2";
-import { ArrowLeftIcon, ChartBarStacked, Save, X } from "lucide-react";
+import { useState } from "react";
+import { CarSpecs, SelectedCar } from "@/types/carTypes";
+import { ArrowLeftIcon, Save, X } from "lucide-react";
 import CarDisplay from "./sub-comp/carDisplay";
 import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
 import CarSpecDisplayMobile from "./sub-comp/carSpecDisplayMobile";
+import SaveBuildDialog from "../SaveBuildDialog";
 import { useModStore } from "@/stores/modStore";
 import { useAuthStore } from "@/stores/authStore";
+import { useApiClient } from "@/hooks/useApiClient";
 
 type ModSelectorProps = {
   carSpecs: CarSpecs;
@@ -15,8 +18,38 @@ type ModSelectorProps = {
 }
 
 export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelectorProps) {
-  const { selectedMods, selectMod, deselectMod, clearAllMods, getTotalSpecsGained } = useModStore();
+  const { selectedMods, selectMod, deselectMod, clearAllMods, getTotalSpecsGained, setCurrentCategory } = useModStore();
   const {user} = useAuthStore();
+  const { apiCall } = useApiClient();
+  
+  // Dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const buildData = {
+    selectedCar,
+    baseSpecs: carSpecs,
+    selectedMods,
+    nickname: "",
+    notes: "",
+  };
+
+  const handleSave = async (nickname: string, notes: string) => {
+    const finalBuildData = {
+      ...buildData,
+      nickname,
+      notes,
+    };
+
+    const response = await apiCall("/api/builds", {
+      method: "POST",
+      body: JSON.stringify(finalBuildData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to save build");
+    }
+  };
 
   return (
     <section 
@@ -48,7 +81,10 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
             hover:shadow-lg
             w-6 h-6 lg:w-auto lg:h-auto p-0.5 lg:px-3 lg:py-1.5 min-w-0
           " 
-          onClick={() => setPhase("car-selecting")} 
+          onClick={() => {
+            setPhase("car-selecting");
+            setCurrentCategory("");
+          }} 
           variant="secondary"
           size="sm"
           aria-label="Return to car selection page"
@@ -84,7 +120,11 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
         </div>
 
         <div className="flex items-center justify-center gap-2 absolute right-0 bottom-2 lg:bottom-4">
-          <Button variant="secondary" size="sm" className={`min-h-6 ${!user && "opacity-50 cursor-not-allowed"}`} disabled={!user}>
+          <Button 
+            variant="secondary" size="sm" 
+            className={"min-h-6"} 
+            disabled={!user || Object.keys(selectedMods).length === 0}
+            onClick={() => setIsDialogOpen(true)}>
             <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Save</span>
           </Button>
@@ -186,6 +226,13 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           />
         </aside>
       </section>
+
+      {/* Save Build Dialog */}
+      <SaveBuildDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSave={handleSave}
+      />
     </section>
   );
 }

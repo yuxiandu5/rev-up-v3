@@ -141,7 +141,6 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({ 
         // Only persist user and accessToken, not loading/initialization states
         user: state.user,
-        accessToken: state.accessToken,
       }),
     }
   )

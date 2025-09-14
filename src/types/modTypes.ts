@@ -73,19 +73,7 @@ export interface SelectedMods {
   [categoryName: string]: Mod | undefined; // Maps category name to selected mod id
 }
 
-export type BuildData = {
-  id?: string;
-  name: string;
-  notes?: string;
-  selectedMods: SelectedModsByCategory;
-  isDraft: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
 export type LoadingState = {
   categories: boolean;
   mods: boolean;
-  saving: boolean;
-  loading: boolean;
 };

@@ -5,9 +5,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { 
   ModCategory, 
   Mod, 
-  SelectedModsByCategory, 
-  BuildData, 
-  LoadingState,
+  SelectedModsByCategory,
 } from "@/types/modTypes";
 
 interface ModState {
@@ -16,10 +14,12 @@ interface ModState {
   mods: Mod[];
   currentCategory: string;
   selectedMods: SelectedModsByCategory;
-  currentBuild: BuildData;
   
   // Loading states
-  loading: LoadingState;
+  loading: {
+    categories: boolean;
+    mods: boolean;
+  };
   
   // Actions
   fetchCategories: () => Promise<void>;
@@ -29,13 +29,6 @@ interface ModState {
   deselectMod: (categoryId: string) => void;
   toggleMod: (categoryId: string, mod: Mod) => void;
   clearAllMods: () => void;
-  
-  // Build management
-  setBuildName: (name: string) => void;
-  setBuildNotes: (notes: string) => void;
-  saveBuild: () => Promise<void>;
-  loadBuild: (buildId: string) => Promise<void>;
-  startNewBuild: () => void;
   
   // Calculations
   getTotalSpecsGained: () => {
@@ -48,12 +41,6 @@ interface ModState {
   formatPrice: (price: number) => string;
 }
 
-const initialBuild: BuildData = {
-  name: "",
-  notes: "",
-  selectedMods: {} as SelectedModsByCategory,
-  isDraft: true,
-};
 
 export const useModStore = create<ModState>()(
   persist(
@@ -63,12 +50,9 @@ export const useModStore = create<ModState>()(
       mods: [],
       currentCategory: "",
       selectedMods: {} as SelectedModsByCategory,
-      currentBuild: initialBuild,
       loading: {
         categories: false,
         mods: false,
-        saving: false,
-        loading: false,
       },
 
       // API calls
@@ -121,25 +105,18 @@ export const useModStore = create<ModState>()(
 
       // Mod selection
       selectMod: (categoryId: string, mod: Mod) => {
-        const { selectedMods, currentBuild } = get();
+        const { selectedMods } = get();
         
         const newSelectedMods = {
           ...selectedMods,
           [categoryId]: mod,
         };
         
-        set({
-          selectedMods: newSelectedMods,
-          currentBuild: {
-            ...currentBuild,
-            selectedMods: newSelectedMods,
-            isDraft: true, // Mark as draft when changes are made
-          }
-        });
+        set({ selectedMods: newSelectedMods });
       },
 
       deselectMod: (categoryId: string) => {
-        const { selectedMods, currentBuild } = get();
+        const { selectedMods } = get();
         
         const newSelectedMods = { ...selectedMods };
         delete newSelectedMods[categoryId];
@@ -165,14 +142,7 @@ export const useModStore = create<ModState>()(
           delete newSelectedMods[catId];
         });
         
-        set({
-          selectedMods: newSelectedMods,
-          currentBuild: {
-            ...currentBuild,
-            selectedMods: newSelectedMods,
-            isDraft: true,
-          }
-        });
+        set({ selectedMods: newSelectedMods });
       },
 
       toggleMod: (categoryId: string, mod: Mod) => {
@@ -188,108 +158,9 @@ export const useModStore = create<ModState>()(
       },
 
       clearAllMods: () => {
-        const { currentBuild } = get();
-        
-        set({
-          selectedMods: {} as SelectedModsByCategory,
-          currentBuild: {
-            ...currentBuild,
-            selectedMods: {} as SelectedModsByCategory,
-            isDraft: true,
-          }
-        });
+        set({ selectedMods: {} as SelectedModsByCategory });
       },
 
-      // Build management
-      setBuildName: (name: string) => {
-        const { currentBuild } = get();
-        set({
-          currentBuild: {
-            ...currentBuild,
-            name,
-            isDraft: true,
-          }
-        });
-      },
-
-      setBuildNotes: (notes: string) => {
-        const { currentBuild } = get();
-        set({
-          currentBuild: {
-            ...currentBuild,
-            notes,
-            isDraft: true,
-          }
-        });
-      },
-
-      saveBuild: async () => {
-        const { currentBuild } = get();
-        
-        set((state) => ({ 
-          loading: { ...state.loading, saving: true } 
-        }));
-        
-        try {
-          const method = currentBuild.id ? "PUT" : "POST";
-          const url = currentBuild.id ? `/api/builds/${currentBuild.id}` : "/api/builds";
-          
-          const response = await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(currentBuild),
-          });
-          
-          if (!response.ok) throw new Error("Failed to save build");
-          
-          const savedBuild = await response.json();
-          set({
-            currentBuild: {
-              ...savedBuild,
-              isDraft: false,
-            }
-          });
-          
-          return savedBuild;
-        } catch (error) {
-          console.error("Error saving build:", error);
-          throw error;
-        } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, saving: false } 
-          }));
-        }
-      },
-
-      loadBuild: async (buildId: string) => {
-        set((state) => ({ 
-          loading: { ...state.loading, loading: true } 
-        }));
-        
-        try {
-          const response = await fetch(`/api/builds/${buildId}`);
-          if (!response.ok) throw new Error("Failed to load build");
-          
-          const build = await response.json();
-          set({
-            currentBuild: build,
-            selectedMods: build.selectedMods || {},
-          });
-        } catch (error) {
-          console.error("Error loading build:", error);
-        } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, loading: false } 
-          }));
-        }
-      },
-
-      startNewBuild: () => {
-        set({
-          currentBuild: { ...initialBuild },
-          selectedMods: {} as SelectedModsByCategory,
-        });
-      },
 
       // Calculations
       getTotalSpecsGained: () => {
@@ -340,9 +211,8 @@ export const useModStore = create<ModState>()(
       name: "mod-storage",
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        // Persist build data and selections
+        // Persist mod selections
         selectedMods: state.selectedMods,
-        currentBuild: state.currentBuild,
       }),
     }
   )
