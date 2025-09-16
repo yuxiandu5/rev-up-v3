@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { mapToBuildDetailDTO } from "@/lib/dto-mappers";
+import type { ApiSuccessResponse } from "@/types/dtos";
 
 /**
  * GET /api/builds/public/[id] - Get build for public viewing (no auth required)
@@ -16,16 +18,7 @@ export async function GET(
       where: {
         id: buildId
       },
-      select: {
-        id: true,
-        nickname: true,
-        notes: true,
-        selectedCar: true,
-        baseSpecs: true,
-        selectedMods: true,
-        createdAt: true,
-        updatedAt: true,
-        // Include user info for attribution (but not sensitive data)
+      include: {
         user: {
           select: {
             userName: true
@@ -41,18 +34,14 @@ export async function GET(
       );
     }
 
-    // Return build data for public viewing
-    return NextResponse.json({
-      id: build.id,
-      nickname: build.nickname,
-      notes: build.notes,
-      selectedCar: build.selectedCar,
-      baseSpecs: build.baseSpecs,
-      selectedMods: build.selectedMods,
-      createdAt: build.createdAt,
-      updatedAt: build.updatedAt,
-      createdBy: build.user.userName, // Attribution
-    }, { status: 200 });
+    // Transform to detailed DTO with user attribution
+    const buildDTO = mapToBuildDetailDTO(build);
+
+    const response: ApiSuccessResponse<typeof buildDTO> = {
+      data: buildDTO,
+    };
+
+    return NextResponse.json(response, { status: 200 });
 
   } catch (error) {
     console.error("Get public build error:", error);
