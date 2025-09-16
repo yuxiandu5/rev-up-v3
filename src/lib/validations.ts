@@ -73,7 +73,69 @@ export const requestPasswordResetFormSchema = z.object({
   path: ["confirmPassword"],
 });
 
-// Build validation schemas
+// ============================================================================
+// DTO Validation Schemas
+// ============================================================================
+
+// Car Info Schema
+export const carInfoSchema = z.object({
+  makeId: z.string().min(1),
+  make: z.string().min(1),
+  modelId: z.string().min(1),
+  model: z.string().min(1),
+  badgeId: z.string().min(1),
+  badge: z.string().min(1),
+  yearRangeId: z.string().min(1),
+  startYear: z.number().int().min(1900).max(2100),
+  endYear: z.number().int().min(1900).max(2100).nullable(),
+  chassis: z.string().nullable(),
+});
+
+// Car Specs Schema
+export const carSpecsSchema = z.object({
+  hp: z.number().int().min(0).max(2000),
+  torque: z.number().int().min(0).max(2000),
+  zeroToHundred: z.number().int().min(10).max(1000), // 1.0s to 100.0s in tenths
+  handling: z.number().int().min(0).max(10),
+  imageUrl: z.string().url().or(z.string().length(0)), // Allow empty string
+});
+
+// Modification Schema
+export const modificationSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  brand: z.string().min(1),
+  category: z.string().min(1),
+  description: z.string().optional(),
+  imageUrl: z.string().url().optional(),
+  performance: z.object({
+    hpGain: z.number().int().min(-500).max(500),
+    torqueGain: z.number().int().min(-500).max(500),
+    handlingDelta: z.number().int().min(-10).max(10),
+    zeroToHundredDelta: z.number().int().min(-500).max(500),
+  }),
+  price: z.number().int().min(0).optional(),
+  notes: z.string().optional(),
+});
+
+// Build DTO Schemas
+export const createBuildDTOSchema = z.object({
+  selectedCar: carInfoSchema,
+  baseSpecs: carSpecsSchema,
+  selectedMods: z.record(z.string(), modificationSchema),
+  nickname: z.string().max(100).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+export const updateBuildDTOSchema = z.object({
+  selectedCar: carInfoSchema.partial().optional(),
+  baseSpecs: carSpecsSchema.partial().optional(),
+  selectedMods: z.record(z.string(), modificationSchema).optional(),
+  nickname: z.string().max(100).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+// Legacy Build validation schemas (for backward compatibility with existing JSON storage)
 export const createBuildSchema = z.object({
   selectedCar: z.record(z.string(), z.any()), // JSON object
   baseSpecs: z.record(z.string(), z.any()),   // JSON object
@@ -99,5 +161,14 @@ export type VerifyUsernameInput = z.infer<typeof verifyUsernameSchema>;
 export type VerifyAnswerInput = z.infer<typeof verifyAnswerSchema>;
 export type VerifyAnswerFormInput = z.infer<typeof verifyAnswerFormSchema>;
 export type RequestPasswordResetFormInput = z.infer<typeof requestPasswordResetFormSchema>;
+
+// DTO Type exports
+export type CarInfoInput = z.infer<typeof carInfoSchema>;
+export type CarSpecsInput = z.infer<typeof carSpecsSchema>;
+export type ModificationInput = z.infer<typeof modificationSchema>;
+export type CreateBuildDTOInput = z.infer<typeof createBuildDTOSchema>;
+export type UpdateBuildDTOInput = z.infer<typeof updateBuildDTOSchema>;
+
+// Legacy type exports
 export type CreateBuildInput = z.infer<typeof createBuildSchema>;
 export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;

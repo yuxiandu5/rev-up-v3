@@ -3,6 +3,8 @@ import { ZodError } from "zod";
 import { createBuildSchema } from "@/lib/validations";
 import { verifyAccessJWT, extractBearerToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
+import { mapToBuildSummaryDTOs, mapToBuildSummaryDTO, filterValidBuilds } from "@/lib/dto-mappers";
+import type { ApiSuccessResponse } from "@/types/dtos";
 
 /**
  * GET /api/builds - Get all builds for authenticated user
@@ -24,7 +26,7 @@ export async function GET(request: NextRequest) {
     const userId = payload.sub;
 
     // Fetch user's builds
-    const builds = await prisma.userBuild.findMany({
+    const rawBuilds = await prisma.userBuild.findMany({
       where: {
         userId: userId
       },
@@ -33,7 +35,15 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    return NextResponse.json(builds, { status: 200 });
+    // Filter out invalid builds and transform to DTOs
+    const validBuilds = filterValidBuilds(rawBuilds);
+    const buildDTOs = mapToBuildSummaryDTOs(validBuilds);
+
+    const response: ApiSuccessResponse<typeof buildDTOs> = {
+      data: buildDTOs,
+    };
+
+    return NextResponse.json(response, { status: 200 });
 
   } catch (error) {
     console.error("Get builds error:", error);
@@ -86,7 +96,15 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    return NextResponse.json(newBuild, { status: 201 });
+    // Transform to DTO
+    const buildDTO = mapToBuildSummaryDTO(newBuild);
+
+    const response: ApiSuccessResponse<typeof buildDTO> = {
+      data: buildDTO,
+      message: "Build created successfully",
+    };
+
+    return NextResponse.json(response, { status: 201 });
 
   } catch (error) {
     console.error("Create build error:", error);

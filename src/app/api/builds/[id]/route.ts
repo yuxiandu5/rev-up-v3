@@ -3,6 +3,8 @@ import { ZodError } from "zod";
 import { updateBuildSchema } from "@/lib/validations";
 import { verifyAccessJWT, extractBearerToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
+import { mapToBuildDetailDTO } from "@/lib/dto-mappers";
+import type { ApiSuccessResponse } from "@/types/dtos";
 
 /**
  * GET /api/builds/[id] - Get specific build (must be owned by user)
@@ -42,7 +44,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(build, { status: 200 });
+    // Transform to detailed DTO
+    const buildDTO = mapToBuildDetailDTO(build);
+
+    const response: ApiSuccessResponse<typeof buildDTO> = {
+      data: buildDTO,
+    };
+
+    return NextResponse.json(response, { status: 200 });
 
   } catch (error) {
     console.error("Get build error:", error);
@@ -118,7 +127,15 @@ export async function PUT(
       }
     });
 
-    return NextResponse.json(updatedBuild, { status: 200 });
+    // Transform to detailed DTO
+    const buildDTO = mapToBuildDetailDTO(updatedBuild);
+
+    const response: ApiSuccessResponse<typeof buildDTO> = {
+      data: buildDTO,
+      message: "Build updated successfully",
+    };
+
+    return NextResponse.json(response, { status: 200 });
 
   } catch (error) {
     console.error("Update build error:", error);
