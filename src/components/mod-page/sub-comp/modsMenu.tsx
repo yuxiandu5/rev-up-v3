@@ -6,6 +6,7 @@ import { useModStore } from "@/stores/modStore";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { useCarStore } from "@/stores/carStore";
+import { LoadingOverlay } from "@/components/ui/Loading";
 
 type ModsMenuProps = {
   selectedMods: SelectedMods;
@@ -15,7 +16,7 @@ type ModsMenuProps = {
 
 export default function ModsMenu({selectedMods}: ModsMenuProps) {
 
-  const { getTotalPrice, setCurrentCategory, fetchCategories, categories, currentCategory, fetchModsForCategory, mods, toggleMod, formatPrice } = useModStore();
+  const { getTotalPrice, setCurrentCategory, fetchCategories, categories, currentCategory, fetchModsForCategory, mods, toggleMod, formatPrice, loading } = useModStore();
   const { selectedCar } = useCarStore();
   const totalPrice = getTotalPrice();
 
@@ -65,16 +66,23 @@ export default function ModsMenu({selectedMods}: ModsMenuProps) {
                   </span>
                 </header>
                 
-                <div className="flex flex-col gap-3">
-                  {categories.map((category) => (
-                    <ModCategory 
-                      key={category.id}
-                      category={category}
-                      onSelect={() => setCurrentCategory(category.id)}
-                      hasSelectedMod={Object.keys(selectedMods).includes(category.id)}
-                      />
-                  ))}
-                </div>
+                <LoadingOverlay 
+                  show={loading.categories} 
+                  variant="dots" 
+                  text="Loading categories..."
+                  showText
+                >
+                  <div className="flex flex-col gap-3">
+                    {categories.map((category) => (
+                      <ModCategory 
+                        key={category.id}
+                        category={category}
+                        onSelect={() => setCurrentCategory(category.id)}
+                        hasSelectedMod={Object.keys(selectedMods).includes(category.id)}
+                        />
+                    ))}
+                  </div>
+                </LoadingOverlay>
               </motion.div>
           ) 
           : (
@@ -112,17 +120,24 @@ export default function ModsMenu({selectedMods}: ModsMenuProps) {
                   </p>
                 </header>
                 
-                <div className="flex flex-col gap-3">
-                  {mods.map((mod) => (
-                    <ModCard 
-                      key={mod.id}
-                      mod={mod}
-                      modSpec={mod.compatibilities?.[0]}
-                      isSelected={selectedMods[currentCategory]?.id === mod.id}
-                      onSelect={() => toggleMod(currentCategory, mod)}
-                    />
-                  ))}
-                </div>
+                <LoadingOverlay 
+                  show={loading.mods} 
+                  variant="spinner" 
+                  text="Loading compatible mods..."
+                  showText
+                >
+                  <div className="flex flex-col gap-3">
+                    {mods.map((mod) => (
+                      <ModCard 
+                        key={mod.id}
+                        mod={mod}
+                        modSpec={mod.compatibilities?.[0]}
+                        isSelected={selectedMods[currentCategory]?.id === mod.id}
+                        onSelect={() => toggleMod(currentCategory, mod)}
+                      />
+                    ))}
+                  </div>
+                </LoadingOverlay>
               </motion.div>
             )}
         </div>
