@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import { useAuthStore } from "@/stores/authStore";
 import { User, Mail, Shield, Calendar } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Loading } from "@/components/ui/Loading";
 
 export default function Profile() {
   const { user, logout, isLoading } = useAuthStore();
@@ -16,9 +17,13 @@ export default function Profile() {
   
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 bg-[var(--accent)] rounded-full animate-pulse"></div>
-      </div>
+      <Loading 
+        variant="spinner" 
+        size="lg" 
+        fullScreen 
+        text="Loading profile..." 
+        showText 
+      />
     );
   }
 

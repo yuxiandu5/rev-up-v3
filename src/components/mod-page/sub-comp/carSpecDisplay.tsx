@@ -19,7 +19,7 @@ export default function CarSpecDisplay({ carSpecs, specGained }: CarSpecDisplayP
 
   // Define max values for each stat to calculate progress percentages
   const maxValues = {
-    hp: 500,        // Max horsepower for progress bar
+    hp: 600,        // Max horsepower for progress bar
     torque: 800,     // Max torque (Nm)
     zeroToHundred: 12,   // Max 0-100 time (seconds) - 1s = full bar, 12s = empty bar
     handling: 10     // Max handling score (1-10 scale)

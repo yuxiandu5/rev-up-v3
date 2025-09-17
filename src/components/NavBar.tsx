@@ -70,6 +70,16 @@ export default function NavBar() {
         >
           Mod
         </Link>
+        <Link 
+          href="/gallery" 
+          className="
+            text-[var(--text1)] font-medium transition-all duration-200
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
+            px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
+          "
+        >
+          Gallery
+        </Link>
       </div>
 
       {/* Desktop Auth Links */}
