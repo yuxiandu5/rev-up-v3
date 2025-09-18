@@ -7,10 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
+}
+
 model User {
   id              String    @id @default(cuid())
   userName        String    @unique
   passwordHash    String
+  role            Role      @default(USER)
   isActive        Boolean   @default(true)
   recoverQuestion String
   answer          String
