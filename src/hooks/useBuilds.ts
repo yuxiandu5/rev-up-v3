@@ -100,7 +100,7 @@ export const useBuilds = () => {
   };
 
   const copyPublicUrl = (buildId: string) => {
-    const publicUrl = `${window.location.origin}/api/builds/public/${buildId}`;
+    const publicUrl = `${window.location.origin}/public-url/${buildId}`;
     navigator.clipboard.writeText(publicUrl);
     return publicUrl;
   };

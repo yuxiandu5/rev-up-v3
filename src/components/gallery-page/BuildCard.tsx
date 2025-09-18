@@ -3,14 +3,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { BuildSummaryDTO, BuildDetailDTO } from "@/types/dtos";
-import CarDisplay from "./mod-page/sub-comp/carDisplay";
-import CarSpecDisplay from "./mod-page/sub-comp/carSpecDisplay";
+import CarDisplay from "../mod-page/sub-comp/carDisplay";
+import CarSpecDisplay from "../mod-page/sub-comp/carSpecDisplay";
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
 import type { Mod, ModCompatibility } from "@/types/modTypes";
-import ConfirmationDialog from "./ui/ConfirmationDialog";
+import ConfirmationDialog from "../ui/ConfirmationDialog";
 import { useApiClient } from "@/hooks/useApiClient";
-import { Loading } from "./ui/Loading";
-import ModCard from "./mod-page/sub-comp/modCard";
+import { Loading } from "../ui/Loading";
+import ModCard from "../mod-page/sub-comp/modCard";
 
 // No need for these interfaces anymore - using DTOs directly
 

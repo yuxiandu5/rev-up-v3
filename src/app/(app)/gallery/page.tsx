@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useBuilds } from "@/hooks/useBuilds";
-import { BuildCard } from "@/components/BuildCard";
+import { BuildCard } from "@/components/gallery-page/BuildCard";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 import { Loading, LoadingCard } from "@/components/ui/Loading";
