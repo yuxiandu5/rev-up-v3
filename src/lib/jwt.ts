@@ -9,7 +9,7 @@ const ACCESS_TTL_MIN = parseInt(process.env.ACCESS_TTL_MIN || "15");
 export interface JWTPayload {
   sub: string; // user id
   userName: string;
-  role?: string;
+  role: string;
   jti: string; // unique token id
 }
 
@@ -40,7 +40,7 @@ export async function verifyAccessJWT(token: string): Promise<JWTPayload> {
     return {
       sub: payload.sub as string,
       userName: payload.userName as string,
-      role: payload.role as string | undefined,
+      role: payload.role as string,
       jti: payload.jti as string,
     };
   } catch {

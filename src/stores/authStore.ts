@@ -3,23 +3,20 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-type User = {
-  id: string;
-  userName: string;
-};
+import { UserDTO } from "@/types/dtos";
 
 interface AuthState {
-  user: User | null;
+  user: UserDTO | null;
   accessToken: string | null;
   isLoading: boolean;
   isInitialized: boolean;
   
   // Actions
-  setUser: (user: User | null) => void;
+  setUser: (user: UserDTO | null) => void;
   setAccessToken: (token: string | null) => void;
   setLoading: (loading: boolean) => void;
   setInitialized: (initialized: boolean) => void;
-  login: (accessToken: string, userData: User) => void;
+  login: (accessToken: string, userData: UserDTO) => void;
   logout: () => Promise<void>;
   refreshAccessToken: () => Promise<boolean>;
   initializeAuth: () => Promise<void>;
@@ -42,7 +39,7 @@ export const useAuthStore = create<AuthState>()(
         set({ 
           accessToken, 
           user: userData,
-          isLoading: false 
+          isLoading: false,
         });
       },
 
@@ -54,7 +51,7 @@ export const useAuthStore = create<AuthState>()(
             set({ 
               accessToken: null, 
               user: null, 
-              isLoading: false 
+              isLoading: false,
             });
           },
           500
@@ -81,7 +78,7 @@ export const useAuthStore = create<AuthState>()(
             set({ 
               accessToken: data.accessToken, 
               user: data.user,
-              isLoading: false 
+              isLoading: false,
             });
             return true;
           } else {
@@ -89,7 +86,7 @@ export const useAuthStore = create<AuthState>()(
             set({ 
               accessToken: null, 
               user: null, 
-              isLoading: false 
+              isLoading: false,
             });
             return false;
           }
@@ -98,7 +95,7 @@ export const useAuthStore = create<AuthState>()(
           set({ 
             accessToken: null, 
             user: null, 
-            isLoading: false 
+            isLoading: false,
           });
           return false;
         }
@@ -118,19 +115,19 @@ export const useAuthStore = create<AuthState>()(
             // If refresh fails, clear any stale data
             set({ 
               user: null, 
-              accessToken: null 
+              accessToken: null,
             });
           }
         } catch {
           // Silently handle initialization errors
           set({ 
             user: null, 
-            accessToken: null 
+            accessToken: null,
           });
         } finally {
           set({ 
             isLoading: false, 
-            isInitialized: true 
+            isInitialized: true
           });
         }
       },

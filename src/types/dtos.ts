@@ -78,6 +78,14 @@ export interface BuildDetailDTO extends BuildSummaryDTO {
 // User DTOs
 // ============================================================================
 
+export type Role = "USER" | "ADMIN" | "MODERATOR";
+
+export interface UserDTO {
+  id: string;
+  userName: string;
+  role: Role;
+}
+
 export interface UserSummaryDTO {
   id: string;
   userName: string;
