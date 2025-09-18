@@ -11,6 +11,7 @@ export default function NavBar() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout, isLoading } = useAuthStore();
+  const isStaffRole = user?.role === "ADMIN" || user?.role === "MODERATOR";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -80,6 +81,16 @@ export default function NavBar() {
         >
           Gallery
         </Link>
+        {isStaffRole && <Link 
+          href="/dashboard" 
+          className="
+            text-[var(--text1)] font-medium transition-all duration-200
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
+            px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
+          "
+        >
+          Dashboard
+        </Link>}
       </div>
 
       {/* Desktop Auth Links */}
