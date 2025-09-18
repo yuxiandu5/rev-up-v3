@@ -22,13 +22,14 @@ export const useApiClient = () => {
 
       // If unauthorized, try to refresh token
       if (response.status === 401 && accessToken) {
-        const refreshSuccess = await refreshAccessToken();
+        await refreshAccessToken();
+        const { accessToken: newAccessToken } = useAuthStore.getState();
         
-        if (refreshSuccess) {
+        if (newAccessToken) {
           // Retry the original request with new token
           const retryHeaders = {
             ...headers,
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${newAccessToken}`,
           };
           
           return fetch(url, {

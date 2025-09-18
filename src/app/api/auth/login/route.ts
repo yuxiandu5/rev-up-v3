@@ -73,12 +73,13 @@ export async function POST(request: NextRequest) {
     // Issue access JWT
     const accessToken = await issueAccessJWT({
       sub: user.id,
+      role: user.role,
       userName: user.userName,
     });
 
     // Set refresh token cookie
     const response = NextResponse.json(
-      { accessToken, user: { id: user.id, userName: user.userName } },
+      { accessToken, user: { id: user.id, userName: user.userName, role: user.role } },
       { status: 200 }
     );
     
