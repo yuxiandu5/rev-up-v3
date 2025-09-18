@@ -28,7 +28,7 @@ export default function CarSelector({ setPhase }: CarSelectorProps) {
 
   return (
     <LoadingOverlay 
-      show={isAnyLoading} 
+      show={loading.makes} 
       variant="spinner" 
       text="Loading car data..."
       showText
