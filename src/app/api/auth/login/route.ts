@@ -6,6 +6,7 @@ import { issueAccessJWT } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 
 const REFRESH_TTL_DAYS = parseInt(process.env.REFRESH_TTL_DAYS || "14");
+const ACCESS_TTL_MIN = parseInt(process.env.ACCESS_TTL_MIN || "15");
 
 export async function POST(request: NextRequest) {
   try {
@@ -82,6 +83,14 @@ export async function POST(request: NextRequest) {
       { accessToken, user: { id: user.id, userName: user.userName, role: user.role } },
       { status: 200 }
     );
+
+    response.cookies.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: ACCESS_TTL_MIN * 60, // Convert minutes to seconds
+    });
     
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,

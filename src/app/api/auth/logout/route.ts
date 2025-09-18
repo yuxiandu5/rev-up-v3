@@ -2,6 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { hashToken } from "@/lib/crypto";
 import { prisma } from "@/lib/prisma";
 
+function clearCookies(response: NextResponse) {
+  response.cookies.set("refreshToken", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/api/auth",
+    maxAge: 0, // Immediately expire the cookie
+  });
+  response.cookies.set("accessToken", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0, // Immediately expire the cookie
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Get refresh token from cookie
@@ -9,13 +26,7 @@ export async function POST(request: NextRequest) {
     if (!refreshToken) {
       // No token to revoke, but still clear cookie and return success
       const response = new NextResponse(null, { status: 204 });
-      response.cookies.set("refreshToken", "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/api/auth",
-        maxAge: 0, // Immediately expire the cookie
-      });
+      clearCookies(response);
       return response;
     }
 
@@ -36,13 +47,7 @@ export async function POST(request: NextRequest) {
     }
     // Clear the refresh token cookie
     const response = new NextResponse(null, { status: 204 });
-    response.cookies.set("refreshToken", "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/api/auth",
-      maxAge: 0, // Immediately expire the cookie
-    });
+    clearCookies(response);
 
     return response;
 
@@ -56,13 +61,7 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
     
-    response.cookies.set("refreshToken", "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/api/auth",
-      maxAge: 0,
-    });
+    clearCookies(response);
 
     return response;
   }

@@ -1,3 +1,4 @@
+import { Role } from "@/types/dtos";
 import { SignJWT, jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
@@ -40,7 +41,7 @@ export async function verifyAccessJWT(token: string): Promise<JWTPayload> {
     return {
       sub: payload.sub as string,
       userName: payload.userName as string,
-      role: payload.role as string,
+      role: payload.role as Role,
       jti: payload.jti as string,
     };
   } catch {
