@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import Button from "./Button";
-import GreenTick from "./GreenTick";
+import Button from "@/components/Button";
+import GreenTick from "@/components/GreenTick";
 
 interface SaveBuildDialogProps {
   isOpen: boolean;

@@ -70,9 +70,9 @@ const SpinnerLoading = ({ size, color, spinnerColor }: { size: string; color: st
 
 const DotsLoading = ({ size, color }: { size: string; color: string }) => {
   const dotSize = size === "w-4 h-4" ? "w-1 h-1" : 
-                 size === "w-6 h-6" ? "w-1.5 h-1.5" :
-                 size === "w-8 h-8" ? "w-2 h-2" :
-                 size === "w-12 h-12" ? "w-3 h-3" : "w-4 h-4";
+                size === "w-6 h-6" ? "w-1.5 h-1.5" :
+                size === "w-8 h-8" ? "w-2 h-2" :
+                size === "w-12 h-12" ? "w-3 h-3" : "w-4 h-4";
 
   return (
     <div className="flex items-center gap-1">
@@ -108,9 +108,9 @@ const BarsLoading = ({ size, color }: { size: string; color: string }) => {
                   size === "w-12 h-12" ? "w-1.5" : "w-2";
   
   const barHeight = size === "w-4 h-4" ? "h-4" : 
-                   size === "w-6 h-6" ? "h-6" :
-                   size === "w-8 h-8" ? "h-8" :
-                   size === "w-12 h-12" ? "h-12" : "h-16";
+                  size === "w-6 h-6" ? "h-6" :
+                  size === "w-8 h-8" ? "h-8" :
+                  size === "w-12 h-12" ? "h-12" : "h-16";
 
   return (
     <div className="flex items-end gap-0.5">

@@ -6,7 +6,7 @@ import Button from "../Button";
 import ModsMenu from "./sub-comp/modsMenu";
 import CarSpecDisplay from "./sub-comp/carSpecDisplay";
 import CarSpecDisplayMobile from "./sub-comp/carSpecDisplayMobile";
-import SaveBuildDialog from "../SaveBuildDialog";
+import SaveBuildDialog from "../gallery-page/SaveBuildDialog";
 import { useModStore } from "@/stores/modStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
