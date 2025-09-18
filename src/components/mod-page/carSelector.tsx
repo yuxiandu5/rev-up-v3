@@ -24,11 +24,9 @@ export default function CarSelector({ setPhase }: CarSelectorProps) {
     fetchYearRanges(selectedCar.badgeId);
   }, []);
 
-  const isAnyLoading = loading.makes || loading.models || loading.badges || loading.yearRanges;
-
   return (
     <LoadingOverlay 
-      show={isAnyLoading} 
+      show={loading.makes} 
       variant="spinner" 
       text="Loading car data..."
       showText
