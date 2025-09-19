@@ -152,6 +152,36 @@ export const updateBuildSchema = z.object({
   notes: z.string().max(1000).optional(),
 });
 
+// Pagination validation
+export const PaginationSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20)
+});
+
+export const UserFilterSchema = z.object({
+  userName: z.preprocess((val) => (val === null ? undefined : val),
+  z.string().optional()
+  ),
+  role: z.preprocess((val) => (val === null ? undefined : val),
+  z.enum(["USER", "MODERATOR", "ADMIN"]).optional()
+  ),
+  isActive: z.preprocess((val) => (val === null ? undefined : val),
+  z.coerce.boolean().optional()
+  )
+});
+
+// AdminUserApi validation
+export const AdminToggleActiveSchema = z.object({
+  isActive: z.union([
+    z.boolean(),
+    z.enum(["true", "false"]).transform((val) => val === "true")
+  ])
+});
+
+export const UserIdFormatSchema = z.object({
+  id: z.string().cuid()
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -172,3 +202,4 @@ export type UpdateBuildDTOInput = z.infer<typeof updateBuildDTOSchema>;
 // Legacy type exports
 export type CreateBuildInput = z.infer<typeof createBuildSchema>;
 export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
+
