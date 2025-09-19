@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { extractBearerToken, verifyAccessJWT, JWTPayload } from "./jwt";
 import { Role } from "@/types/dtos";
-import { UnauthorizedError, ForbiddenError } from "./errors/AuthErrors";
+import { UnauthorizedError, ForbiddenError } from "./errors/AppError";
 
 export async function requireAuth(req: NextRequest): Promise<JWTPayload> {
   const token = extractBearerToken(req.headers.get("authorization"));
