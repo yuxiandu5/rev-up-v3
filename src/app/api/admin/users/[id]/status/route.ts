@@ -5,13 +5,13 @@ import { NextRequest } from "next/server";
 import { ok, errorToResponse } from "@/lib/apiResponse";
 import { ifUserExist, preventSelfDeletion } from "../../../user-helper";
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string} }){
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{ id: string }>}){
   try {
     await requireRole(req, ["ADMIN"]);
   
     const body = await req.json();
     const { isActive } = AdminToggleActiveSchema.parse(body);
-    const { id } = UserIdFormatSchema.parse(params);
+    const { id } = UserIdFormatSchema.parse(await params);
 
     await ifUserExist(id);
     await preventSelfDeletion(req, id);
