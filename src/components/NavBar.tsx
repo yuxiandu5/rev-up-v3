@@ -23,26 +23,28 @@ export default function NavBar() {
     setIsMobileMenuOpen(false); // Close mobile menu after logout
   };
   return (
-    <nav className="
+    <nav
+      className="
       flex justify-between items-center px-4 py-0 md:px-6 lg:px-8 lg:py-3
       bg-[var(--bg-dark1)] border-b border-[var(--bg-dark3)]
       fixed top-0 left-0 right-0 z-50 shadow-xl backdrop-blur-sm
-    ">
+    "
+    >
       {/* Logo */}
       <div className="flex items-center">
-        <Image 
-          src="/logo/logo.png" 
-          alt="Logo" 
-          width={60} 
-          height={60} 
+        <Image
+          src="/logo/logo.png"
+          alt="Logo"
+          width={60}
+          height={60}
           className="w-12 h-12 md:w-16 md:h-16 object-contain"
         />
       </div>
 
       {/* Desktop Center Navigation */}
       <div className="hidden md:flex items-center space-x-8 lg:space-x-12 flex-1 justify-center">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="
             text-[var(--text1)] font-medium transition-all duration-200
             hover:text-[var(--highlight)] hover:scale-105 active:scale-95
@@ -51,8 +53,8 @@ export default function NavBar() {
         >
           Home
         </Link>
-        <Link 
-          href="/profile" 
+        <Link
+          href="/profile"
           className="
             text-[var(--text1)] font-medium transition-all duration-200
             hover:text-[var(--highlight)] hover:scale-105 active:scale-95
@@ -61,8 +63,8 @@ export default function NavBar() {
         >
           Profile
         </Link>
-        <Link 
-          href="/mod" 
+        <Link
+          href="/mod"
           className="
             text-[var(--text1)] font-medium transition-all duration-200
             hover:text-[var(--highlight)] hover:scale-105 active:scale-95
@@ -71,8 +73,8 @@ export default function NavBar() {
         >
           Mod
         </Link>
-        <Link 
-          href="/gallery" 
+        <Link
+          href="/gallery"
           className="
             text-[var(--text1)] font-medium transition-all duration-200
             hover:text-[var(--highlight)] hover:scale-105 active:scale-95
@@ -81,16 +83,18 @@ export default function NavBar() {
         >
           Gallery
         </Link>
-        {isStaffRole && <Link 
-          href="/dashboard" 
-          className="
+        {isStaffRole && (
+          <Link
+            href="/dashboard"
+            className="
             text-[var(--text1)] font-medium transition-all duration-200
             hover:text-[var(--highlight)] hover:scale-105 active:scale-95
             px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
           "
-        >
-          Dashboard
-        </Link>}
+          >
+            Dashboard
+          </Link>
+        )}
       </div>
 
       {/* Desktop Auth Links */}
@@ -101,7 +105,7 @@ export default function NavBar() {
         ) : user ? (
           // Authenticated user
           <div className="flex items-center space-x-3">
-            <Link 
+            <Link
               href="/profile"
               className="
                 w-8 h-8 bg-blue-500 rounded-full transition-all duration-200
@@ -129,8 +133,8 @@ export default function NavBar() {
         ) : (
           // Guest user
           <>
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
                 hover:text-[var(--highlight)] hover:scale-105 active:scale-95
@@ -140,8 +144,8 @@ export default function NavBar() {
             >
               Sign In
             </Link>
-            <Link 
-              href="/register" 
+            <Link
+              href="/register"
               className="
                 bg-[var(--accent)] text-white font-medium transition-all duration-200
                 hover:bg-[var(--highlight)] hover:scale-105 active:scale-95
@@ -157,7 +161,7 @@ export default function NavBar() {
 
       {/* Mobile Menu Button */}
       <div className="md:hidden">
-        <button 
+        <button
           className="
             p-2 rounded-md text-[var(--text1)] hover:bg-[var(--bg-dark2)]
             transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500
@@ -166,11 +170,11 @@ export default function NavBar() {
           onClick={toggleMobileMenu}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} 
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
             />
           </svg>
         </button>
@@ -178,14 +182,16 @@ export default function NavBar() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="
+        <div
+          className="
           absolute top-full left-0 right-0 md:hidden
           bg-[var(--bg-dark1)] border-b border-[var(--bg-dark3)]
           shadow-xl backdrop-blur-sm
-        ">
+        "
+        >
           <div className="flex flex-col space-y-1 p-4">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
                 hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
@@ -195,8 +201,8 @@ export default function NavBar() {
             >
               Home
             </Link>
-            <Link 
-              href="/profile" 
+            <Link
+              href="/profile"
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
                 hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
@@ -206,8 +212,8 @@ export default function NavBar() {
             >
               Profile
             </Link>
-            <Link 
-              href="/mod" 
+            <Link
+              href="/mod"
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
                 hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
@@ -217,7 +223,7 @@ export default function NavBar() {
             >
               Mod
             </Link>
-            
+
             {/* Mobile Auth Links */}
             <div className="border-t border-[var(--bg-dark3)] pt-4 mt-4 space-y-1">
               {isLoading ? (
@@ -229,7 +235,7 @@ export default function NavBar() {
                 // Authenticated user
                 <div className="space-y-2">
                   <div className="flex items-center justify-center space-x-3 px-4 py-2">
-                    <Link 
+                    <Link
                       href="/profile"
                       className="
                         w-10 h-10 bg-blue-500 rounded-full transition-all duration-200
@@ -259,8 +265,8 @@ export default function NavBar() {
               ) : (
                 // Guest user
                 <>
-                  <Link 
-                    href="/login" 
+                  <Link
+                    href="/login"
                     className="
                       text-[var(--text1)] font-medium transition-all duration-200
                       hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
@@ -270,8 +276,8 @@ export default function NavBar() {
                   >
                     Sign In
                   </Link>
-                  <Link 
-                    href="/register" 
+                  <Link
+                    href="/register"
                     className="
                       bg-[var(--accent)] text-white font-medium transition-all duration-200
                       hover:bg-[var(--highlight)]
@@ -287,7 +293,6 @@ export default function NavBar() {
           </div>
         </div>
       )}
-      
     </nav>
   );
 }

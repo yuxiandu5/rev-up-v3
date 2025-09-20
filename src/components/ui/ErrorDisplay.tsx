@@ -28,11 +28,9 @@ export function ErrorDisplay({
     >
       <div className="text-center max-w-md">
         <div className="text-6xl mb-4">⚠️</div>
-        <h1 className="text-2xl font-bold text-[var(--text1)] mb-2">
-          {title}
-        </h1>
+        <h1 className="text-2xl font-bold text-[var(--text1)] mb-2">{title}</h1>
         <p className="text-[var(--text2)] mb-6">{error}</p>
-        
+
         <div className="space-y-3">
           {showRetry && onRetry && (
             <button
@@ -42,7 +40,7 @@ export function ErrorDisplay({
               Try Again
             </button>
           )}
-          
+
           {showNavigation && (
             <>
               <button
@@ -52,7 +50,7 @@ export function ErrorDisplay({
                 Browse Gallery
               </button>
               <button
-                    onClick={() => router.push("/")}
+                onClick={() => router.push("/")}
                 className="w-full px-6 py-3 bg-[var(--bg-dark1)] text-[var(--text1)] rounded-lg hover:bg-[var(--bg-dark2)] transition-colors"
               >
                 Go Home
@@ -66,14 +64,14 @@ export function ErrorDisplay({
 }
 
 // Specialized error components for common use cases
-export function NotFoundError({ 
-  item = "item", 
-  itemId, 
-  onRetry 
-}: { 
-  item?: string; 
-  itemId?: string; 
-  onRetry?: () => void; 
+export function NotFoundError({
+  item = "item",
+  itemId,
+  onRetry,
+}: {
+  item?: string;
+  itemId?: string;
+  onRetry?: () => void;
 }) {
   const router = useRouter();
 
@@ -89,24 +87,21 @@ export function NotFoundError({
           {item.charAt(0).toUpperCase() + item.slice(1)} not found
         </h1>
         <p className="text-[var(--text2)] mb-6">
-          The {item} {itemId && (
+          The {item}{" "}
+          {itemId && (
             <>
-              with ID <code className="bg-[var(--bg-dark1)] px-2 py-1 rounded text-sm">{itemId}</code>
+              with ID{" "}
+              <code className="bg-[var(--bg-dark1)] px-2 py-1 rounded text-sm">{itemId}</code>
             </>
-          )} could not be found or is not public.
+          )}{" "}
+          could not be found or is not public.
         </p>
       </div>
     </motion.div>
   );
 }
 
-export function NoDataError({ 
-  item = "data", 
-  onRetry 
-}: { 
-  item?: string; 
-  onRetry?: () => void; 
-}) {
+export function NoDataError({ item = "data", onRetry }: { item?: string; onRetry?: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -115,12 +110,8 @@ export function NoDataError({
     >
       <div className="text-center max-w-md">
         <div className="text-6xl mb-4">📭</div>
-        <h1 className="text-2xl font-bold text-[var(--text1)] mb-2">
-          No {item} found
-        </h1>
-        <p className="text-[var(--text2)] mb-6">
-          This {item} appears to have no data available.
-        </p>
+        <h1 className="text-2xl font-bold text-[var(--text1)] mb-2">No {item} found</h1>
+        <p className="text-[var(--text2)] mb-6">This {item} appears to have no data available.</p>
         {onRetry && (
           <button
             onClick={onRetry}

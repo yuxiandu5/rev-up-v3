@@ -26,14 +26,14 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
         badgeId: build.car.badgeId,
         badge: build.car.badge,
         yearRangeId: build.car.yearRangeId,
-        yearRange: build.car.endYear 
+        yearRange: build.car.endYear
           ? `${build.car.startYear}-${build.car.endYear}`
           : `${build.car.startYear}+`,
-      }
+      },
     };
   };
   const { carSpecs, selectedCar } = getCarDisplayData();
-  const getSpecGains = () => {    
+  const getSpecGains = () => {
     // Calculate from detailed modifications
     return build.modifications.reduce(
       (acc, mod) => ({
@@ -45,7 +45,9 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
       { hpGain: 0, torqueGain: 0, handlingGain: 0, zeroToHundredGain: 0 }
     );
   };
-  const convertToModCardData = (modificationDTO: BuildDetailDTO["modifications"][0]): { mod: Mod; modSpec: ModCompatibility } => {
+  const convertToModCardData = (
+    modificationDTO: BuildDetailDTO["modifications"][0]
+  ): { mod: Mod; modSpec: ModCompatibility } => {
     const mod: Mod = {
       id: modificationDTO.id,
       name: modificationDTO.name,
@@ -72,7 +74,7 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
 
     return { mod, modSpec };
   };
-  
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -94,7 +96,10 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
               {build.nickname || `${build.car.make} ${build.car.model}`}
             </h3>
             <p className="text-[var(--text2)]">
-              {build.car.make} {build.car.model} {build.car.badge} {build.car.endYear ? `${build.car.startYear}-${build.car.endYear}` : `${build.car.startYear}+`}
+              {build.car.make} {build.car.model} {build.car.badge}{" "}
+              {build.car.endYear
+                ? `${build.car.startYear}-${build.car.endYear}`
+                : `${build.car.startYear}+`}
             </p>
           </div>
         </div>
@@ -114,10 +119,7 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
 
               {/* Performance Specs with Progress Bars */}
               <div className="bg-[var(--bg-dark1)] rounded-lg p-4 border border-[var(--bg-dark3)]">
-                <CarSpecDisplay 
-                  carSpecs={carSpecs} 
-                  specGained={getSpecGains()} 
-                />
+                <CarSpecDisplay carSpecs={carSpecs} specGained={getSpecGains()} />
               </div>
             </div>
 
@@ -132,7 +134,7 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
                     ${build.totalPrice.toLocaleString()}
                   </span>
                 </div>
-                
+
                 {build.modifications.length === 0 ? (
                   <div className="flex justify-center py-8">
                     <Loading variant="spinner" text="Loading modifications..." showText />
@@ -166,4 +168,3 @@ export default function PublicCard({ build }: { build: BuildDetailDTO }) {
     </motion.div>
   );
 }
-

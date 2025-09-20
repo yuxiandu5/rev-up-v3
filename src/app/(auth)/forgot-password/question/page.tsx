@@ -44,7 +44,7 @@ export default function ForgotPasswordQuestionPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName, answer: data.answer }),
       });
-      
+
       if (response.ok) {
         setIsLoading(true);
         router.push("/forgot-password/question/reset-password");
@@ -53,29 +53,21 @@ export default function ForgotPasswordQuestionPage() {
       }
     } catch (error) {
       setError("root", {
-        message: "Failed to verify answer"
+        message: "Failed to verify answer",
       });
     }
   };
 
-    return (
-    <AuthLayout
-      title="Forgot your password?"
-    >
-
-      <h2 className="text-lg font-bold text-[var(--text1)] mb-4 text-center">
-        {question} ?
-      </h2>
+  return (
+    <AuthLayout title="Forgot your password?">
+      <h2 className="text-lg font-bold text-[var(--text1)] mb-4 text-center">{question} ?</h2>
       <p className="text-sm text-[var(--text2)] mb-4 text-center">
         Please enter the answer to the question above.
       </p>
 
       {errors.root && (
-
         <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-          <p className="text-sm text-red-500 font-medium">
-            {errors.root.message}
-          </p>
+          <p className="text-sm text-red-500 font-medium">{errors.root.message}</p>
         </div>
       )}
 

@@ -15,31 +15,22 @@ export async function POST(request: NextRequest) {
 
     // Find user by userName
     const user = await prisma.user.findUnique({
-      where: { userName }
+      where: { userName },
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid username or password" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
     }
 
     // Verify password
     const isValidPassword = await verifyPassword(user.passwordHash, password);
     if (!isValidPassword) {
-      return NextResponse.json(
-        { error: "Invalid username or password" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
     }
 
     // Check if user is active
     if (!user.isActive) {
-      return NextResponse.json(
-        { error: "Account is deactivated" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Account is deactivated" }, { status: 403 });
     }
 
     // Generate refresh token
@@ -48,9 +39,8 @@ export async function POST(request: NextRequest) {
 
     // Get client info
     const userAgent = request.headers.get("user-agent") || null;
-    const ipAddress = request.headers.get("x-forwarded-for") || 
-                      request.headers.get("x-real-ip") || 
-                      "unknown";
+    const ipAddress =
+      request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
 
     // Create refresh token and update last login in transaction
     await prisma.$transaction([
@@ -62,13 +52,13 @@ export async function POST(request: NextRequest) {
           userAgent,
           ipAddress,
           expiresAt: addDays(new Date(), REFRESH_TTL_DAYS),
-        }
+        },
       }),
       // Update last login
       prisma.user.update({
         where: { id: user.id },
-        data: { lastLoginAt: new Date() }
-      })
+        data: { lastLoginAt: new Date() },
+      }),
     ]);
 
     // Issue access JWT
@@ -91,7 +81,7 @@ export async function POST(request: NextRequest) {
       path: "/",
       maxAge: ACCESS_TTL_MIN * 60, // Convert minutes to seconds
     });
-    
+
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -101,21 +91,14 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     console.error("Login error:", error);
 
     // Handle validation errors
     if (error instanceof ZodError) {
-      return NextResponse.json(
-        { error: "Invalid input data" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

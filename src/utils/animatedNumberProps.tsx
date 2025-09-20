@@ -18,7 +18,7 @@ export function AnimatedNumber({
   value,
   duration = 0.5,
   decimals,
-  type = "number"
+  type = "number",
 }: AnimatedNumberProps) {
   const { formatPrice } = useModStore();
   const motionValue = useMotionValue(value);
@@ -29,11 +29,7 @@ export function AnimatedNumber({
       duration,
       onUpdate: (latest) => {
         setDisplayValue(
-          latest.toFixed(
-            decimals !== undefined
-              ? decimals
-              : Number.isInteger(value) ? 0 : 1
-          )
+          latest.toFixed(decimals !== undefined ? decimals : Number.isInteger(value) ? 0 : 1)
         );
       },
     });

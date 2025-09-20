@@ -2,7 +2,15 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { Make, Model, Badge, YearRange, SelectedCar, CarSpecs, LoadingState } from "@/types/carTypes";
+import {
+  Make,
+  Model,
+  Badge,
+  YearRange,
+  SelectedCar,
+  CarSpecs,
+  LoadingState,
+} from "@/types/carTypes";
 
 // Import mod store to clear mods when car changes
 let clearModsCallback: (() => void) | null = null;
@@ -19,10 +27,10 @@ interface CarState {
   yearRanges: YearRange[];
   selectedCar: SelectedCar;
   carSpecs: CarSpecs;
-  
+
   // Loading states
   loading: LoadingState;
-  
+
   // Actions
   fetchMakes: () => Promise<void>;
   fetchModels: (makeId: string) => Promise<void>;
@@ -73,81 +81,81 @@ export const useCarStore = create<CarState>()(
 
       // API calls
       fetchMakes: async () => {
-        set((state) => ({ 
-          loading: { ...state.loading, makes: true } 
+        set((state) => ({
+          loading: { ...state.loading, makes: true },
         }));
-        
+
         try {
           const response = await fetch("/api/car");
           if (!response.ok) throw new Error("Failed to fetch makes");
-          
+
           const makes = await response.json();
           set({ makes });
         } catch (error) {
           console.error("Error fetching makes:", error);
         } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, makes: false } 
+          set((state) => ({
+            loading: { ...state.loading, makes: false },
           }));
         }
       },
 
       fetchModels: async (makeId: string) => {
-        set((state) => ({ 
-          loading: { ...state.loading, models: true } 
+        set((state) => ({
+          loading: { ...state.loading, models: true },
         }));
-        
+
         try {
           const response = await fetch(`/api/car?makeId=${makeId}`);
           if (!response.ok) throw new Error("Failed to fetch models");
-          
+
           const models = await response.json();
           set({ models });
         } catch (error) {
           console.error("Error fetching models:", error);
         } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, models: false } 
+          set((state) => ({
+            loading: { ...state.loading, models: false },
           }));
         }
       },
 
       fetchBadges: async (modelId: string) => {
-        set((state) => ({ 
-          loading: { ...state.loading, badges: true } 
+        set((state) => ({
+          loading: { ...state.loading, badges: true },
         }));
-        
+
         try {
           const response = await fetch(`/api/car?modelId=${modelId}`);
           if (!response.ok) throw new Error("Failed to fetch badges");
-          
+
           const badges = await response.json();
           set({ badges });
         } catch (error) {
           console.error("Error fetching badges:", error);
         } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, badges: false } 
+          set((state) => ({
+            loading: { ...state.loading, badges: false },
           }));
         }
       },
 
       fetchYearRanges: async (badgeId: string) => {
-        set((state) => ({ 
-          loading: { ...state.loading, yearRanges: true } 
+        set((state) => ({
+          loading: { ...state.loading, yearRanges: true },
         }));
-        
+
         try {
           const response = await fetch(`/api/car?badgeId=${badgeId}`);
           if (!response.ok) throw new Error("Failed to fetch year ranges");
-          
+
           const yearRanges = await response.json();
           set({ yearRanges });
         } catch (error) {
           console.error("Error fetching year ranges:", error);
         } finally {
-          set((state) => ({ 
-            loading: { ...state.loading, yearRanges: false } 
+          set((state) => ({
+            loading: { ...state.loading, yearRanges: false },
           }));
         }
       },
@@ -155,7 +163,7 @@ export const useCarStore = create<CarState>()(
       // Selection actions
       selectMake: (make: Make) => {
         const { selectedCar, clearDependentData, fetchModels } = get();
-        
+
         set({
           selectedCar: {
             ...selectedCar,
@@ -171,19 +179,19 @@ export const useCarStore = create<CarState>()(
           },
           carSpecs: initialCarSpecs, // Clear specs when make changes
         });
-        
+
         // Clear all selected mods when car changes
         if (clearModsCallback) {
           clearModsCallback();
         }
-        
+
         clearDependentData("models");
         fetchModels(make.id);
       },
 
       selectModel: (model: Model) => {
         const { selectedCar, clearDependentData, fetchBadges } = get();
-        
+
         set({
           selectedCar: {
             ...selectedCar,
@@ -197,19 +205,19 @@ export const useCarStore = create<CarState>()(
           },
           carSpecs: initialCarSpecs, // Clear specs when model changes
         });
-        
+
         // Clear all selected mods when car changes
         if (clearModsCallback) {
           clearModsCallback();
         }
-        
+
         clearDependentData("badges");
         fetchBadges(model.id);
       },
 
       selectBadge: (badge: Badge) => {
         const { selectedCar, clearDependentData, fetchYearRanges } = get();
-        
+
         set({
           selectedCar: {
             ...selectedCar,
@@ -221,20 +229,20 @@ export const useCarStore = create<CarState>()(
           },
           carSpecs: initialCarSpecs, // Clear specs when badge changes
         });
-        
+
         // Clear all selected mods when car changes
         if (clearModsCallback) {
           clearModsCallback();
         }
-        
+
         clearDependentData("yearRanges");
         fetchYearRanges(badge.id);
       },
 
       selectYearRange: (yearRange: YearRange) => {
         const { selectedCar } = get();
-        
-        const yearRangeDisplay = yearRange.endYear 
+
+        const yearRangeDisplay = yearRange.endYear
           ? `${yearRange.startYear}-${yearRange.endYear}`
           : `${yearRange.startYear}-Present`;
 
@@ -246,12 +254,12 @@ export const useCarStore = create<CarState>()(
           url: yearRange.url,
           chassis: yearRange.chassis,
         };
-        
+
         // Clear all selected mods when car changes
         if (clearModsCallback) {
           clearModsCallback();
         }
-          
+
         set({
           selectedCar: {
             ...selectedCar,
@@ -271,7 +279,6 @@ export const useCarStore = create<CarState>()(
           set({ yearRanges: [] });
         }
       },
-
     }),
     {
       name: "car-storage",

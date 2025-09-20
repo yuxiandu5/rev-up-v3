@@ -18,16 +18,10 @@ export default function AuthLayout({ children, title, subtitle, footer }: AuthLa
           <Link href="/" className="inline-block">
             <Image src="/logo/logo.png" alt="Logo" width={140} height={140} />
           </Link>
-          
-          <h2 className="mt-0 text-3xl font-bold text-[var(--text1)]">
-            {title}
-          </h2>
-          
-          {subtitle && (
-            <p className="mt-2 text-sm text-[var(--text2)]">
-              {subtitle}
-            </p>
-          )}
+
+          <h2 className="mt-0 text-3xl font-bold text-[var(--text1)]">{title}</h2>
+
+          {subtitle && <p className="mt-2 text-sm text-[var(--text2)]">{subtitle}</p>}
         </div>
 
         {/* Main Content */}
@@ -36,11 +30,7 @@ export default function AuthLayout({ children, title, subtitle, footer }: AuthLa
         </div>
 
         {/* Footer */}
-        {footer && (
-          <div className="text-center text-sm text-[var(--text2)] mt-0">
-            {footer}
-          </div>
-        )}
+        {footer && <div className="text-center text-sm text-[var(--text2)] mt-0">{footer}</div>}
       </div>
     </div>
   );

@@ -10,14 +10,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends("next/core-web-vitals", "next/typescript", "plugin:prettier/recommended"),
   {
     rules: {
-      // Example opinionated rules (tweak to taste)
-      semi: ["error", "always"],
-      quotes: ["error", "double"],
       "@typescript-eslint/no-unused-vars": ["warn"],
       "no-console": "warn",
+      // Let Prettier handle these
+      semi: "off",
+      quotes: "off",
     },
   },
 ];

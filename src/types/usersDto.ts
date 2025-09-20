@@ -1,13 +1,13 @@
 import { Role } from "./dtos";
 
-export interface AdminUserListItemDTO{
-  id: string,
-  userName: string,
-  isActive: boolean,
-  role: Role,
-  createdAt: string,
-  updatedAt: string,
-  lastLoginAt: string | null,
+export interface AdminUserListItemDTO {
+  id: string;
+  userName: string;
+  isActive: boolean;
+  role: Role;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt: string | null;
 }
 
 export interface PaginationMeta {
@@ -17,9 +17,9 @@ export interface PaginationMeta {
   totalPages: number;
 }
 
-export interface AdminUserListResponse{
-  success: boolean,
-  message: string,
-  data: AdminUserListItemDTO[]
-  meta: PaginationMeta
+export interface AdminUserListResponse {
+  success: boolean;
+  message: string;
+  data: AdminUserListItemDTO[];
+  meta: PaginationMeta;
 }

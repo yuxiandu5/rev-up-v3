@@ -14,12 +14,9 @@ export async function GET(request: NextRequest) {
     // Extract and verify JWT token
     const authHeader = request.headers.get("authorization");
     const token = extractBearerToken(authHeader);
-    
+
     if (!token) {
-      return NextResponse.json(
-        { error: "Authorization token required" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authorization token required" }, { status: 401 });
     }
 
     const payload = await verifyAccessJWT(token);
@@ -28,11 +25,11 @@ export async function GET(request: NextRequest) {
     // Fetch user's builds
     const rawBuilds = await prisma.userBuild.findMany({
       where: {
-        userId: userId
+        userId: userId,
       },
       orderBy: {
-        updatedAt: "desc"
-      }
+        updatedAt: "desc",
+      },
     });
 
     // Filter out invalid builds and transform to DTOs
@@ -44,21 +41,14 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json(response, { status: 200 });
-
   } catch (error) {
     console.error("Get builds error:", error);
 
     if (error instanceof Error && error.message.includes("Invalid or expired token")) {
-      return NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -70,12 +60,9 @@ export async function POST(request: NextRequest) {
     // Extract and verify JWT token
     const authHeader = request.headers.get("authorization");
     const token = extractBearerToken(authHeader);
-    
+
     if (!token) {
-      return NextResponse.json(
-        { error: "Authorization token required" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Authorization token required" }, { status: 401 });
     }
 
     const payload = await verifyAccessJWT(token);
@@ -93,7 +80,7 @@ export async function POST(request: NextRequest) {
         selectedMods: validatedData.selectedMods,
         nickname: validatedData.nickname,
         notes: validatedData.notes,
-      }
+      },
     });
 
     // Transform to DTO
@@ -105,30 +92,23 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(response, { status: 201 });
-
   } catch (error) {
     console.error("Create build error:", error);
 
     if (error instanceof Error && error.message.includes("Invalid or expired token")) {
-      return NextResponse.json(
-        { error: "Invalid or expired token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
     }
 
     if (error instanceof ZodError) {
       return NextResponse.json(
-        { 
+        {
           error: "Invalid input data",
-          details: error.issues 
+          details: error.issues,
         },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

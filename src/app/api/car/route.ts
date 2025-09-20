@@ -108,19 +108,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Invalid query combination
-    return NextResponse.json(
-      { error: "Invalid query parameters" },
-      { status: 400 }
-    );
-
+    return NextResponse.json({ error: "Invalid query parameters" }, { status: 400 });
   } catch (error) {
     // Log error for debugging in development
     if (process.env.NODE_ENV === "development") {
       console.error("Car API error:", error);
     }
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

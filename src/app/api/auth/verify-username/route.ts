@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { userName }
+      where: { userName },
     });
 
     if (!user) {
@@ -21,9 +21,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ question: user.recoverQuestion }, { status: 200 });
   } catch (error) {
     console.error("Verify username error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

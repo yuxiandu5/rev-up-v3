@@ -317,14 +317,7 @@ export default function useApiWithLoading() {
 
 ```typescript
 interface LoadingProps {
-  variant?:
-    | "spinner"
-    | "dots"
-    | "pulse"
-    | "skeleton"
-    | "bars"
-    | "card"
-    | "page";
+  variant?: "spinner" | "dots" | "pulse" | "skeleton" | "bars" | "card" | "page";
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   color?: "primary" | "secondary" | "accent" | "muted";
   text?: string;

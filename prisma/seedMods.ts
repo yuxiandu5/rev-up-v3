@@ -8,10 +8,10 @@ async function main() {
       yearRanges: true,
       model: {
         include: {
-          make: true
-        }
-      }
-    }
+          make: true,
+        },
+      },
+    },
   });
 
   // Create Mod Categories
@@ -21,8 +21,8 @@ async function main() {
     create: {
       name: "Intake",
       slug: "intake",
-      description: "Cold air intakes and intake systems"
-    }
+      description: "Cold air intakes and intake systems",
+    },
   });
 
   const exhaustCategory = await prisma.modCategory.upsert({
@@ -31,8 +31,8 @@ async function main() {
     create: {
       name: "Exhaust",
       slug: "exhaust",
-      description: "Exhaust systems, downpipes, and catbacks"
-    }
+      description: "Exhaust systems, downpipes, and catbacks",
+    },
   });
 
   const suspensionCategory = await prisma.modCategory.upsert({
@@ -41,8 +41,8 @@ async function main() {
     create: {
       name: "Suspension",
       slug: "suspension",
-      description: "Coilovers, springs, and suspension components"
-    }
+      description: "Coilovers, springs, and suspension components",
+    },
   });
 
   const tuneCategory = await prisma.modCategory.upsert({
@@ -51,8 +51,8 @@ async function main() {
     create: {
       name: "Tune",
       slug: "tune",
-      description: "ECU tunes and performance software"
-    }
+      description: "ECU tunes and performance software",
+    },
   });
 
   const turboCategory = await prisma.modCategory.upsert({
@@ -61,8 +61,8 @@ async function main() {
     create: {
       name: "Turbo",
       slug: "turbo",
-      description: "Turbochargers and turbo upgrades"
-    }
+      description: "Turbochargers and turbo upgrades",
+    },
   });
 
   const intercoolerCategory = await prisma.modCategory.upsert({
@@ -71,8 +71,8 @@ async function main() {
     create: {
       name: "Intercooler",
       slug: "intercooler",
-      description: "Front mount and upgraded intercoolers"
-    }
+      description: "Front mount and upgraded intercoolers",
+    },
   });
 
   // Create Intake Mods
@@ -85,8 +85,8 @@ async function main() {
       brand: "K&N",
       category: "intake",
       description: "High-flow cold air intake system for improved airflow and sound",
-      modCategoryId: intakeCategory.id
-    }
+      modCategoryId: intakeCategory.id,
+    },
   });
 
   const carbonFiberIntake = await prisma.mod.upsert({
@@ -98,8 +98,8 @@ async function main() {
       brand: "BMC",
       category: "intake",
       description: "Lightweight carbon fiber intake with performance gains",
-      modCategoryId: intakeCategory.id
-    }
+      modCategoryId: intakeCategory.id,
+    },
   });
 
   // Create Exhaust Mods
@@ -112,8 +112,8 @@ async function main() {
       brand: "Borla",
       category: "exhaust",
       description: "Full cat-back exhaust system with aggressive sound",
-      modCategoryId: exhaustCategory.id
-    }
+      modCategoryId: exhaustCategory.id,
+    },
   });
 
   const downpipe = await prisma.mod.upsert({
@@ -125,8 +125,8 @@ async function main() {
       brand: "COBB",
       category: "exhaust",
       description: "High-flow catted downpipe for turbo applications",
-      modCategoryId: exhaustCategory.id
-    }
+      modCategoryId: exhaustCategory.id,
+    },
   });
 
   const valvetronic = await prisma.mod.upsert({
@@ -138,8 +138,8 @@ async function main() {
       brand: "Fi Exhaust",
       category: "exhaust",
       description: "Electronic valve-controlled exhaust system",
-      modCategoryId: exhaustCategory.id
-    }
+      modCategoryId: exhaustCategory.id,
+    },
   });
 
   // Create Suspension Mods
@@ -152,8 +152,8 @@ async function main() {
       brand: "KW",
       category: "suspension",
       description: "Adjustable height and damping coilover system",
-      modCategoryId: suspensionCategory.id
-    }
+      modCategoryId: suspensionCategory.id,
+    },
   });
 
   const sportSprings = await prisma.mod.upsert({
@@ -165,8 +165,8 @@ async function main() {
       brand: "Eibach",
       category: "suspension",
       description: "Progressive rate lowering springs",
-      modCategoryId: suspensionCategory.id
-    }
+      modCategoryId: suspensionCategory.id,
+    },
   });
 
   const swaybars = await prisma.mod.upsert({
@@ -178,8 +178,8 @@ async function main() {
       brand: "Hotchkis",
       category: "suspension",
       description: "Front and rear sway bar set for reduced body roll",
-      modCategoryId: suspensionCategory.id
-    }
+      modCategoryId: suspensionCategory.id,
+    },
   });
 
   // Create Tune Mods
@@ -192,8 +192,8 @@ async function main() {
       brand: "APR",
       category: "tune",
       description: "Stage 1 ECU tune for stock hardware",
-      modCategoryId: tuneCategory.id
-    }
+      modCategoryId: tuneCategory.id,
+    },
   });
 
   const stage2Tune = await prisma.mod.upsert({
@@ -205,8 +205,8 @@ async function main() {
       brand: "APR",
       category: "tune",
       description: "Stage 2 ECU tune requiring downpipe and intake",
-      modCategoryId: tuneCategory.id
-    }
+      modCategoryId: tuneCategory.id,
+    },
   });
 
   // Create Turbo Mods
@@ -219,8 +219,8 @@ async function main() {
       brand: "Garrett",
       category: "turbo",
       description: "Upgraded hybrid turbocharger for increased power",
-      modCategoryId: turboCategory.id
-    }
+      modCategoryId: turboCategory.id,
+    },
   });
 
   // Create Intercooler Mods
@@ -233,8 +233,8 @@ async function main() {
       brand: "Mishimoto",
       category: "intercooler",
       description: "Large front-mount intercooler upgrade",
-      modCategoryId: intercoolerCategory.id
-    }
+      modCategoryId: intercoolerCategory.id,
+    },
   });
 
   // Now create compatibilities for each mod with appropriate year ranges
@@ -242,9 +242,9 @@ async function main() {
 
   // Helper function to create compatibility with performance deltas and pricing
   async function createCompatibility(
-    modId: string, 
-    badge: { id: string; model: { id: string; name: string; make: { id: string; name: string } } }, 
-    yearRange: { id: string; startYear: number; endYear: number | null }, 
+    modId: string,
+    badge: { id: string; model: { id: string; name: string; make: { id: string; name: string } } },
+    yearRange: { id: string; startYear: number; endYear: number | null },
     hpGain: number | null = null,
     nmGain: number | null = null,
     handlingDelta: number | null = null,
@@ -265,25 +265,29 @@ async function main() {
         handlingDelta,
         zeroToHundredDelta,
         price,
-        notes
-      }
+        notes,
+      },
     });
   }
 
   // Helper function to calculate car-specific pricing
-  function getModPrice(basePriceRange: [number, number], makeName: string, isHighPerformance: boolean): number {
+  function getModPrice(
+    basePriceRange: [number, number],
+    makeName: string,
+    isHighPerformance: boolean
+  ): number {
     const [minPrice, maxPrice] = basePriceRange;
     let multiplier = 1.0;
-    
+
     // Brand multipliers
     if (makeName === "Porsche") multiplier = 1.5;
     else if (makeName === "Mercedes-Benz") multiplier = 1.3;
     else if (makeName === "Audi") multiplier = 1.2;
     else if (makeName === "BMW") multiplier = 1.1;
-    
+
     // Performance car multiplier
     if (isHighPerformance) multiplier *= 1.2;
-    
+
     const basePrice = minPrice + (maxPrice - minPrice) * Math.random();
     return Math.round(basePrice * multiplier);
   }
@@ -292,8 +296,28 @@ async function main() {
   for (const badge of badges) {
     for (const yearRange of badge.yearRanges) {
       const makeName = badge.model.make.name;
-      const isTurbo = ["330i", "340i", "M340i", "M240i", "230i", "C300", "C43 AMG", "A4 45 TFSI", "A5 45 TFSI", "S4", "Carrera", "Carrera S"].includes(badge.name);
-      const isHighPerformance = ["M340i", "M240i", "C43 AMG", "S4", "Carrera", "Carrera S"].includes(badge.name);
+      const isTurbo = [
+        "330i",
+        "340i",
+        "M340i",
+        "M240i",
+        "230i",
+        "C300",
+        "C43 AMG",
+        "A4 45 TFSI",
+        "A5 45 TFSI",
+        "S4",
+        "Carrera",
+        "Carrera S",
+      ].includes(badge.name);
+      const isHighPerformance = [
+        "M340i",
+        "M240i",
+        "C43 AMG",
+        "S4",
+        "Carrera",
+        "Carrera S",
+      ].includes(badge.name);
 
       // Cold Air Intake - Universal compatibility
       await createCompatibility(
@@ -468,63 +492,63 @@ async function main() {
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: exhaustCategory.id,
-      dependentId: stage2Tune.id
-    }
+      dependentId: stage2Tune.id,
+    },
   });
 
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: intakeCategory.id,
-      dependentId: stage2Tune.id
-    }
+      dependentId: stage2Tune.id,
+    },
   });
 
   // Turbo upgrade requires tune category first
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: tuneCategory.id,
-      dependentId: turboUpgrade.id
-    }
+      dependentId: turboUpgrade.id,
+    },
   });
 
   // Turbo upgrade also requires intercooler category for cooling
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: intercoolerCategory.id,
-      dependentId: turboUpgrade.id
-    }
+      dependentId: turboUpgrade.id,
+    },
   });
 
   // Turbo upgrade requires exhaust category for flow
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: exhaustCategory.id,
-      dependentId: turboUpgrade.id
-    }
+      dependentId: turboUpgrade.id,
+    },
   });
 
   // Turbo upgrade requires intake category for airflow
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: intakeCategory.id,
-      dependentId: turboUpgrade.id
-    }
+      dependentId: turboUpgrade.id,
+    },
   });
 
   // Performance coilovers work better with suspension category (sway bars)
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: suspensionCategory.id,
-      dependentId: coilovers.id
-    }
+      dependentId: coilovers.id,
+    },
   });
 
   // FMIC upgrade is recommended with tune category
   await prisma.modRequirement.create({
     data: {
       prerequisiteCategoryId: tuneCategory.id,
-      dependentId: fmicUpgrade.id
-    }
+      dependentId: fmicUpgrade.id,
+    },
   });
 
   console.log("Mod seed completed successfully!");

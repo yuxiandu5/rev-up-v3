@@ -47,17 +47,19 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
         badgeId: build.car.badgeId,
         badge: build.car.badge,
         yearRangeId: build.car.yearRangeId,
-        yearRange: build.car.endYear 
+        yearRange: build.car.endYear
           ? `${build.car.startYear}-${build.car.endYear}`
           : `${build.car.startYear}+`,
-      }
+      },
     };
   };
 
   const { carSpecs, selectedCar } = getCarDisplayData();
 
   // Convert ModificationDTO to Mod and ModCompatibility for ModCard component
-  const convertToModCardData = (modificationDTO: BuildDetailDTO["modifications"][0]): { mod: Mod; modSpec: ModCompatibility } => {
+  const convertToModCardData = (
+    modificationDTO: BuildDetailDTO["modifications"][0]
+  ): { mod: Mod; modSpec: ModCompatibility } => {
     const mod: Mod = {
       id: modificationDTO.id,
       name: modificationDTO.name,
@@ -88,15 +90,15 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
   // Fetch detailed build information when expanded
   const fetchBuildDetail = useCallback(async () => {
     if (buildDetail) return; // Already loaded
-    
+
     try {
       setLoadingDetail(true);
       const response = await apiCall(`/api/builds/${build.id}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch build details: ${response.status}`);
       }
-      
+
       const responseData = await response.json();
       setBuildDetail(responseData.data);
     } catch (error) {
@@ -126,7 +128,7 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
         zeroToHundredGain: carSpecs.zeroToHundred - build.performance.zeroToHundred,
       };
     }
-    
+
     // Calculate from detailed modifications
     return buildDetail.modifications.reduce(
       (acc, mod) => ({
@@ -184,7 +186,10 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
             {build.nickname || `${build.car.make} ${build.car.model}`}
           </h3>
           <p className="text-sm text-[var(--text2)]">
-            {build.car.make} {build.car.model} {build.car.badge} {build.car.endYear ? `${build.car.startYear}-${build.car.endYear}` : `${build.car.startYear}+`}
+            {build.car.make} {build.car.model} {build.car.badge}{" "}
+            {build.car.endYear
+              ? `${build.car.startYear}-${build.car.endYear}`
+              : `${build.car.startYear}+`}
           </p>
         </div>
 
@@ -226,10 +231,13 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
               {build.nickname || `${build.car.make} ${build.car.model}`}
             </h3>
             <p className="text-[var(--text2)]">
-              {build.car.make} {build.car.model} {build.car.badge} {build.car.endYear ? `${build.car.startYear}-${build.car.endYear}` : `${build.car.startYear}+`}
+              {build.car.make} {build.car.model} {build.car.badge}{" "}
+              {build.car.endYear
+                ? `${build.car.startYear}-${build.car.endYear}`
+                : `${build.car.startYear}+`}
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             {/* Share Button */}
             <button
@@ -238,16 +246,31 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
               title="Copy public URL"
             >
               {urlCopied ? (
-                <svg className="w-5 h-5 text-[var(--green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-5 h-5 text-[var(--green)]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               ) : (
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                  />
                 </svg>
               )}
             </button>
-            
+
             {/* Delete Button */}
             <button
               onClick={handleDeleteClick}
@@ -256,10 +279,15 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
               title="Delete build"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
               </svg>
             </button>
-            
+
             {/* Close Button */}
             <button
               onClick={() => setIsExpanded(false)}
@@ -267,7 +295,12 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
               title="Close"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -288,10 +321,7 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
 
               {/* Performance Specs with Progress Bars */}
               <div className="bg-[var(--bg-dark1)] rounded-lg p-4 border border-[var(--bg-dark3)]">
-                <CarSpecDisplay 
-                  carSpecs={carSpecs} 
-                  specGained={getSpecGains()} 
-                />
+                <CarSpecDisplay carSpecs={carSpecs} specGained={getSpecGains()} />
               </div>
             </div>
 
@@ -306,7 +336,7 @@ export const BuildCard = ({ build, onDelete, onCopyUrl }: BuildCardProps) => {
                     ${build.totalPrice.toLocaleString()}
                   </span>
                 </div>
-                
+
                 {loadingDetail ? (
                   <div className="flex justify-center py-8">
                     <Loading variant="spinner" text="Loading modifications..." showText />

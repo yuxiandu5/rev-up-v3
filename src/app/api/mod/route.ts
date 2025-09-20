@@ -28,16 +28,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(mods);
     }
 
-
     if (categoryId && yearRangeId) {
       const mods = await prisma.mod.findMany({
-        where: { 
+        where: {
           modCategoryId: categoryId,
           compatibilities: {
             some: {
-              modelYearRangeId: yearRangeId
-            }
-          }
+              modelYearRangeId: yearRangeId,
+            },
+          },
         },
         select: {
           category: true,
@@ -47,21 +46,19 @@ export async function GET(request: NextRequest) {
           description: true,
           compatibilities: {
             where: {
-              modelYearRangeId: yearRangeId
-            }
+              modelYearRangeId: yearRangeId,
+            },
           },
           dependentOn: {
             select: {
-              prerequisiteCategory: true
-            }
-          }
+              prerequisiteCategory: true,
+            },
+          },
         },
       });
-    
+
       return NextResponse.json(mods);
     }
-
-
 
     if (categoryId) {
       const mods = await prisma.mod.findMany({
@@ -76,10 +73,8 @@ export async function GET(request: NextRequest) {
       });
       return NextResponse.json(mods);
     }
-      
   } catch (error) {
     console.error("Error fetching mods:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-
   }
 }

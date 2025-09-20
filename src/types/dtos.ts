@@ -1,6 +1,6 @@
 /**
  * Data Transfer Objects (DTOs)
- * 
+ *
  * DTOs define the contract between frontend and backend.
  * They ensure type safety, data consistency, and provide a clean API interface.
  */

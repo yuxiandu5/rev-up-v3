@@ -6,22 +6,22 @@ Production‑ready authentication for a Next.js + Prisma + PostgreSQL stack. Des
 
 ## Goals
 
-* Argon2id password hashing
-* Short‑lived **access JWT** (stateless)
-* **Rotating, hashed refresh tokens** with anti‑replay detection
-* Email verification and password reset via **hashed one‑time tokens**
-* HTTP‑only, Secure cookies for refresh token
-* Input validation, rate limiting, audit‑friendly logs
+- Argon2id password hashing
+- Short‑lived **access JWT** (stateless)
+- **Rotating, hashed refresh tokens** with anti‑replay detection
+- Email verification and password reset via **hashed one‑time tokens**
+- HTTP‑only, Secure cookies for refresh token
+- Input validation, rate limiting, audit‑friendly logs
 
 ---
 
 ## Tech Stack
 
-* **Runtime**: Next.js (App Router) / Node 18+
-* **DB**: PostgreSQL + Prisma
-* **Crypto**: `argon2` (Argon2id) or `@node-rs/argon2`, `jose` for JWT, `crypto` for SHA‑256
-* **Validation**: `zod`
-* **Email**: any SMTP (e.g., Resend/SendGrid/Postmark)
+- **Runtime**: Next.js (App Router) / Node 18+
+- **DB**: PostgreSQL + Prisma
+- **Crypto**: `argon2` (Argon2id) or `@node-rs/argon2`, `jose` for JWT, `crypto` for SHA‑256
+- **Validation**: `zod`
+- **Email**: any SMTP (e.g., Resend/SendGrid/Postmark)
 
 ---
 
@@ -96,15 +96,15 @@ enum TokenType {
 
 ## Token Strategy
 
-* **Access JWT**: expires in 10–15 minutes, includes `sub` (user id), `email`, optional `role`, `jti`.
-* **Refresh token**: long random (256‑bit). Plaintext only in cookie; DB stores `sha256(token)`.
-* **Rotation**: on each refresh, mark the old token `consumedAt`, create a new token with `prevTokenHash` pointing at the old one. Any reuse of an already‑consumed token triggers **replay detection** and the chain is revoked.
+- **Access JWT**: expires in 10–15 minutes, includes `sub` (user id), `email`, optional `role`, `jti`.
+- **Refresh token**: long random (256‑bit). Plaintext only in cookie; DB stores `sha256(token)`.
+- **Rotation**: on each refresh, mark the old token `consumedAt`, create a new token with `prevTokenHash` pointing at the old one. Any reuse of an already‑consumed token triggers **replay detection** and the chain is revoked.
 
 ### Cookie Settings (refresh token)
 
-* `httpOnly`, `Secure`, `SameSite=Lax`
-* `path=/api/auth/refresh` (narrow scope)
-* `Max‑Age` equals refresh TTL (7–14 days typical)
+- `httpOnly`, `Secure`, `SameSite=Lax`
+- `path=/api/auth/refresh` (narrow scope)
+- `Max‑Age` equals refresh TTL (7–14 days typical)
 
 ---
 
@@ -112,45 +112,45 @@ enum TokenType {
 
 ### POST `/api/auth/register`
 
-* Input: `{ email, password }`
-* Flow: create user → send email verify link (OneTimeToken: EMAIL\_VERIFY)
-* Output: 201
+- Input: `{ email, password }`
+- Flow: create user → send email verify link (OneTimeToken: EMAIL_VERIFY)
+- Output: 201
 
 ### POST `/api/auth/login`
 
-* Input: `{ email, password }`
-* Flow: verify password → issue access JWT + refresh token (set cookie) → update `lastLoginAt`
-* Output: `{ accessToken }`
+- Input: `{ email, password }`
+- Flow: verify password → issue access JWT + refresh token (set cookie) → update `lastLoginAt`
+- Output: `{ accessToken }`
 
 ### POST `/api/auth/refresh`
 
-* Input: refresh cookie only
-* Flow: validate & rotate refresh token → issue new access JWT + set new refresh cookie
-* Output: `{ accessToken }`
+- Input: refresh cookie only
+- Flow: validate & rotate refresh token → issue new access JWT + set new refresh cookie
+- Output: `{ accessToken }`
 
 ### POST `/api/auth/logout`
 
-* Input: refresh cookie
-* Flow: revoke current refresh token (set `revokedAt`) and clear cookie
-* Output: 204
+- Input: refresh cookie
+- Flow: revoke current refresh token (set `revokedAt`) and clear cookie
+- Output: 204
 
 ### POST `/api/auth/verify-email`
 
-* Input: `{ token }` (plaintext from link)
-* Flow: `sha256(token)` → find OneTimeToken where type=EMAIL\_VERIFY, not consumed/expired → set `emailVerifiedAt` and mark token consumed
-* Output: 204
+- Input: `{ token }` (plaintext from link)
+- Flow: `sha256(token)` → find OneTimeToken where type=EMAIL_VERIFY, not consumed/expired → set `emailVerifiedAt` and mark token consumed
+- Output: 204
 
 ### POST `/api/auth/request-password-reset`
 
-* Input: `{ email }`
-* Flow: create OneTimeToken: PASSWORD\_RESET → email link
-* Output: 204
+- Input: `{ email }`
+- Flow: create OneTimeToken: PASSWORD_RESET → email link
+- Output: 204
 
 ### POST `/api/auth/reset-password`
 
-* Input: `{ token, newPassword }`
-* Flow: verify token → set new `passwordHash` → revoke all user refresh tokens → mark token consumed
-* Output: 204
+- Input: `{ token, newPassword }`
+- Flow: verify token → set new `passwordHash` → revoke all user refresh tokens → mark token consumed
+- Output: 204
 
 ---
 
@@ -179,14 +179,14 @@ export const resetPasswordSchema = z.object({
 
 ## Crypto & Security Settings
 
-* **Password hashing** (Argon2id suggested defaults; tune for your server):
+- **Password hashing** (Argon2id suggested defaults; tune for your server):
+  - memory: 64–128 MB, iterations: 3, parallelism: 1–2
 
-  * memory: 64–128 MB, iterations: 3, parallelism: 1–2
-* **JWT**: sign with `HS256` using a long random secret, or `RS256` with key rotation plan
-* **Token generation**: `crypto.randomBytes(32)` → base64url
-* **Hashing** refresh/one‑time tokens: `sha256(base64url)` with Node `crypto`
-* **Rate limiting**: login/refresh/reset endpoints (e.g., sliding window with Redis)
-* **CORS/CSRF**: if using cookies cross‑site, implement CSRF double‑submit token on state‑changing routes
+- **JWT**: sign with `HS256` using a long random secret, or `RS256` with key rotation plan
+- **Token generation**: `crypto.randomBytes(32)` → base64url
+- **Hashing** refresh/one‑time tokens: `sha256(base64url)` with Node `crypto`
+- **Rate limiting**: login/refresh/reset endpoints (e.g., sliding window with Redis)
+- **CORS/CSRF**: if using cookies cross‑site, implement CSRF double‑submit token on state‑changing routes
 
 ---
 
@@ -216,7 +216,7 @@ export const resetPasswordSchema = z.object({
 
 ### Password Reset
 
-1. Request: create OneTimeToken(PASSWORD\_RESET), email link
+1. Request: create OneTimeToken(PASSWORD_RESET), email link
 2. Reset: verify token → update `passwordHash` → revoke all user refresh tokens
 
 ---
@@ -274,35 +274,33 @@ SMTP_PASS=
 
 ## Testing Checklist
 
-* Register → email verify → login → refresh → logout
-* Reuse of consumed refresh token triggers replay handling
-* Expired refresh token is rejected
-* Password reset invalidates all refresh tokens
-* Invalid/forged tokens are rejected (signature, exp, sub)
-* Rate limit kicks in after N failed logins
+- Register → email verify → login → refresh → logout
+- Reuse of consumed refresh token triggers replay handling
+- Expired refresh token is rejected
+- Password reset invalidates all refresh tokens
+- Invalid/forged tokens are rejected (signature, exp, sub)
+- Rate limit kicks in after N failed logins
 
 ---
 
 ## Observability (nice to have)
 
-* Log security events (login success/failure, token refresh, resets)
-* Metrics: login success rate, refresh errors, replay detections
+- Log security events (login success/failure, token refresh, resets)
+- Metrics: login success rate, refresh errors, replay detections
 
 ---
 
 ## Future Enhancements
 
-* Device/session management UI (per‑device revoke)
-* TOTP MFA, optional WebAuthn passkeys
-* JWT key rotation and KMS‑backed secrets
-* Anomalous session detection (geo‑velocity, device change alerts)
+- Device/session management UI (per‑device revoke)
+- TOTP MFA, optional WebAuthn passkeys
+- JWT key rotation and KMS‑backed secrets
+- Anomalous session detection (geo‑velocity, device change alerts)
 
 ---
 
 ## Notes
 
-* Never store plaintext refresh or reset tokens. Always store hashes.
-* Keep access tokens short‑lived; treat the refresh cookie like a password.
-* On password change, revoke all refresh tokens for the user.
-
-
+- Never store plaintext refresh or reset tokens. Always store hashes.
+- Keep access tokens short‑lived; treat the refresh cookie like a password.
+- On password change, revoke all refresh tokens for the user.

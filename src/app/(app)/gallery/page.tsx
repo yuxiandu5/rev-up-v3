@@ -14,15 +14,7 @@ export default function GalleryPage() {
 
   // Show loading while auth is initializing
   if (authLoading) {
-    return (
-      <Loading 
-        variant="spinner" 
-        size="lg" 
-        fullScreen 
-        text="Authenticating..." 
-        showText 
-      />
-    );
+    return <Loading variant="spinner" size="lg" fullScreen text="Authenticating..." showText />;
   }
 
   // Redirect to login if not authenticated
@@ -57,7 +49,7 @@ export default function GalleryPage() {
             <h1 className="text-3xl font-bold text-[var(--text1)]">My Builds</h1>
             <p className="text-[var(--text2)] mt-2">Your saved car configurations</p>
           </div>
-          
+
           {/* Loading Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -77,7 +69,7 @@ export default function GalleryPage() {
             <h1 className="text-3xl font-bold text-[var(--text1)] mb-4">My Builds</h1>
             <div className="bg-[var(--bg-dark3)] border border-red-500/20 rounded-lg p-4 max-w-md mx-auto">
               <p className="text-red-400">Failed to load builds: {error}</p>
-              <button 
+              <button
                 onClick={() => window.location.reload()}
                 className="mt-2 px-4 py-2 bg-red-600 text-[var(--text1)] rounded-md hover:bg-red-700 transition-colors"
               >
@@ -96,7 +88,8 @@ export default function GalleryPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[var(--text1)]">My Builds</h1>
           <p className="text-[var(--text2)] mt-2">
-            Your saved car configurations ({builds.length} {builds.length === 1 ? "build" : "builds"})
+            Your saved car configurations ({builds.length}{" "}
+            {builds.length === 1 ? "build" : "builds"})
           </p>
         </div>
 
@@ -131,17 +124,13 @@ export default function GalleryPage() {
                 key={build.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.4, 
+                transition={{
+                  duration: 0.4,
                   delay: index * 0.1,
-                  ease: "easeOut" 
+                  ease: "easeOut",
                 }}
               >
-                <BuildCard
-                  build={build}
-                  onDelete={deleteBuild}
-                  onCopyUrl={copyPublicUrl}
-                />
+                <BuildCard build={build} onDelete={deleteBuild} onCopyUrl={copyPublicUrl} />
               </motion.div>
             ))}
           </motion.div>

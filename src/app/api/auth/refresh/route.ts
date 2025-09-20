@@ -11,12 +11,9 @@ export async function POST(request: NextRequest) {
   try {
     // Get refresh token from cookie
     const refreshToken = request.cookies.get("refreshToken")?.value;
-    
+
     if (!refreshToken) {
-      return NextResponse.json(
-        { error: "No refresh token provided" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "No refresh token provided" }, { status: 401 });
     }
 
     // Hash the presented token to find it in database
@@ -25,23 +22,17 @@ export async function POST(request: NextRequest) {
     // Find the refresh token
     const token = await prisma.refreshToken.findUnique({
       where: { tokenHash },
-      include: { user: true }
+      include: { user: true },
     });
 
     // Validate token exists and is valid
     if (!token) {
-      return NextResponse.json(
-        { error: "Invalid refresh token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Invalid refresh token" }, { status: 401 });
     }
 
     // Check if token is revoked
     if (token.revokedAt) {
-      return NextResponse.json(
-        { error: "Refresh token has been revoked" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Refresh token has been revoked" }, { status: 401 });
     }
 
     // Check if token is already consumed (replay detection)
@@ -56,18 +47,12 @@ export async function POST(request: NextRequest) {
 
     // Check if token is expired
     if (token.expiresAt < new Date()) {
-      return NextResponse.json(
-        { error: "Refresh token has expired" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Refresh token has expired" }, { status: 401 });
     }
 
     // Check if user is still active
     if (!token.user.isActive) {
-      return NextResponse.json(
-        { error: "Account is deactivated" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Account is deactivated" }, { status: 403 });
     }
 
     // Generate new refresh token
@@ -76,16 +61,15 @@ export async function POST(request: NextRequest) {
 
     // Get client info
     const userAgent = request.headers.get("user-agent") || null;
-    const ipAddress = request.headers.get("x-forwarded-for") || 
-                      request.headers.get("x-real-ip") || 
-                      "unknown";
+    const ipAddress =
+      request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
 
     // Rotate refresh token (mark old as consumed, create new)
     await prisma.$transaction([
       // Mark current token as consumed
       prisma.refreshToken.update({
         where: { id: token.id },
-        data: { consumedAt: new Date() }
+        data: { consumedAt: new Date() },
       }),
       // Create new refresh token with prevTokenHash chain
       prisma.refreshToken.create({
@@ -96,8 +80,8 @@ export async function POST(request: NextRequest) {
           userAgent,
           ipAddress,
           expiresAt: addDays(new Date(), REFRESH_TTL_DAYS),
-        }
-      })
+        },
+      }),
     ]);
 
     // Issue new access JWT
@@ -109,8 +93,12 @@ export async function POST(request: NextRequest) {
 
     // Set new refresh token cookie
     const response = NextResponse.json(
-      { accessToken, user: { id: token.user.id, userName: token.user.userName, role: token.user.role } }, 
-      { status: 200 });
+      {
+        accessToken,
+        user: { id: token.user.id, userName: token.user.userName, role: token.user.role },
+      },
+      { status: 200 }
+    );
 
     response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
@@ -119,7 +107,7 @@ export async function POST(request: NextRequest) {
       path: "/",
       maxAge: ACCESS_TTL_MIN * 60, // Convert minutes to seconds
     });
-    
+
     response.cookies.set("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -129,13 +117,9 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-
   } catch (error) {
     console.error("Refresh error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -149,13 +133,10 @@ async function revokeTokenChain(userId: string, startTokenHash: string): Promise
       await tx.refreshToken.updateMany({
         where: {
           userId,
-          OR: [
-            { tokenHash: startTokenHash },
-            { prevTokenHash: startTokenHash }
-          ],
-          revokedAt: null
+          OR: [{ tokenHash: startTokenHash }, { prevTokenHash: startTokenHash }],
+          revokedAt: null,
         },
-        data: { revokedAt: new Date() }
+        data: { revokedAt: new Date() },
       });
 
       // Also revoke any tokens that might chain from the tokens we just found
@@ -163,9 +144,9 @@ async function revokeTokenChain(userId: string, startTokenHash: string): Promise
         where: {
           userId,
           prevTokenHash: startTokenHash,
-          revokedAt: null
+          revokedAt: null,
         },
-        select: { tokenHash: true }
+        select: { tokenHash: true },
       });
 
       for (const chainedToken of chainedTokens) {
@@ -173,9 +154,9 @@ async function revokeTokenChain(userId: string, startTokenHash: string): Promise
           where: {
             userId,
             prevTokenHash: chainedToken.tokenHash,
-            revokedAt: null
+            revokedAt: null,
           },
-          data: { revokedAt: new Date() }
+          data: { revokedAt: new Date() },
         });
       }
     });

@@ -3,11 +3,7 @@
 import { useState, useEffect } from "react";
 import { useApiClient } from "./useApiClient";
 import { useAuthStore } from "@/stores/authStore";
-import type { 
-  BuildSummaryDTO, 
-  ApiSuccessResponse,
-  ApiErrorResponse 
-} from "@/types/dtos";
+import type { BuildSummaryDTO, ApiSuccessResponse, ApiErrorResponse } from "@/types/dtos";
 
 // Legacy interface for backward compatibility
 export interface Build {
@@ -24,19 +20,11 @@ export interface Build {
 
 // Type guard to check if response is success or error
 function isApiSuccessResponse<T>(response: unknown): response is ApiSuccessResponse<T> {
-  return (
-    typeof response === "object" &&
-    response !== null &&
-    "data" in response
-  );
+  return typeof response === "object" && response !== null && "data" in response;
 }
 
 function isApiErrorResponse(response: unknown): response is ApiErrorResponse {
-  return (
-    typeof response === "object" &&
-    response !== null &&
-    "error" in response
-  );
+  return typeof response === "object" && response !== null && "error" in response;
 }
 
 export const useBuilds = () => {
@@ -53,15 +41,15 @@ export const useBuilds = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await apiCall("/api/builds");
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch builds: ${response.status}`);
       }
-      
+
       const responseData = await response.json();
-      
+
       // Handle new DTO response format
       if (isApiSuccessResponse<BuildSummaryDTO[]>(responseData)) {
         setBuilds(responseData.data);
@@ -91,7 +79,7 @@ export const useBuilds = () => {
       }
 
       // Optimistically update the UI
-      setBuilds(prev => prev.filter(build => build.id !== buildId));
+      setBuilds((prev) => prev.filter((build) => build.id !== buildId));
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("Error deleting build:", err);

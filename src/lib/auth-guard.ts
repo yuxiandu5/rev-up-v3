@@ -16,10 +16,7 @@ export async function requireAuth(req: NextRequest): Promise<JWTPayload> {
   }
 }
 
-export async function requireRole(
-  req: NextRequest,
-  allowedRoles: Role[]
-): Promise<JWTPayload> {
+export async function requireRole(req: NextRequest, allowedRoles: Role[]): Promise<JWTPayload> {
   const userPayload = await requireAuth(req);
   if (!allowedRoles.includes(userPayload.role as Role)) {
     throw new ForbiddenError();

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer 
+    <footer
       className="bg-[var(--bg-dark1)] border-t border-[var(--bg-dark3)] py-12 px-4"
       role="contentinfo"
     >
@@ -24,8 +24,8 @@ export default function Footer() {
               <span className="text-2xl font-bold text-[var(--text1)]">Rev Up</span>
             </div>
             <p className="text-[var(--text2)] leading-relaxed mb-6 max-w-md">
-              Transform your car with precision modifications. The ultimate platform 
-              for performance enthusiasts to plan, calculate, and track their builds.
+              Transform your car with precision modifications. The ultimate platform for performance
+              enthusiasts to plan, calculate, and track their builds.
             </p>
             <div className="flex gap-4">
               {/* Social links (placeholder) */}
@@ -52,7 +52,11 @@ export default function Footer() {
                 aria-label="Follow us on Instagram"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.328-1.297C4.243 14.814 3.752 13.662 3.752 12.365s.49-2.449 1.369-3.328c.88-.88 2.031-1.297 3.328-1.297s2.449.417 3.328 1.297c.88.88 1.297 2.031 1.297 3.328s-.417 2.449-1.297 3.328c-.879.807-2.031 1.297-3.328 1.297zm7.718 0c-1.297 0-2.449-.49-3.328-1.297-.88-.88-1.297-2.031-1.297-3.328s.417-2.449 1.297-3.328c.88-.88 2.031-1.297 3.328-1.297s2.449.417 3.328 1.297c.88.88 1.297 2.031 1.297 3.328s-.417 2.449-1.297 3.328c-.879.807-2.031 1.297-3.328 1.297z" clipRule="evenodd" />
+                  <path
+                    fillRule="evenodd"
+                    d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.328-1.297C4.243 14.814 3.752 13.662 3.752 12.365s.49-2.449 1.369-3.328c.88-.88 2.031-1.297 3.328-1.297s2.449.417 3.328 1.297c.88.88 1.297 2.031 1.297 3.328s-.417 2.449-1.297 3.328c-.879.807-2.031 1.297-3.328 1.297zm7.718 0c-1.297 0-2.449-.49-3.328-1.297-.88-.88-1.297-2.031-1.297-3.328s.417-2.449 1.297-3.328c.88-.88 2.031-1.297 3.328-1.297s2.449.417 3.328 1.297c.88.88 1.297 2.031 1.297 3.328s-.417 2.449-1.297 3.328c-.879.807-2.031 1.297-3.328 1.297z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </a>
               <a
@@ -166,13 +170,13 @@ export default function Footer() {
         </div>
 
         {/* Bottom section */}
-        <div className="
+        <div
+          className="
           border-t border-[var(--bg-dark3)] pt-8
           flex flex-col md:flex-row justify-between items-center gap-4
-        ">
-          <p className="text-[var(--text2)] text-sm">
-          © 2025 RevUp · Built by Yushi Du
-          </p>
+        "
+        >
+          <p className="text-[var(--text2)] text-sm">© 2025 RevUp · Built by Yushi Du</p>
           <div className="flex gap-6 text-sm">
             <a
               href="#"
