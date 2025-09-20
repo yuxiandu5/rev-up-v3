@@ -22,6 +22,11 @@ export default function NavBar() {
     router.push("/");
     setIsMobileMenuOpen(false); // Close mobile menu after logout
   };
+
+  const handleLogoClick = async () => {
+    router.push("/");
+  };
+
   return (
     <nav
       className="
@@ -31,7 +36,10 @@ export default function NavBar() {
     "
     >
       {/* Logo */}
-      <div className="flex items-center">
+      <div
+        className="flex items-center cursor-pointer hover:bg-[var(--bg-dark2)] rounded px-1 transition-all duration-200 active:scale-95"
+        onClick={handleLogoClick}
+      >
         <Image
           src="/logo/logo.png"
           alt="Logo"
