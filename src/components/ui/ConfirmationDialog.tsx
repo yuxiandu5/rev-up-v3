@@ -33,7 +33,7 @@ export const ConfirmationDialog = ({
   confirmText = "Confirm",
   cancelText = "Cancel",
   isLoading = false,
-  confirmVariant = "primary"
+  confirmVariant = "primary",
 }: ConfirmationDialogProps) => {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget && !isLoading) {
@@ -74,16 +74,12 @@ export const ConfirmationDialog = ({
           >
             {/* Header */}
             <div className="px-6 py-4 border-b border-[var(--bg-dark1)]">
-              <h3 className="text-lg font-semibold text-[var(--text1)]">
-                {title}
-              </h3>
+              <h3 className="text-lg font-semibold text-[var(--text1)]">{title}</h3>
             </div>
 
             {/* Content */}
             <div className="px-6 py-4">
-              <p className="text-[var(--text2)] leading-relaxed">
-                {message}
-              </p>
+              <p className="text-[var(--text2)] leading-relaxed">{message}</p>
             </div>
 
             {/* Actions */}

@@ -10,7 +10,7 @@ interface AuthState {
   accessToken: string | null;
   isLoading: boolean;
   isInitialized: boolean;
-  
+
   // Actions
   setUser: (user: UserDTO | null) => void;
   setAccessToken: (token: string | null) => void;
@@ -36,8 +36,8 @@ export const useAuthStore = create<AuthState>()(
       setInitialized: (isInitialized) => set({ isInitialized }),
 
       login: (accessToken, userData) => {
-        set({ 
-          accessToken, 
+        set({
+          accessToken,
           user: userData,
           isLoading: false,
         });
@@ -45,25 +45,21 @@ export const useAuthStore = create<AuthState>()(
 
       logout: async () => {
         set({ isLoading: true });
-        
-        setTimeout(
-          () => {
-            set({ 
-              accessToken: null, 
-              user: null, 
-              isLoading: false,
-            });
-          },
-          500
-        );
+
+        setTimeout(() => {
+          set({
+            accessToken: null,
+            user: null,
+            isLoading: false,
+          });
+        }, 500);
 
         try {
           await fetch("/api/auth/logout", {
             method: "POST",
             credentials: "include",
           });
-        } catch {
-        }
+        } catch {}
       },
 
       refreshAccessToken: async (): Promise<boolean> => {
@@ -75,26 +71,26 @@ export const useAuthStore = create<AuthState>()(
 
           if (response.ok) {
             const data = await response.json();
-            set({ 
-              accessToken: data.accessToken, 
+            set({
+              accessToken: data.accessToken,
               user: data.user,
               isLoading: false,
             });
             return true;
           } else {
             // Refresh token invalid/expired
-            set({ 
-              accessToken: null, 
-              user: null, 
+            set({
+              accessToken: null,
+              user: null,
               isLoading: false,
             });
             return false;
           }
         } catch {
           // Silently handle refresh errors
-          set({ 
-            accessToken: null, 
-            user: null, 
+          set({
+            accessToken: null,
+            user: null,
             isLoading: false,
           });
           return false;
@@ -103,31 +99,31 @@ export const useAuthStore = create<AuthState>()(
 
       initializeAuth: async () => {
         const { isInitialized } = get();
-        
+
         if (isInitialized) return;
-        
+
         set({ isLoading: true });
-        
+
         try {
           const success = await get().refreshAccessToken();
-          
+
           if (!success) {
             // If refresh fails, clear any stale data
-            set({ 
-              user: null, 
+            set({
+              user: null,
               accessToken: null,
             });
           }
         } catch {
           // Silently handle initialization errors
-          set({ 
-            user: null, 
+          set({
+            user: null,
             accessToken: null,
           });
         } finally {
-          set({ 
-            isLoading: false, 
-            isInitialized: true
+          set({
+            isLoading: false,
+            isInitialized: true,
           });
         }
       },
@@ -135,7 +131,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage", // unique name for localStorage key
       storage: createJSONStorage(() => localStorage), // use localStorage
-      partialize: (state) => ({ 
+      partialize: (state) => ({
         // Only persist user and accessToken, not loading/initialization states
         user: state.user,
       }),

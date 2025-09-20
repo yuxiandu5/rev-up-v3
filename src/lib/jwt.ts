@@ -16,11 +16,11 @@ export interface JWTPayload {
 
 export async function issueAccessJWT(payload: Omit<JWTPayload, "jti">): Promise<string> {
   const jti = crypto.randomUUID();
-  const expirationTime = Math.floor(Date.now() / 1000) + (ACCESS_TTL_MIN * 60);
+  const expirationTime = Math.floor(Date.now() / 1000) + ACCESS_TTL_MIN * 60;
 
-  const jwt = await new SignJWT({ 
-    ...payload, 
-    jti 
+  const jwt = await new SignJWT({
+    ...payload,
+    jti,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -33,7 +33,7 @@ export async function issueAccessJWT(payload: Omit<JWTPayload, "jti">): Promise<
 export async function verifyAccessJWT(token: string): Promise<JWTPayload> {
   try {
     const { payload } = await jwtVerify(token, JWT_SECRET);
-    
+
     if (!payload.sub || !payload.userName || !payload.jti) {
       throw new Error("Invalid token payload");
     }

@@ -7,12 +7,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AuthLayout from "@/components/auth/AuthLayout";
 import Input from "@/components/auth/Input";
 import Button from "@/components/Button";
-import { requestPasswordResetFormSchema, type RequestPasswordResetFormInput } from "@/lib/validations";
+import {
+  requestPasswordResetFormSchema,
+  type RequestPasswordResetFormInput,
+} from "@/lib/validations";
 import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  
+
   const [resetState, setResetState] = useState<"form" | "success">("form");
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +27,7 @@ export default function ResetPasswordPage() {
     } else {
       setUserName(userName);
     }
-  }, []); 
+  }, []);
 
   const {
     register,
@@ -36,18 +39,17 @@ export default function ResetPasswordPage() {
     mode: "onBlur",
   });
 
-
   const onSubmit = async (data: RequestPasswordResetFormInput) => {
     try {
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          userName: userName, 
-          newPassword: data.newPassword 
+        body: JSON.stringify({
+          userName: userName,
+          newPassword: data.newPassword,
         }),
       });
-      
+
       if (response.ok) {
         setIsLoading(true);
         setResetState("success");
@@ -56,7 +58,7 @@ export default function ResetPasswordPage() {
       }
     } catch (error) {
       setError("root", {
-        message: "Failed to reset password"
+        message: "Failed to reset password",
       });
     }
   };
@@ -69,7 +71,10 @@ export default function ResetPasswordPage() {
         footer={
           <p>
             Continue to{" "}
-            <Link href="/login" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+            <Link
+              href="/login"
+              className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]"
+            >
               Sign in
             </Link>
           </p>
@@ -77,15 +82,26 @@ export default function ResetPasswordPage() {
       >
         <div className="text-center space-y-4">
           <div className="w-16 h-16 mx-auto bg-[var(--green)]/20 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-[var(--green)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <svg
+              className="w-8 h-8 text-[var(--green)]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-medium text-[var(--text1)]">Password updated!</h3>
             <p className="mt-2 text-sm text-[var(--text2)]">
-              Your password has been successfully updated. You can now sign in with your new password.
+              Your password has been successfully updated. You can now sign in with your new
+              password.
             </p>
           </div>
 
@@ -108,7 +124,10 @@ export default function ResetPasswordPage() {
       footer={
         <p>
           Remember your password?{" "}
-          <Link href="/login" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+          <Link
+            href="/login"
+            className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]"
+          >
             Sign in
           </Link>
         </p>
@@ -118,12 +137,18 @@ export default function ResetPasswordPage() {
         {errors.root && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <svg
+                className="w-5 h-5 text-red-500 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <p className="text-sm text-red-500 font-medium">
-                {errors.root.message}
-              </p>
+              <p className="text-sm text-red-500 font-medium">{errors.root.message}</p>
             </div>
           </div>
         )}
@@ -167,7 +192,10 @@ export default function ResetPasswordPage() {
         </Button>
 
         <div className="text-center">
-          <Link href="/forgot-password" className="text-sm text-[var(--accent)] hover:text-[var(--highlight)]">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-[var(--accent)] hover:text-[var(--highlight)]"
+          >
             Didn&apos;t receive a reset token?
           </Link>
         </div>

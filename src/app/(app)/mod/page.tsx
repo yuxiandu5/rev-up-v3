@@ -13,31 +13,24 @@ export default function Mod() {
   useStoreConnection();
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="flex flex-col gap-10 items-center justify-center w-[95vw] h-full lg:w-[80vw]"
     >
-      {
-        phase === "car-selecting" ? 
-          <CarSelector 
-            setPhase={setPhase}
-          /> 
-          : 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="w-full h-full"
-          >
-            <ModSelector 
-              carSpecs={carSpecs} 
-              selectedCar={selectedCar} 
-              setPhase={setPhase}
-              />
-          </motion.div>
-      }
+      {phase === "car-selecting" ? (
+        <CarSelector setPhase={setPhase} />
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="w-full h-full"
+        >
+          <ModSelector carSpecs={carSpecs} selectedCar={selectedCar} setPhase={setPhase} />
+        </motion.div>
+      )}
     </motion.div>
   );
 }

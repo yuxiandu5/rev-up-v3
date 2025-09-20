@@ -70,14 +70,14 @@ export function errorToResponse(error: unknown) {
   }
 
   if (error instanceof ZodError) {
-  return NextResponse.json<ApiResponse<null>>(
-    {
-      success: false,
-      message: "Validation failed",
-      error: {
-        code: "BAD_REQUEST",
+    return NextResponse.json<ApiResponse<null>>(
+      {
+        success: false,
+        message: "Validation failed",
+        error: {
+          code: "BAD_REQUEST",
+        },
       },
-    },
       { status: 400 }
     );
   }

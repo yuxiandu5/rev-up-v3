@@ -28,39 +28,38 @@ export default function RegisterPage() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          userName: data.userName, 
-          password: data.password, 
-          confirmPassword: data.confirmPassword, 
-          recoverQuestion: data.recoverQuestion, 
-          answer: data.answer }),
-        });
-        
-        if (response.ok) {
-          setIsLoading(true);
-          setShowSuccess(true);
+        body: JSON.stringify({
+          userName: data.userName,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+          recoverQuestion: data.recoverQuestion,
+          answer: data.answer,
+        }),
+      });
+
+      if (response.ok) {
+        setIsLoading(true);
+        setShowSuccess(true);
       } else {
         const errorData = await response.json();
-        
+
         if (response.status === 409) {
           setError("userName", {
-            message: errorData.error || "Username already exists"
+            message: errorData.error || "Username already exists",
           });
-        } 
+        }
         throw new Error("Failed to create account");
       }
     } catch (error) {
       setError("root", {
-        message: "Failed to create account"
+        message: "Failed to create account",
       });
     }
   };
 
   if (showSuccess) {
     return (
-      <AuthLayout
-        title="Account created successfully!"
-      >
+      <AuthLayout title="Account created successfully!">
         <div className="text-center space-y-4">
           <GreenTick />
           <h3 className="text-lg font-medium text-[var(--text1)]">Account created successfully!</h3>
@@ -86,7 +85,10 @@ export default function RegisterPage() {
       footer={
         <p>
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+          <Link
+            href="/login"
+            className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]"
+          >
             Sign in
           </Link>
         </p>
@@ -96,12 +98,18 @@ export default function RegisterPage() {
         {errors.root && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <svg
+                className="w-5 h-5 text-red-500 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <p className="text-sm text-red-500 font-medium">
-                {errors.root.message}
-              </p>
+              <p className="text-sm text-red-500 font-medium">{errors.root.message}</p>
             </div>
           </div>
         )}

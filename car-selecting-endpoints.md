@@ -6,6 +6,7 @@ The goal is to keep the surface minimal and payloads small while allowing users 
 ---
 
 ## Base Route
+
 /cars
 
 The same endpoint is used for all levels of selection, controlled by query parameters.
@@ -13,11 +14,12 @@ The same endpoint is used for all levels of selection, controlled by query param
 ---
 
 ## 1. Get All Makes
+
 **Request**
 GET /cars
 
-
 **Response**
+
 ```json
 [
   { "id": "mk1", "name": "BMW", "slug": "bmw" },
@@ -58,3 +60,4 @@ json
   { "id": "yr1", "startYear": 2013, "endYear": 2018, "chassis": "F30", url:"" },
   { "id": "yr2", "startYear": 2019, "endYear": null, "chassis": "G20", url:"" }
 ]
+```

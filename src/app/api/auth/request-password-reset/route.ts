@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     // Find user by userName
     const user = await prisma.user.findUnique({
-      where: { userName }
+      where: { userName },
     });
 
     if (user && user.isActive) {
@@ -27,21 +27,14 @@ export async function POST(request: NextRequest) {
     }
 
     return new NextResponse(null, { status: 204 });
-
   } catch (error) {
     console.error("Password reset request error:", error);
 
     // Handle validation errors
     if (error instanceof ZodError) {
-      return NextResponse.json(
-        { error: "Invalid input data" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

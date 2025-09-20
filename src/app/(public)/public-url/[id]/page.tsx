@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useEffect, useState, use } from "react";
 import { BuildDetailDTO } from "@/types/dtos";
 import PublicCard from "@/components/gallery-page/PublicCard";
@@ -9,7 +8,7 @@ import { NotFoundError, NoDataError, ErrorDisplay } from "@/components/ui/ErrorD
 
 export default function PublicUrlPage({ params }: { params: Promise<{ id: string }> }) {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<BuildDetailDTO | undefined>(undefined);  
+  const [data, setData] = useState<BuildDetailDTO | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
   const [notFound, setNotFound] = useState(false);
   const { id } = use(params);
@@ -19,7 +18,7 @@ export default function PublicUrlPage({ params }: { params: Promise<{ id: string
       setLoading(true);
       setError(undefined);
       setNotFound(false);
-      
+
       const response = await fetch(`/api/builds/public/${id}`, {
         method: "GET",
         headers: {
@@ -39,12 +38,12 @@ export default function PublicUrlPage({ params }: { params: Promise<{ id: string
       }
 
       const dataJson = await response.json();
-      
+
       // Validate response structure
       if (!dataJson.data || !dataJson.data.id) {
         throw new Error("Invalid response format");
       }
-      
+
       setData(dataJson.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -62,9 +61,7 @@ export default function PublicUrlPage({ params }: { params: Promise<{ id: string
 
   // Loading state
   if (loading) {
-    return (
-      <Loading variant="spinner" size="lg" />
-    );
+    return <Loading variant="spinner" size="lg" />;
   }
 
   // Not found state
@@ -81,7 +78,7 @@ export default function PublicUrlPage({ params }: { params: Promise<{ id: string
   if (!data) {
     return <NoDataError item="build data" onRetry={fetchData} />;
   }
-  
+
   // Success state
   return (
     <div className="min-h-screen bg-[var(--bg-dark3)]">

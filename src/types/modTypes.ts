@@ -1,4 +1,3 @@
-
 // Legacy types - keeping for backward compatibility
 export interface ModSpecChanges {
   hp: number;

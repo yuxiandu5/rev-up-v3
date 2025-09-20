@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuthStore();
-  
+
   const {
     register,
     handleSubmit,
@@ -33,11 +33,11 @@ export default function LoginPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName: data.userName, password: data.password }),
       });
-      
+
       if (response.ok) {
         setIsLoading(true);
         const result = await response.json();
-        
+
         login(result.accessToken, result.user);
         router.push("/");
       } else {
@@ -45,7 +45,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       setError("root", {
-        message: "Invalid email or password"
+        message: "Invalid email or password",
       });
     }
   };
@@ -56,23 +56,31 @@ export default function LoginPage() {
       footer={
         <p>
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+          <Link
+            href="/register"
+            className="font-medium text-[var(--text1)] hover:text-[var(--highlight)]"
+          >
             Sign up
           </Link>
         </p>
       }
     >
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {errors.root && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
             <div className="flex items-center">
-              <svg className="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <svg
+                className="w-5 h-5 text-red-500 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
-              <p className="text-sm text-red-500 font-medium">
-                {errors.root.message}
-              </p>
+              <p className="text-sm text-red-500 font-medium">{errors.root.message}</p>
             </div>
           </div>
         )}
@@ -96,7 +104,10 @@ export default function LoginPage() {
         />
 
         <div className="text-sm text-[var(--text2)] text-right">
-          <Link href="/forgot-password" className="font-medium text-[var(--accent)] hover:text-[var(--highlight)]">
+          <Link
+            href="/forgot-password"
+            className="font-medium text-[var(--text1)] hover:text-[var(--highlight)]"
+          >
             Forgot password?
           </Link>
         </div>

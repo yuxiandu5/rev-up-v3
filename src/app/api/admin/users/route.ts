@@ -23,9 +23,9 @@ export async function GET(req: NextRequest) {
     });
 
     const where: Prisma.UserWhereInput = {
-      ...(userName ? { userName: {contains: userName, mode: "insensitive" }} : {}),
+      ...(userName ? { userName: { contains: userName, mode: "insensitive" } } : {}),
       ...(role ? { role } : {}),
-      ...(typeof isActive === "boolean" ? {isActive} : {})
+      ...(typeof isActive === "boolean" ? { isActive } : {}),
     };
 
     const users = await prisma.user.findMany({
@@ -39,17 +39,16 @@ export async function GET(req: NextRequest) {
         role: true,
         createdAt: true,
         updatedAt: true,
-        lastLoginAt: true
+        lastLoginAt: true,
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: "desc",
+      },
     });
 
-    const totalUsers = await prisma.user.count({where});
+    const totalUsers = await prisma.user.count({ where });
 
     return okPaginated(users, page, pageSize, totalUsers, "Successfully fetched all users!", 200);
-
   } catch (error) {
     console.log("Unexpected error in GET /users:", error);
     return errorToResponse(error);

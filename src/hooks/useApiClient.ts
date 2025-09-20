@@ -24,14 +24,14 @@ export const useApiClient = () => {
       if (response.status === 401 && accessToken) {
         await refreshAccessToken();
         const { accessToken: newAccessToken } = useAuthStore.getState();
-        
+
         if (newAccessToken) {
           // Retry the original request with new token
           const retryHeaders = {
             ...headers,
             Authorization: `Bearer ${newAccessToken}`,
           };
-          
+
           return fetch(url, {
             ...options,
             headers: retryHeaders,

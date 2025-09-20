@@ -1,8 +1,8 @@
 /**
  * DTO Mappers - Transform database entities to DTOs
- * 
+ *
  * These functions ensure consistent data transformation between database models
- * and the DTOs consumed by the frontend. They handle data validation, 
+ * and the DTOs consumed by the frontend. They handle data validation,
  * type conversion, and computed fields.
  */
 
@@ -111,8 +111,14 @@ function calculateTotalPerformance(
 } {
   const totalHpGain = modifications.reduce((sum, mod) => sum + mod.performance.hpGain, 0);
   const totalTorqueGain = modifications.reduce((sum, mod) => sum + mod.performance.torqueGain, 0);
-  const totalHandlingDelta = modifications.reduce((sum, mod) => sum + mod.performance.handlingDelta, 0);
-  const totalZeroToHundredDelta = modifications.reduce((sum, mod) => sum + mod.performance.zeroToHundredDelta, 0);
+  const totalHandlingDelta = modifications.reduce(
+    (sum, mod) => sum + mod.performance.handlingDelta,
+    0
+  );
+  const totalZeroToHundredDelta = modifications.reduce(
+    (sum, mod) => sum + mod.performance.zeroToHundredDelta,
+    0
+  );
 
   return {
     totalHp: Math.max(0, baseSpecs.hp + totalHpGain),
@@ -211,11 +217,11 @@ export function mapToCarSpecsDTO(specsData: unknown): CarSpecsDTO {
 
 export function mapToModificationsDTO(modsData: unknown): ModificationDTO[] {
   const mods = safeParseJSON<DatabaseBuildMods>(modsData, {});
-  
+
   return Object.values(mods).map((mod): ModificationDTO => {
     // Get performance data from first compatibility (or defaults)
     const compatibility = mod.compatibilities?.[0];
-    
+
     return {
       id: mod.id,
       name: mod.name,
@@ -243,7 +249,7 @@ export function mapToBuildSummaryDTO(build: DatabaseBuild): BuildSummaryDTO {
   const car = mapToCarInfoDTO(build.selectedCar);
   const specs = mapToCarSpecsDTO(build.baseSpecs);
   const modifications = mapToModificationsDTO(build.selectedMods);
-  
+
   const performance = calculateTotalPerformance(specs, modifications);
   const totalPrice = calculateTotalPrice(modifications);
 
@@ -277,7 +283,7 @@ export function mapToBuildDetailDTO(build: DatabaseBuild): BuildDetailDTO {
 // ============================================================================
 
 export function mapToUserSummaryDTO(
-  user: User, 
+  user: User,
   buildCount: number = 0,
   lastActive?: Date
 ): UserSummaryDTO {
@@ -291,7 +297,7 @@ export function mapToUserSummaryDTO(
 }
 
 export function mapToUserProfileDTO(
-  user: User, 
+  user: User,
   buildCount: number = 0,
   lastActive?: Date
 ): UserProfileDTO {
@@ -324,7 +330,7 @@ export function validateBuildData(build: DatabaseBuild): boolean {
   try {
     const car = mapToCarInfoDTO(build.selectedCar);
     const specs = mapToCarSpecsDTO(build.baseSpecs);
-    
+
     return !!(
       build.id &&
       car.makeId &&

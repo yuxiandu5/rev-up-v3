@@ -35,14 +35,14 @@ export async function POST(request: NextRequest) {
 
     // Find and revoke the refresh token
     const token = await prisma.refreshToken.findUnique({
-      where: { tokenHash }
+      where: { tokenHash },
     });
 
     if (token && !token.revokedAt) {
       // Only revoke if token exists and isn't already revoked
       await prisma.refreshToken.update({
         where: { id: token.id },
-        data: { revokedAt: new Date() }
+        data: { revokedAt: new Date() },
       });
     }
     // Clear the refresh token cookie
@@ -50,17 +50,13 @@ export async function POST(request: NextRequest) {
     clearCookies(response);
 
     return response;
-
   } catch (error) {
     console.error("Logout error:", error);
-    
+
     // Even if there's an error, we should still clear the cookie
     // to ensure the client doesn't keep a potentially invalid token
-    const response = NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-    
+    const response = NextResponse.json({ error: "Internal server error" }, { status: 500 });
+
     clearCookies(response);
 
     return response;

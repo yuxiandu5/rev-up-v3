@@ -15,13 +15,20 @@ type ModSelectorProps = {
   carSpecs: CarSpecs;
   selectedCar: SelectedCar;
   setPhase: (phase: string) => void;
-}
+};
 
-export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelectorProps) {
-  const { selectedMods, selectMod, deselectMod, clearAllMods, getTotalSpecsGained, setCurrentCategory } = useModStore();
-  const {user} = useAuthStore();
+export default function ModSelector({ carSpecs, selectedCar, setPhase }: ModSelectorProps) {
+  const {
+    selectedMods,
+    selectMod,
+    deselectMod,
+    clearAllMods,
+    getTotalSpecsGained,
+    setCurrentCategory,
+  } = useModStore();
+  const { user } = useAuthStore();
   const { apiCall } = useApiClient();
-  
+
   // Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -52,7 +59,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
   };
 
   return (
-    <section 
+    <section
       className="
         flex flex-col gap-2 md:gap-3 lg:gap-4 
         w-full h-full max-h-screen   
@@ -62,9 +69,8 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
       role="main"
       aria-label="Vehicle modification interface"
     >
-
       {/* Vehicle Header */}
-      <header 
+      <header
         className="
           flex items-center justify-center
           text-center
@@ -73,18 +79,18 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           border-b border-[var(--bg-dark3)]
         "
       >
-        <Button 
+        <Button
           className="
             flex items-center gap-0 lg:gap-2 
             transition-all duration-200 
             absolute top-8 left-0 lg:top-4 lg:left-4
             hover:shadow-lg
             w-6 h-6 lg:w-auto lg:h-auto p-0.5 lg:px-3 lg:py-1.5 min-w-0
-          " 
+          "
           onClick={() => {
             setPhase("car-selecting");
             setCurrentCategory("");
-          }} 
+          }}
           variant="secondary"
           size="sm"
           aria-label="Return to car selection page"
@@ -95,7 +101,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           </span>
         </Button>
         <div>
-          <h1 
+          <h1
             className="
               text-lg md:text-xl lg:text-2xl 
               font-bold 
@@ -120,15 +126,24 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
         </div>
 
         <div className="flex items-center justify-center gap-2 absolute right-0 bottom-2 lg:bottom-4">
-          <Button 
-            variant="secondary" size="sm" 
-            className={"min-h-6"} 
+          <Button
+            variant="secondary"
+            size="sm"
+            className={"min-h-6"}
             disabled={!user || Object.keys(selectedMods).length === 0}
-            onClick={() => setIsDialogOpen(true)}>
+            onClick={() => setIsDialogOpen(true)}
+          >
             <Save className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Save</span>
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => {clearAllMods();}} className="min-h-6">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              clearAllMods();
+            }}
+            className="min-h-6"
+          >
             <X className="w-3 h-3 lg:hidden text-[var(--text1)] mr-1" aria-hidden="true" />
             <span className="hidden lg:block">Discard</span>
           </Button>
@@ -136,7 +151,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
       </header>
 
       {/* Main Content Area */}
-      <section 
+      <section
         className="
           flex flex-col lg:flex-row 
           gap-2 md:gap-4 lg:gap-6 
@@ -149,7 +164,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
         aria-labelledby="vehicle-title"
       >
         {/* Vehicle Display and Specs */}
-        <div 
+        <div
           className="
             hidden md:flex
             flex-col gap-2 md:gap-3
@@ -166,7 +181,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           aria-label="Vehicle display and specifications"
         >
           {/* Car Display */}
-          <div 
+          <div
             className="
               flex-1 min-h-30
               hidden lg:block
@@ -178,9 +193,9 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           >
             <CarDisplay carSpecs={carSpecs} selectedCar={selectedCar} />
           </div>
-          
+
           {/* Car Specifications */}
-          <div 
+          <div
             className="
               bg-[var(--bg-dark2)]
               rounded-md
@@ -190,22 +205,16 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
               shrink-0
             "
           >
-            <CarSpecDisplay 
-              carSpecs={carSpecs}
-              specGained={getTotalSpecsGained()}
-            />
+            <CarSpecDisplay carSpecs={carSpecs} specGained={getTotalSpecsGained()} />
           </div>
         </div>
 
         <div className="flex flex-col gap-2 w-full md:hidden">
-          <CarSpecDisplayMobile 
-            carSpecs={carSpecs}
-            modifiedSpecs={null}
-          />
+          <CarSpecDisplayMobile carSpecs={carSpecs} modifiedSpecs={null} />
         </div>
 
         {/* Modifications Menu */}
-        <aside 
+        <aside
           className="
             w-full lg:w-1/3
             bg-[var(--bg-dark1)]
@@ -219,11 +228,7 @@ export default function ModSelector({carSpecs, selectedCar, setPhase}: ModSelect
           role="complementary"
           aria-label="Vehicle modification options"
         >
-          <ModsMenu 
-            selectedMods={selectedMods}
-            selectMod={selectMod}
-            deselectMod={deselectMod}
-          />
+          <ModsMenu selectedMods={selectedMods} selectMod={selectMod} deselectMod={deselectMod} />
         </aside>
       </section>
 

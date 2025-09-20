@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     const { userName, answer } = verifyAnswerSchema.parse(body);
 
     const user = await prisma.user.findUnique({
-      where: { userName }
+      where: { userName },
     });
 
     if (!user) {
@@ -22,13 +22,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ message: "Answer verified" }, { status: 200 });
-  }
-
-  catch (error) {
+  } catch (error) {
     console.error("Verify answer error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -55,7 +55,15 @@ const colorConfig = {
 // Individual Loading Variants
 // ============================================================================
 
-const SpinnerLoading = ({ size, color, spinnerColor }: { size: string; color: string; spinnerColor?: string }) => (
+const SpinnerLoading = ({
+  size,
+  color,
+  spinnerColor,
+}: {
+  size: string;
+  color: string;
+  spinnerColor?: string;
+}) => (
   <motion.div
     className={cn(
       "border-2 border-transparent rounded-full",
@@ -69,10 +77,16 @@ const SpinnerLoading = ({ size, color, spinnerColor }: { size: string; color: st
 );
 
 const DotsLoading = ({ size, color }: { size: string; color: string }) => {
-  const dotSize = size === "w-4 h-4" ? "w-1 h-1" : 
-                size === "w-6 h-6" ? "w-1.5 h-1.5" :
-                size === "w-8 h-8" ? "w-2 h-2" :
-                size === "w-12 h-12" ? "w-3 h-3" : "w-4 h-4";
+  const dotSize =
+    size === "w-4 h-4"
+      ? "w-1 h-1"
+      : size === "w-6 h-6"
+        ? "w-1.5 h-1.5"
+        : size === "w-8 h-8"
+          ? "w-2 h-2"
+          : size === "w-12 h-12"
+            ? "w-3 h-3"
+            : "w-4 h-4";
 
   return (
     <div className="flex items-center gap-1">
@@ -102,15 +116,27 @@ const PulseLoading = ({ size, color }: { size: string; color: string }) => (
 );
 
 const BarsLoading = ({ size, color }: { size: string; color: string }) => {
-  const barWidth = size === "w-4 h-4" ? "w-0.5" : 
-                  size === "w-6 h-6" ? "w-1" :
-                  size === "w-8 h-8" ? "w-1" :
-                  size === "w-12 h-12" ? "w-1.5" : "w-2";
-  
-  const barHeight = size === "w-4 h-4" ? "h-4" : 
-                  size === "w-6 h-6" ? "h-6" :
-                  size === "w-8 h-8" ? "h-8" :
-                  size === "w-12 h-12" ? "h-12" : "h-16";
+  const barWidth =
+    size === "w-4 h-4"
+      ? "w-0.5"
+      : size === "w-6 h-6"
+        ? "w-1"
+        : size === "w-8 h-8"
+          ? "w-1"
+          : size === "w-12 h-12"
+            ? "w-1.5"
+            : "w-2";
+
+  const barHeight =
+    size === "w-4 h-4"
+      ? "h-4"
+      : size === "w-6 h-6"
+        ? "h-6"
+        : size === "w-8 h-8"
+          ? "h-8"
+          : size === "w-12 h-12"
+            ? "h-12"
+            : "h-16";
 
   return (
     <div className="flex items-end gap-0.5">
@@ -147,10 +173,10 @@ const CardSkeleton = () => (
         {/* Title skeleton */}
         <div className="h-6 bg-[var(--bg-dark2)] rounded mb-2" />
         <div className="h-4 bg-[var(--bg-dark2)] rounded w-3/4 mb-4" />
-        
+
         {/* Image skeleton */}
         <div className="h-48 bg-[var(--bg-dark1)] rounded-md mb-4" />
-        
+
         {/* Stats skeleton */}
         <div className="flex gap-4">
           <div className="h-4 bg-[var(--bg-dark2)] rounded w-16" />
@@ -171,7 +197,7 @@ const PageSkeleton = () => (
           <div className="h-8 bg-[var(--bg-dark2)] rounded w-64 mb-4" />
           <div className="h-4 bg-[var(--bg-dark2)] rounded w-96" />
         </div>
-        
+
         {/* Grid skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -216,35 +242,21 @@ export const Loading = ({
 
   // Standard loading indicator
   const loadingIndicator = (
-    <div className={cn(
-      "flex flex-col items-center justify-center",
-      sizeProps.gap,
-      className
-    )}>
+    <div className={cn("flex flex-col items-center justify-center", sizeProps.gap, className)}>
       {/* Loading animation */}
       <div className="flex items-center justify-center">
         {variant === "spinner" && (
           <SpinnerLoading size={sizeProps.size} color={colorClass} spinnerColor={spinnerColor} />
         )}
-        {variant === "dots" && (
-          <DotsLoading size={sizeProps.size} color={colorClass} />
-        )}
-        {variant === "pulse" && (
-          <PulseLoading size={sizeProps.size} color={colorClass} />
-        )}
-        {variant === "bars" && (
-          <BarsLoading size={sizeProps.size} color={colorClass} />
-        )}
+        {variant === "dots" && <DotsLoading size={sizeProps.size} color={colorClass} />}
+        {variant === "pulse" && <PulseLoading size={sizeProps.size} color={colorClass} />}
+        {variant === "bars" && <BarsLoading size={sizeProps.size} color={colorClass} />}
       </div>
 
       {/* Loading text */}
       {(showText || text) && (
         <motion.p
-          className={cn(
-            "font-medium",
-            sizeProps.text,
-            colorClass
-          )}
+          className={cn("font-medium", sizeProps.text, colorClass)}
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -257,10 +269,12 @@ export const Loading = ({
   // Full screen loading
   if (fullScreen) {
     return (
-      <div className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center",
-        overlay ? "bg-black/50 backdrop-blur-sm" : "bg-[var(--bg-dark4)]"
-      )}>
+      <div
+        className={cn(
+          "fixed inset-0 z-50 flex items-center justify-center",
+          overlay ? "bg-black/50 backdrop-blur-sm" : "bg-[var(--bg-dark4)]"
+        )}
+      >
         {loadingIndicator}
       </div>
     );
@@ -301,13 +315,13 @@ export const LoadingPage = () => <Loading variant="page" />;
 // Loading Overlay Hook
 // ============================================================================
 
-export const LoadingOverlay = ({ 
-  show, 
-  children, 
-  ...loadingProps 
-}: { 
-  show: boolean; 
-  children: React.ReactNode; 
+export const LoadingOverlay = ({
+  show,
+  children,
+  ...loadingProps
+}: {
+  show: boolean;
+  children: React.ReactNode;
 } & LoadingProps) => {
   if (!show) return <>{children}</>;
 

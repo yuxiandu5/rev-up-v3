@@ -12,7 +12,7 @@ async function main() {
     where: {
       userName: "121212",
     },
-    update: {role: Role.ADMIN},
+    update: { role: Role.ADMIN },
     create: {
       userName: "121212",
       passwordHash: await hash("121212"),
@@ -28,7 +28,7 @@ async function main() {
     where: {
       userName: "131313",
     },
-    update: {role: Role.MODERATOR},
+    update: { role: Role.MODERATOR },
     create: {
       userName: "131313",
       passwordHash: await hash("131313"),

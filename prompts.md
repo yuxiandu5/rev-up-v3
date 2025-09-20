@@ -1,6 +1,7 @@
-You are a senior engineer reviewing my pull request. 
+You are a senior engineer reviewing my pull request.
 
 Your tasks:
+
 1. Point out readability issues (naming, structure, comments).
 2. Check maintainability (is this too brittle? duplicated logic?).
 3. Check scalability (what breaks if the project grows?).
@@ -9,5 +10,3 @@ Your tasks:
 6. Be blunt—assume I can handle tough feedback.
 
 I have attached the code.
-
-
