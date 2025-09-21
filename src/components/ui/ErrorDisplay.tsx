@@ -24,7 +24,7 @@ export function ErrorDisplay({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`min-h-screen bg-[var(--bg-dark3)] flex items-center justify-center p-4 ${className}`}
+      className={`bg-[var(--bg-dark3)] flex items-center justify-center p-4 rounded-xl ${className}`}
     >
       <div className="text-center max-w-md">
         <div className="text-6xl mb-4">⚠️</div>

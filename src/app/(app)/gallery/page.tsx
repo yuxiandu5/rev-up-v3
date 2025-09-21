@@ -30,7 +30,7 @@ export default function GalleryPage() {
               </p>
               <button
                 onClick={() => router.push("/login")}
-                className="px-6 py-3 bg-[var(--accent)] text-[var(--text1)] rounded-md hover:bg-[var(--highlight)] transition-colors font-medium"
+                className="px-6 py-3 bg-[var(--bg-dark2)] text-[var(--text1)] rounded-md hover:text-[var(--highlight)] transition-colors font-medium cursor-pointer"
               >
                 Sign In
               </button>

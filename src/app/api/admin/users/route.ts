@@ -12,8 +12,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
 
     const { page, pageSize } = PaginationSchema.parse({
-      page: searchParams.get("page"),
-      pageSize: searchParams.get("pageSize"),
+      page: searchParams.get("page") ?? undefined,
+      pageSize: searchParams.get("pageSize") ?? undefined,
     });
 
     const { userName, role, isActive } = UserFilterSchema.parse({
