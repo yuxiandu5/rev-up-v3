@@ -1,11 +1,10 @@
 import { errorToResponse } from "@/lib/apiResponse";
 import { NextRequest } from "next/server";
 
-export async function GET(req:NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    
   } catch (e) {
-    console.log("Error GET/models", e)
-    return errorToResponse(e)
+    console.log("Error GET/models", e);
+    return errorToResponse(e);
   }
 }
