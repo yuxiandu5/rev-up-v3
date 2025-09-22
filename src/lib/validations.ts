@@ -207,8 +207,21 @@ export const CarYearRangeUpdateSchema = z
 
 export const YearRangeIdFormatSchema = IdSchema;
 
-// Makes CRUD endpoints validation
+// Makes / Models / Badges CRUD endpoints validation
 export const MakeCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  slug: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => {
+      if (val === null || val?.trim() === "") return undefined;
+      return val;
+    }),
+});
+
+export const ModelCreateSchema = z.object({
+  makeId: z.string().cuid(),
   name: z.string().min(1).max(100),
   slug: z
     .string()
