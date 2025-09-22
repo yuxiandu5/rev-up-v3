@@ -3,18 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { AdminToggleActiveSchema, UserIdFormatSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { ok, errorToResponse } from "@/lib/apiResponse";
-import { ifUserExist, preventSelfDeletion } from "../../../user-helper";
+import { ifUserExist, preventSelfDeletion } from "../../user-helper";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(req, ["ADMIN"]);
 
-    const body = await req.json();
-    const { isActive } = AdminToggleActiveSchema.parse(body);
     const { id } = UserIdFormatSchema.parse(await params);
-
     await ifUserExist(id);
     await preventSelfDeletion(req, id);
+
+    const body = await req.json();
+    const { isActive } = AdminToggleActiveSchema.parse(body);
 
     const result = await prisma.$transaction(async (tx) => {
       const updatedUser = await tx.user.update({

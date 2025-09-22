@@ -153,7 +153,7 @@ export const updateBuildSchema = z.object({
 // Pagination validation
 export const PaginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  pageSize: z.coerce.number().int().min(1).max(1000).default(500),
 });
 
 export const UserFilterSchema = z.object({
@@ -173,6 +173,38 @@ export const AdminToggleActiveSchema = z.object({
 export const UserIdFormatSchema = z.object({
   id: z.string().cuid(),
 });
+
+// Car CRUD endpoints validation
+export const CarYearRangeCreateSchema = z.object({
+  badgeId: z.string(),
+  startYear: z.coerce.number().int().min(1900).max((2025)),
+  endYear: z.coerce.number().int().min(1900).max((2025)).optional(),
+  chassis: z.string().optional(),
+  hp: z.number().int().min(0).max(1500),
+  torque: z.number().int().min(0).max(1000),
+  zeroToHundred: z.number().int().min(0).max(200),
+  handling: z.number().int().min(0).max(10),
+  imageUrl: z.string(),
+  imageDescription: z.string().optional(),
+});
+
+export const CarYearRangeUpdateSchema = z.object({
+  badgeId: z.never(),
+  startYear: z.coerce.number().int().min(1900).max((2025)).optional(),
+  endYear: z.coerce.number().int().min(1900).max((2025)).optional(),
+  chassis: z.string().optional(),
+  hp: z.coerce.number().int().min(0).max(1500).optional(),
+  torque: z.coerce.number().int().min(0).max(1000).optional(),
+  zeroToHundred: z.coerce.number().int().min(0).max(200).optional(),
+  handling: z.coerce.number().int().min(0).max(10).optional(),
+  imageUrl: z.string().optional(),
+  imageDescription: z.string().optional(),
+});
+
+export const YearRangeIdFormatSchema = z.object({
+  id: z.string().cuid(),
+});
+
 
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;

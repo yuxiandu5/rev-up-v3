@@ -81,9 +81,7 @@ export async function GET(request: NextRequest) {
           mediaAsset: {
             select: {
               url: true,
-              alt: true,
             },
-            take: 1, // Get the first media asset
           },
         },
         orderBy: {
@@ -101,7 +99,7 @@ export async function GET(request: NextRequest) {
         torque: yearRange.torque,
         zeroToHundred: yearRange.zeroToHundred,
         handling: yearRange.handling,
-        url: yearRange.mediaAsset[0]?.url || "",
+        url: yearRange.mediaAsset.url,
       }));
 
       return NextResponse.json(transformedYearRanges);
