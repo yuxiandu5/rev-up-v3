@@ -78,4 +78,3 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return errorToResponse(e);
   }
 }
-
