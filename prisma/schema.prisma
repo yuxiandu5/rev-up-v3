@@ -89,10 +89,10 @@ model ModelYearRange {
 
   hp          Int
   torque      Int
-  zeroToHundred Int?     // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
+  zeroToHundred Int     // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
   handling    Int        // arbitrary score, standardize scale out of 10
 
-  mediaAsset  MediaAsset[]
+  mediaAsset  MediaAsset?
 }
 
 
@@ -176,7 +176,7 @@ model MediaAsset {
   mod   Mod?    @relation(fields: [modId], references: [id])
 
   // For badges (reference images of trims/cars)
-  modelYearRangeId String?
+  modelYearRangeId String?  @unique
   modelYearRange   ModelYearRange?  @relation(fields: [modelYearRangeId], references: [id])
 }
 
@@ -185,7 +185,7 @@ model MediaAsset {
 // ----------------------
 model UserBuild {
   id           String   @id @default(cuid())
-  userId       String
+  userId       String 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   selectedCar  Json     
