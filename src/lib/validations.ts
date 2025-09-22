@@ -233,6 +233,19 @@ export const ModelCreateSchema = z.object({
     }),
 });
 
+export const BadgeCreateSchema = z.object({
+  modelId: z.string().cuid(),
+  name: z.string().min(1).max(100),
+  slug: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => {
+      if (val === null || val?.trim() === "") return undefined;
+      return val;
+    }),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
