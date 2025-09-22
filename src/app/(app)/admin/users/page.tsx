@@ -18,7 +18,7 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const res = await apiCall("/api/admin/users");
       if (!res.ok) throw new Error(`Failed to fetch users: ${res.status}`);
@@ -39,8 +39,8 @@ export default function UsersPage() {
   useEffect(() => {
     setLoading(true);
     if (!isInitialized) {
-      setLoading(false)
-      return
+      setLoading(false);
+      return;
     }
 
     fetchUsers();
@@ -48,7 +48,7 @@ export default function UsersPage() {
 
   const handleUserDelete = async (id: string) => {
     try {
-      setLoading(true)
+      setLoading(true);
 
       const res = await apiCall(`/api/admin/users/${id}`, {
         method: "DELETE",

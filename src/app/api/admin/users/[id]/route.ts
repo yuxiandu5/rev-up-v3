@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/auth-guard";
 import { prisma } from "@/lib/prisma";
 import { UserIdFormatSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
-import { ifUserExist, preventSelfDeletion } from "../../user-helper";
+import { ifUserExist, preventSelfDeletion } from "../user-helper";
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
