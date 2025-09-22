@@ -4,10 +4,9 @@ import { PaginationSchema, CarYearRangeCreateSchema } from "@/lib/validations";
 import { prisma } from "@/lib/prisma";
 import { errorToResponse, ok, okPaginated } from "@/lib/apiResponse";
 
-
-export async function GET( req: NextRequest ) {
+export async function GET(req: NextRequest) {
   try {
-    await requireRole(req, ["ADMIN", "MODERATOR"])
+    await requireRole(req, ["ADMIN", "MODERATOR"]);
 
     const { searchParams } = new URL(req.url);
 
@@ -23,11 +22,17 @@ export async function GET( req: NextRequest ) {
         select: {
           id: true,
           badge: {
-            select: {name: true, model: {
-              select: {name: true, make: {
-                select: {name: true}
-              }}
-            }}
+            select: {
+              name: true,
+              model: {
+                select: {
+                  name: true,
+                  make: {
+                    select: { name: true },
+                  },
+                },
+              },
+            },
           },
           startYear: true,
           endYear: true,
@@ -37,33 +42,38 @@ export async function GET( req: NextRequest ) {
           zeroToHundred: true,
           handling: true,
           mediaAsset: {
-            select: { url: true }
+            select: { url: true },
           },
-        }
+        },
       }),
       prisma.modelYearRange.count(),
-    ])
+    ]);
 
-    const formattedResults = yearRangeData.map(item => ({
+    const formattedResults = yearRangeData.map((item) => ({
       ...item,
       make: item.badge.model.make.name,
       model: item.badge.model.name,
       badge: item.badge.name,
-      mediaAsset: item.mediaAsset[0]?.url,
-    }))
+      mediaAsset: item.mediaAsset?.url,
+    }));
 
-    return okPaginated(formattedResults, page, pageSize, totalYearRangeCount, "Successfully fetched YearRange data!")
-
+    return okPaginated(
+      formattedResults,
+      page,
+      pageSize,
+      totalYearRangeCount,
+      "Successfully fetched YearRange data!"
+    );
   } catch (e) {
-    console.log("Unexpected error in GET /year-ranges: ", e)
-    return errorToResponse(e)
+    console.log("Unexpected error in GET /year-ranges: ", e);
+    return errorToResponse(e);
   }
 }
 
-export async function POST( req: NextRequest ) {
+export async function POST(req: NextRequest) {
   try {
-    await requireRole(req, ["ADMIN", "MODERATOR"])
-  
+    await requireRole(req, ["ADMIN", "MODERATOR"]);
+
     const body = await req.json();
     const {
       badgeId,
@@ -76,8 +86,8 @@ export async function POST( req: NextRequest ) {
       handling,
       imageUrl,
       imageDescription,
-    } = CarYearRangeCreateSchema.parse(body)
-  
+    } = CarYearRangeCreateSchema.parse(body);
+
     const result = await prisma.modelYearRange.create({
       data: {
         startYear,
@@ -90,19 +100,18 @@ export async function POST( req: NextRequest ) {
         mediaAsset: {
           create: {
             url: imageUrl,
-            alt: imageDescription
-          }
+            alt: imageDescription,
+          },
         },
         badge: {
           connect: { id: badgeId },
         },
-      }
-    })
+      },
+    });
 
-    return ok(result, "YearRange data created!", 201)
-    
+    return ok(result, "YearRange data created!", 201);
   } catch (e) {
-    console.log("Unexpected error happened POST/year-ranges", e)
-    return errorToResponse(e)
+    console.log("Unexpected error happened POST/year-ranges", e);
+    return errorToResponse(e);
   }
 }
