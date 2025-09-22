@@ -177,7 +177,7 @@ model MediaAsset {
 
   // For badges (reference images of trims/cars)
   modelYearRangeId String?  @unique
-  modelYearRange   ModelYearRange?  @relation(fields: [modelYearRangeId], references: [id])
+  modelYearRange   ModelYearRange?  @relation(fields: [modelYearRangeId], references: [id], onDelete: Cascade)
 }
 
 // ----------------------

@@ -36,21 +36,22 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         zeroToHundred,
         handling,
         mediaAsset: imageUrl
-        ? {
-          upsert: {
-            create: { url: imageUrl, alt: imageDescription},
-            update: { url: imageUrl, alt: imageDescription}
-          }
-        } : undefined
+          ? {
+              upsert: {
+                create: { url: imageUrl, alt: imageDescription },
+                update: { url: imageUrl, alt: imageDescription },
+              },
+            }
+          : undefined,
       },
       include: {
         mediaAsset: {
           select: {
             url: true,
-            alt: true
-          }
-        }
-      }
+            alt: true,
+          },
+        },
+      },
     });
 
     return ok(result, "YearRange data updated!", 200);
@@ -59,3 +60,22 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return errorToResponse(e);
   }
 }
+
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    await requireRole(req, ["ADMIN", "MODERATOR"]);
+
+    const { id } = YearRangeIdFormatSchema.parse(params);
+    await ifYearRangeExist(id);
+
+    const res = await prisma.modelYearRange.delete({
+      where: { id },
+    });
+
+    return ok(res, "YearRange data deleted!", 200);
+  } catch (e) {
+    console.log("Unexpected error DELETE/year-ranges[id]", e);
+    return errorToResponse(e);
+  }
+}
+
