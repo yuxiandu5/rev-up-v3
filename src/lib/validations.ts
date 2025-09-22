@@ -165,14 +165,17 @@ export const UserFilterSchema = z.object({
   isActive: z.preprocess((val) => (val === null ? undefined : val), z.coerce.boolean().optional()),
 });
 
+// General Validation
+export const IdSchema = z.object({
+  id: z.string().cuid()
+})
+
 // AdminUserApi validation
 export const AdminToggleActiveSchema = z.object({
   isActive: z.union([z.boolean(), z.enum(["true", "false"]).transform((val) => val === "true")]),
 });
 
-export const UserIdFormatSchema = z.object({
-  id: z.string().cuid(),
-});
+export const UserIdFormatSchema = IdSchema
 
 // Car CRUD endpoints validation
 export const CarYearRangeCreateSchema = z.object({
@@ -202,9 +205,18 @@ export const CarYearRangeUpdateSchema = z
   })
   .strict();
 
-export const YearRangeIdFormatSchema = z.object({
-  id: z.string().cuid(),
-});
+export const YearRangeIdFormatSchema = IdSchema
+
+
+// Makes CRUD endpoints validation
+export const MakeCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  slug: z.string().nullable().optional().transform((val) => {
+    if (val === null || val?.trim() === "") return undefined;
+    return val;
+  }),
+})
+
 
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
