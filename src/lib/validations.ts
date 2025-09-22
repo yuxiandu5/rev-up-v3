@@ -177,8 +177,8 @@ export const UserIdFormatSchema = z.object({
 // Car CRUD endpoints validation
 export const CarYearRangeCreateSchema = z.object({
   badgeId: z.string(),
-  startYear: z.coerce.number().int().min(1900).max((2025)),
-  endYear: z.coerce.number().int().min(1900).max((2025)).optional(),
+  startYear: z.coerce.number().int().min(1900).max(2025),
+  endYear: z.coerce.number().int().min(1900).max(2025).optional(),
   chassis: z.string().optional(),
   hp: z.number().int().min(0).max(1500),
   torque: z.number().int().min(0).max(1000),
@@ -189,9 +189,8 @@ export const CarYearRangeCreateSchema = z.object({
 });
 
 export const CarYearRangeUpdateSchema = z.object({
-  badgeId: z.never(),
-  startYear: z.coerce.number().int().min(1900).max((2025)).optional(),
-  endYear: z.coerce.number().int().min(1900).max((2025)).optional(),
+  startYear: z.coerce.number().int().min(1900).max(2025).optional(),
+  endYear: z.coerce.number().int().min(1900).max(2025).optional(),
   chassis: z.string().optional(),
   hp: z.coerce.number().int().min(0).max(1500).optional(),
   torque: z.coerce.number().int().min(0).max(1000).optional(),
@@ -199,12 +198,11 @@ export const CarYearRangeUpdateSchema = z.object({
   handling: z.coerce.number().int().min(0).max(10).optional(),
   imageUrl: z.string().optional(),
   imageDescription: z.string().optional(),
-});
+}).strict();
 
 export const YearRangeIdFormatSchema = z.object({
   id: z.string().cuid(),
 });
-
 
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;

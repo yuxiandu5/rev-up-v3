@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
         torque: yearRange.torque,
         zeroToHundred: yearRange.zeroToHundred,
         handling: yearRange.handling,
-        url: yearRange.mediaAsset.url,
+        url: yearRange.mediaAsset?.url,
       }));
 
       return NextResponse.json(transformedYearRanges);
