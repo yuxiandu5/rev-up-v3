@@ -72,7 +72,7 @@ export function toBadgeDTO(raw: {
   slug: string;
   model: { name: string, make: { name: string }};
   yearRanges: {startYear: number, endYear: number | null}[] | null
-}): BadgeDTO {
+}): BadgeResponseDTO {
   return {
     id: raw.id,
     name: raw.name,
@@ -87,5 +87,5 @@ export function toBadgeDTO(raw: {
 
 
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
-export type BadgeDTO = z.infer<typeof BadgeDTOSchema>
+export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>
 

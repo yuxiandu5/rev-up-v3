@@ -5,7 +5,7 @@ import { BadgeCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
-import { BadgeDTO, toBadgeDTO } from "@/types/AdminDashboardDTO";
+import { BadgeResponseDTO, toBadgeDTO } from "@/types/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       prisma.badge.count(),
     ]);
 
-    const badgeDataFormatted: BadgeDTO[] = badgeData.map(toBadgeDTO)
+    const badgeDataFormatted: BadgeResponseDTO[] = badgeData.map(toBadgeDTO)
 
     return okPaginated(
       badgeDataFormatted,
