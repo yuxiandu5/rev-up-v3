@@ -35,7 +35,7 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Model",
   },
   {
     accessorKey: "slug",
