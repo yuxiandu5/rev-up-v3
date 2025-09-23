@@ -5,6 +5,7 @@ import { ModelCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
+import { ModelDTO, toModelDTO } from "@/types/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {
@@ -21,12 +22,29 @@ export async function GET(req: NextRequest) {
       prisma.model.findMany({
         skip: (page - 1) * pageSize,
         take: pageSize,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          make: {
+            select: {
+              name: true
+            }
+          },
+          badges: {
+            select: {
+              name: true
+            }
+          }
+        }
       }),
       prisma.model.count(),
     ]);
 
+    const modelDataFormatted: ModelDTO[] = modelData.map(toModelDTO)
+
     return okPaginated(
-      modelData,
+      modelDataFormatted,
       page,
       pageSize,
       totalModelCount,

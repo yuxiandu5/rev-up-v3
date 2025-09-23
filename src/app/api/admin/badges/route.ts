@@ -5,6 +5,7 @@ import { BadgeCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
+import { BadgeDTO, toBadgeDTO } from "@/types/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {
@@ -21,12 +22,35 @@ export async function GET(req: NextRequest) {
       prisma.badge.findMany({
         skip: (page - 1) * pageSize,
         take: pageSize,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          model: {
+            select: {
+              name: true,
+              make: {
+                select: {
+                  name: true
+                }
+              }
+            }
+          },
+          yearRanges: {
+            select: {
+              startYear: true,
+              endYear: true
+            }
+          }
+        }
       }),
       prisma.badge.count(),
     ]);
 
+    const badgeDataFormatted: BadgeDTO[] = badgeData.map(toBadgeDTO)
+
     return okPaginated(
-      badgeData,
+      badgeDataFormatted,
       page,
       pageSize,
       totalBadgeCount,
