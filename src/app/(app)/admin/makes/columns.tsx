@@ -14,7 +14,7 @@ export const makeColumns = (onDelete: (id: string) => void): ColumnDef<MakeItemL
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Make",
   },
   {
     accessorKey: "slug",

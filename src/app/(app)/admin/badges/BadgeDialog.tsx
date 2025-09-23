@@ -12,42 +12,41 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CreateModelInput } from "@/lib/validations";
+import { CreateBadgeInput } from "@/lib/validations";
 import { useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { MakeItemListDTO } from "@/types/AdminDashboardDTO";
+import { ModelResponseDTO } from "@/types/AdminDashboardDTO";
 
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 
-interface ModelDialogProps {
+interface badgeDialogProps {
   onSuccess: () => void;
 }
 
-export function ModelDialog({ onSuccess }: ModelDialogProps) {
-  const [form, setForm] = useState<CreateModelInput>({ makeId: "", name: "", slug: "" });
-  const [makeData, setMakeData] = useState<MakeItemListDTO[]>([]);
+export function BadgeDialog({ onSuccess }: badgeDialogProps) {
+  const [form, setForm] = useState<CreateBadgeInput>({ modelId: "", name: "", slug: "" });
+  const [modelData, setModelData] = useState<ModelResponseDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { apiCall } = useApiClient();
 
-  const fetchMakes = async () => {
+  const fetchModels = async () => {
     try {
       setLoading(true);
 
-      const res = await apiCall("/api/admin/makes");
-      if (!res.ok) throw new Error(`Failed to fetch makes: ${res.status}`);
+      const res = await apiCall("/api/admin/models");
+      if (!res.ok) throw new Error(`Failed to fetch models: ${res.status}`);
 
       const data = await res.json();
-      setMakeData(data.data);
+      setModelData(data.data);
     } catch (error) {
       if (error instanceof Error) {
         toast(error.message);
@@ -69,7 +68,7 @@ export function ModelDialog({ onSuccess }: ModelDialogProps) {
   const handleSelectChange = (value: string) => {
     setForm({
       ...form,
-      makeId: value
+      modelId: value
     })
   }
 
@@ -77,14 +76,14 @@ export function ModelDialog({ onSuccess }: ModelDialogProps) {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await apiCall("/api/admin/models", {
+      const res = await apiCall("/api/admin/badges", {
         method: "POST",
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) throw new Error(`Failed to create model: ${res.status}`);
+      if (!res.ok) throw new Error(`Failed to create badge: ${res.status}`);
 
-      toast("Model created!");
+      toast("badge created!");
       onSuccess();
     } catch (e) {
       if (e instanceof Error) {
@@ -98,29 +97,29 @@ export function ModelDialog({ onSuccess }: ModelDialogProps) {
   };
 
   return (
-    <Dialog onOpenChange={() => fetchMakes()}>
+    <Dialog onOpenChange={() => fetchModels()}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Model</Button>
+        <Button variant="outline">Add badge</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSave}>
           <DialogHeader>
-            <DialogTitle>Add Model</DialogTitle>
+            <DialogTitle>Add badge</DialogTitle>
             <DialogDescription>
-              Create a bew Model here. Click save when you&apos;re done.
+              Create a bew badge here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 mt-4">
-            <Label htmlFor="make">Make</Label>
+            <Label htmlFor="model">model</Label>
             <Select onValueChange={(value) => handleSelectChange(value)}>
-              <SelectTrigger className="w-full" onClick={fetchMakes}>
-                <SelectValue placeholder="Select a make" />
+              <SelectTrigger className="w-full" onClick={fetchModels}>
+                <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {makeData.map((make) => (
-                    <SelectItem key={make.id} value={make.id.toString()}>
-                      {make.name}
+                  {modelData.map((model) => (
+                    <SelectItem key={model.id} value={model.id.toString()}>
+                      {model.name}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -140,7 +139,7 @@ export function ModelDialog({ onSuccess }: ModelDialogProps) {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit" className="w-24">
-              {loading ? <LoadingSpinner size="sm" /> : "Add Model"}
+              {loading ? <LoadingSpinner size="sm" /> : "Add badge"}
             </Button>
           </DialogFooter>
         </form>
