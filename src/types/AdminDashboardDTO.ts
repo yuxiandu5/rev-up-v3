@@ -23,3 +23,9 @@ export interface AdminUserListResponse {
   data: AdminUserListItemDTO[];
   meta: PaginationMeta;
 }
+
+export interface MakeItemListDTO {
+  id: string;
+  name: string;
+  slug: string;
+}
