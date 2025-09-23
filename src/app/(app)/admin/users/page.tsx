@@ -1,7 +1,7 @@
 "use client";
 
 import { UserTable } from "./UserTable";
-import { AdminUserListItemDTO } from "@/types/usersDto";
+import { AdminUserListItemDTO } from "@/types/AdminDashboardDTO";
 import { userColumns } from "./columns";
 import { useApiClient } from "@/hooks/useApiClient";
 import { useEffect, useState } from "react";
@@ -100,7 +100,7 @@ export default function UsersPage() {
 
   return (
     <section className="w-full h-full flex justify-center items-center">
-      <div className="w-full h-full">
+      <div className="w-[95%] h-full">
         <UserTable columns={userColumns(handleToggleActive, handleUserDelete)} data={userData} />
       </div>
     </section>

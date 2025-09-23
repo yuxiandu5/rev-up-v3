@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AdminUserListItemDTO } from "@/types/usersDto";
+import { AdminUserListItemDTO } from "@/types/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
@@ -21,7 +21,7 @@ export const userColumns = (
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          userName
+          UserName
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -55,7 +55,18 @@ export const userColumns = (
   },
   {
     accessorKey: "role",
-    header: "Role",
+    header: () => {
+      return (
+        <span className="block w-20 text-center">
+          Role
+        </span>
+      );
+    },
+    cell: ({ row }) => (
+      <span className="block w-20 text-center">
+        {row.getValue("role")}
+      </span>
+    ),
   },
   {
     accessorKey: "createdAt",
@@ -67,7 +78,12 @@ export const userColumns = (
   },
   {
     accessorKey: "lastLoginAt",
-    header: "lastLoginAt",
+    header: "Last Login",
+    cell: ({ row }) => (
+      <span className="block w-30 truncate">
+        {row.getValue("lastLoginAt")}
+      </span>
+    ),
   },
   {
     id: "actions",
