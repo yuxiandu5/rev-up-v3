@@ -1,4 +1,3 @@
-import { MakeItemListDTO } from "./../types/AdminDashboardDTO";
 import { z } from "zod";
 
 // Backend schemas (for API validation)
@@ -268,3 +267,6 @@ export type UpdateBuildDTOInput = z.infer<typeof updateBuildDTOSchema>;
 // Legacy type exports
 export type CreateBuildInput = z.infer<typeof createBuildSchema>;
 export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
+
+// make model badge yearRange
+export type CreateModelInput = z.infer<typeof ModelCreateSchema>
