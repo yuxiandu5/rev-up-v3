@@ -13,6 +13,9 @@ export default function DashboardSideNavBar() {
     >
       <LinkButton href="/admin/users">Users</LinkButton>
       <LinkButton href="/admin/makes">Makes</LinkButton>
+      <LinkButton href="/admin/models">Models</LinkButton>
+      <LinkButton href="/admin/badges">Badges</LinkButton>
+      <LinkButton href="/admin/year-ranges">YearRanges</LinkButton>
     </nav>
   );
 }
