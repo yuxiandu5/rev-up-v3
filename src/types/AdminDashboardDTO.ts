@@ -1,5 +1,5 @@
 import { Role } from "./dtos";
-import { string, z } from "zod";
+import { z } from "zod"
 
 export interface AdminUserListItemDTO {
   id: string;
@@ -46,7 +46,7 @@ export function toModelDTO(raw: {
   slug: string;
   make: { name: string };
   badges?: { name: string }[] | null;
-}): ModelDTO {
+}): ModelResponseDTO {
   return {
     id: raw.id,
     name: raw.name,
@@ -86,5 +86,6 @@ export function toBadgeDTO(raw: {
 
 
 
-export type ModelDTO = z.infer<typeof ModelDTOSchema>;
+export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeDTO = z.infer<typeof BadgeDTOSchema>
+

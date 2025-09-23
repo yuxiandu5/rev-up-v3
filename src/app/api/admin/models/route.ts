@@ -5,7 +5,7 @@ import { ModelCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
-import { ModelDTO, toModelDTO } from "@/types/AdminDashboardDTO";
+import { ModelResponseDTO, toModelDTO } from "@/types/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
       prisma.model.count(),
     ]);
 
-    const modelDataFormatted: ModelDTO[] = modelData.map(toModelDTO)
+    const modelDataFormatted: ModelResponseDTO[] = modelData.map(toModelDTO)
 
     return okPaginated(
       modelDataFormatted,
