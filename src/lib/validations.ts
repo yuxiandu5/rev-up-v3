@@ -1,3 +1,4 @@
+import { MakeItemListDTO } from './../types/AdminDashboardDTO';
 import { z } from "zod";
 
 // Backend schemas (for API validation)
@@ -255,6 +256,7 @@ export type VerifyUsernameInput = z.infer<typeof verifyUsernameSchema>;
 export type VerifyAnswerInput = z.infer<typeof verifyAnswerSchema>;
 export type VerifyAnswerFormInput = z.infer<typeof verifyAnswerFormSchema>;
 export type RequestPasswordResetFormInput = z.infer<typeof requestPasswordResetFormSchema>;
+export type MakeInput = z.infer<typeof MakeCreateSchema>
 
 // DTO Type exports
 export type CarInfoInput = z.infer<typeof carInfoSchema>;
@@ -266,3 +268,5 @@ export type UpdateBuildDTOInput = z.infer<typeof updateBuildDTOSchema>;
 // Legacy type exports
 export type CreateBuildInput = z.infer<typeof createBuildSchema>;
 export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
+
+
