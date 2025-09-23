@@ -25,7 +25,13 @@ export async function GET(req: NextRequest) {
       prisma.model.count(),
     ]);
 
-    return okPaginated(modelData, page, pageSize, totalModelCount, "Successfully fetched model data!");
+    return okPaginated(
+      modelData,
+      page,
+      pageSize,
+      totalModelCount,
+      "Successfully fetched model data!"
+    );
   } catch (e) {
     console.log("Error GET/models", e);
     return errorToResponse(e);
@@ -40,9 +46,9 @@ export async function POST(req: NextRequest) {
     const { makeId, name, slug } = ModelCreateSchema.parse(body);
 
     const existing = await prisma.make.findUnique({
-      where: { id: makeId }
-    })
-    if(!existing) throw new NotFoundError("Make id does not exist")
+      where: { id: makeId },
+    });
+    if (!existing) throw new NotFoundError("Make id does not exist");
 
     const res = await prisma.model.create({
       data: {

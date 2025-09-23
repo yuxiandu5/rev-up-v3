@@ -40,10 +40,14 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  fetchMakes: () => void
+  fetchMakes: () => void;
 }
 
-export function MakeTable<TData, TValue>({ columns, data, fetchMakes }: DataTableProps<TData, TValue>) {
+export function MakeTable<TData, TValue>({
+  columns,
+  data,
+  fetchMakes,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -78,7 +82,7 @@ export function MakeTable<TData, TValue>({ columns, data, fetchMakes }: DataTabl
           onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
-        <MakeDialog onSuccess={fetchMakes}/>
+        <MakeDialog onSuccess={fetchMakes} />
       </div>
 
       {/* Main */}

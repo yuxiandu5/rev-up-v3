@@ -27,5 +27,5 @@ export interface AdminUserListResponse {
 export interface MakeItemListDTO {
   id: string;
   name: string;
-  slug: string
+  slug: string;
 }

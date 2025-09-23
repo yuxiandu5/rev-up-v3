@@ -1,30 +1,24 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { MakeItemListDTO } from "@/types/AdminDashboardDTO"
-import { ColumnDef } from "@tanstack/react-table"
+import { Button } from "@/components/ui/button";
+import { MakeItemListDTO } from "@/types/AdminDashboardDTO";
+import { ColumnDef } from "@tanstack/react-table";
 
-export const makeColumns = (
-  onDelete: (id: string) => void
-  ): ColumnDef<MakeItemListDTO>[] => [
+export const makeColumns = (onDelete: (id: string) => void): ColumnDef<MakeItemListDTO>[] => [
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({row}) => {
-      return (
-        <span className="block w-25">
-          {row.original.id}
-        </span>
-      )
-    }
+    cell: ({ row }) => {
+      return <span className="block w-25">{row.original.id}</span>;
+    },
   },
   {
     accessorKey: "name",
-    header: "Name"
+    header: "Name",
   },
   {
     accessorKey: "slug",
-    header: "Slug"
+    header: "Slug",
   },
   {
     id: "actions",
@@ -38,4 +32,4 @@ export const makeColumns = (
       );
     },
   },
-]
+];

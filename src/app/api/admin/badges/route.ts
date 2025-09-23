@@ -25,7 +25,13 @@ export async function GET(req: NextRequest) {
       prisma.badge.count(),
     ]);
 
-    return okPaginated(badgeData, page, pageSize, totalBadgeCount, "Successfully fetched badge data!");
+    return okPaginated(
+      badgeData,
+      page,
+      pageSize,
+      totalBadgeCount,
+      "Successfully fetched badge data!"
+    );
   } catch (e) {
     console.log("Error GET/badges", e);
     return errorToResponse(e);
@@ -40,9 +46,9 @@ export async function POST(req: NextRequest) {
     const { modelId, name, slug } = BadgeCreateSchema.parse(body);
 
     const existing = await prisma.model.findUnique({
-      where: {id: modelId}
-    })
-    if(!existing) throw new NotFoundError("Model ID does not exist!")
+      where: { id: modelId },
+    });
+    if (!existing) throw new NotFoundError("Model ID does not exist!");
 
     const res = await prisma.badge.create({
       data: {

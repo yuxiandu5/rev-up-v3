@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { LoadingSpinner } from "@/components/ui/Loading"
+import { Button } from "@/components/ui/button";
+import { LoadingSpinner } from "@/components/ui/Loading";
 import {
   Dialog,
   DialogClose,
@@ -9,54 +9,54 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { MakeInput } from "@/lib/validations"
-import { useState } from "react"
-import { useApiClient } from "@/hooks/useApiClient"
-import { toast } from "sonner"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { MakeInput } from "@/lib/validations";
+import { useState } from "react";
+import { useApiClient } from "@/hooks/useApiClient";
+import { toast } from "sonner";
 
 interface MakeDialogProps {
-  onSuccess: () => void
+  onSuccess: () => void;
 }
 
-export function MakeDialog( {onSuccess}: MakeDialogProps ) {
-  const [form, setForm] = useState<MakeInput>({name: "", slug: ""})
-  const [loading, setLoading] = useState<boolean>(false)
+export function MakeDialog({ onSuccess }: MakeDialogProps) {
+  const [form, setForm] = useState<MakeInput>({ name: "", slug: "" });
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { apiCall} = useApiClient()
+  const { apiCall } = useApiClient();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  const handleSave = async(e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await apiCall("/api/admin/makes", {
         method: "POST",
         body: JSON.stringify(form),
-      })
+      });
 
-      if(!res.ok) throw new Error(`Failed to create make: ${res.status}`)
+      if (!res.ok) throw new Error(`Failed to create make: ${res.status}`);
 
-      toast("Make created!")
-      onSuccess()
+      toast("Make created!");
+      onSuccess();
     } catch (e) {
-      if(e instanceof Error) {
-        toast(e.message)
+      if (e instanceof Error) {
+        toast(e.message);
       } else {
-        toast("Unknown error occurred!")
+        toast("Unknown error occurred!");
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog>
@@ -68,18 +68,17 @@ export function MakeDialog( {onSuccess}: MakeDialogProps ) {
           <DialogHeader>
             <DialogTitle>Add Make</DialogTitle>
             <DialogDescription>
-              Create a bew Make here. Click save when you&apos;re
-              done.
+              Create a bew Make here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 mt-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" name="name" onChange={handleChange}/>
+              <Input id="name" name="name" onChange={handleChange} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="slug">Slug</Label>
-              <Input id="slug" name="slug" onChange={handleChange}/>
+              <Input id="slug" name="slug" onChange={handleChange} />
             </div>
           </div>
           <DialogFooter className="mt-6">
@@ -93,5 +92,5 @@ export function MakeDialog( {onSuccess}: MakeDialogProps ) {
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

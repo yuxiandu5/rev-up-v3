@@ -56,17 +56,9 @@ export const userColumns = (
   {
     accessorKey: "role",
     header: () => {
-      return (
-        <span className="block w-20 text-center">
-          Role
-        </span>
-      );
+      return <span className="block w-20 text-center">Role</span>;
     },
-    cell: ({ row }) => (
-      <span className="block w-20 text-center">
-        {row.getValue("role")}
-      </span>
-    ),
+    cell: ({ row }) => <span className="block w-20 text-center">{row.getValue("role")}</span>,
   },
   {
     accessorKey: "createdAt",
@@ -79,11 +71,7 @@ export const userColumns = (
   {
     accessorKey: "lastLoginAt",
     header: "Last Login",
-    cell: ({ row }) => (
-      <span className="block w-30 truncate">
-        {row.getValue("lastLoginAt")}
-      </span>
-    ),
+    cell: ({ row }) => <span className="block w-30 truncate">{row.getValue("lastLoginAt")}</span>,
   },
   {
     id: "actions",
