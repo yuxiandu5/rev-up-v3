@@ -83,9 +83,24 @@ export function toBadgeDTO(raw: {
   };
 }
 
-
+// YeaRange related
+export const YearRangeDTOSchema = z.object({
+  id: z.string(),
+  badge: z.string(),
+  startYear: z.number().int(),
+  endYear: z.number().int().optional(),
+  chassis: z.string().optional(),
+  hp: z.number().int(),
+  torque: z.number().int(),
+  zeroToHundred: z.number().int(),
+  handling: z.number().int(),
+  mediaAsset: z.string(),
+  make: z.string(),
+  model: z.string(),
+})
 
 
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>
+export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>
 

@@ -72,10 +72,10 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
   {
     id: "actions",
     cell: ({ row }) => {
-      const user = row.original;
+      const data = row.original;
 
       return (
-        <Button size="sm" variant="secondary" onClick={() => onDelete(user.id)}>
+        <Button size="sm" variant="secondary" onClick={() => onDelete(data.id)}>
           Delete
         </Button>
       );

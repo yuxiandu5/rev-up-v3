@@ -271,3 +271,4 @@ export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
 // make model badge yearRange
 export type CreateModelInput = z.infer<typeof ModelCreateSchema>
 export type CreateBadgeInput = z.infer<typeof BadgeCreateSchema>
+export type CreateYearRangeInput = z.infer<typeof CarYearRangeCreateSchema>
