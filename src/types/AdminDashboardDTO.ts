@@ -1,5 +1,5 @@
 import { Role } from "./dtos";
-import { z } from "zod"
+import { z } from "zod";
 
 export interface AdminUserListItemDTO {
   id: string;
@@ -37,7 +37,7 @@ export const ModelDTOSchema = z.object({
   name: z.string(),
   slug: z.string(),
   make: z.string(),
-  badges: z.array(z.string()).optional()
+  badges: z.array(z.string()).optional(),
 });
 
 export function toModelDTO(raw: {
@@ -52,7 +52,7 @@ export function toModelDTO(raw: {
     name: raw.name,
     slug: raw.slug,
     make: raw.make.name,
-    badges: raw.badges?.map(b => b.name) ?? []
+    badges: raw.badges?.map((b) => b.name) ?? [],
   };
 }
 
@@ -63,15 +63,15 @@ export const BadgeDTOSchema = z.object({
   slug: z.string(),
   make: z.string(),
   model: z.string(),
-  yearRanges: z.array(z.string()).optional()
+  yearRanges: z.array(z.string()).optional(),
 });
 
 export function toBadgeDTO(raw: {
   id: string;
   name: string;
   slug: string;
-  model: { name: string, make: { name: string }};
-  yearRanges: {startYear: number, endYear: number | null}[] | null
+  model: { name: string; make: { name: string } };
+  yearRanges: { startYear: number; endYear: number | null }[] | null;
 }): BadgeResponseDTO {
   return {
     id: raw.id,
@@ -79,13 +79,28 @@ export function toBadgeDTO(raw: {
     slug: raw.slug,
     model: raw.model.name,
     make: raw.model.make.name,
-    yearRanges: raw.yearRanges?.map(y => y.endYear ? `${y.startYear}-${y.endYear}` : `${y.startYear}-present`)
+    yearRanges: raw.yearRanges?.map((y) =>
+      y.endYear ? `${y.startYear}-${y.endYear}` : `${y.startYear}-present`
+    ),
   };
 }
 
-
-
+// YeaRange related
+export const YearRangeDTOSchema = z.object({
+  id: z.string(),
+  badge: z.string(),
+  startYear: z.number().int(),
+  endYear: z.number().int().optional(),
+  chassis: z.string().optional(),
+  hp: z.number().int(),
+  torque: z.number().int(),
+  zeroToHundred: z.number().int(),
+  handling: z.number().int(),
+  mediaAsset: z.string(),
+  make: z.string(),
+  model: z.string(),
+});
 
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
-export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>
-
+export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
+export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;

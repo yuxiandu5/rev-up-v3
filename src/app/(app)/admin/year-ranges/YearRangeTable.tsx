@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
-import { BadgeDialog } from "./BadgeDialog";
+import { YearRangeDialog } from "./YearRangeDialog";
 
 import {
   ColumnDef,
@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BadgeResponseDTO } from "@/types/AdminDashboardDTO";
+import { YearRangeResponseDTO } from "@/types/AdminDashboardDTO";
 
 import {
   Select,
@@ -39,12 +39,13 @@ import {
 } from "@/components/ui/select";
 
 interface DataTableProps {
-  columns: ColumnDef<BadgeResponseDTO>[];
-  data: BadgeResponseDTO[];
-  fetchBadges: () => void;
+  columns: ColumnDef<YearRangeResponseDTO>[];
+  data: YearRangeResponseDTO[];
+  fetchYearRanges: () => void;
+  onCreate: () => void;
 }
 
-export function BadgeTable({ columns, data, fetchBadges }: DataTableProps) {
+export function YearRangeTable({ columns, data, fetchYearRanges, onCreate }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
@@ -75,11 +76,14 @@ export function BadgeTable({ columns, data, fetchBadges }: DataTableProps) {
       <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Search badge..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          value={(table.getColumn("badge")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => table.getColumn("badge")?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
-        <BadgeDialog onSuccess={fetchBadges} />
+        <Button size="lg" variant="outline" onClick={onCreate}>
+          Add YearRange
+        </Button>
+        <YearRangeDialog onSuccess={fetchYearRanges} />
       </div>
 
       {/* Main */}

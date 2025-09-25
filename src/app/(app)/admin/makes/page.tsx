@@ -53,7 +53,8 @@ export default function MakePage() {
       const res = await apiCall(`/api/admin/makes/${id}`, {
         method: "DELETE",
       });
-      if(res.status === 409) return toast("You cannot delete a make while it still has models assigned.")
+      if (res.status === 409)
+        return toast("You cannot delete a make while it still has models assigned.");
       if (!res.ok) throw new Error(`Failed to delete make: ${res.status}`);
 
       toast("Make deleted!");

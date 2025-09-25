@@ -26,7 +26,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface ModelDialogProps {
   onSuccess: () => void;
@@ -69,9 +69,9 @@ export function ModelDialog({ onSuccess }: ModelDialogProps) {
   const handleSelectChange = (value: string) => {
     setForm({
       ...form,
-      makeId: value
-    })
-  }
+      makeId: value,
+    });
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

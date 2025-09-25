@@ -5,11 +5,67 @@ import { ifYearRangeExist } from "../year-ranges-helpers";
 import { prisma } from "@/lib/prisma";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
 
-    const { id } = YearRangeIdFormatSchema.parse(await params);
+    const { id } = YearRangeIdFormatSchema.parse(await context.params);
+    await ifYearRangeExist(id);
+
+    const yearRangeData = await prisma.modelYearRange.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        badge: {
+          select: {
+            id: true,
+            name: true,
+            model: {
+              select: {
+                name: true,
+                make: {
+                  select: { name: true },
+                },
+              },
+            },
+          },
+        },
+        startYear: true,
+        endYear: true,
+        chassis: true,
+        hp: true,
+        torque: true,
+        zeroToHundred: true,
+        handling: true,
+        mediaAsset: {
+          select: { url: true },
+        },
+      },
+    });
+
+    const formattedResults = () => {
+      return {
+        ...yearRangeData,
+        make: yearRangeData?.badge.model.make.name,
+        model: yearRangeData?.badge.model.name,
+        badge: yearRangeData?.badge.name,
+        badgeId: yearRangeData?.badge.id,
+        mediaAsset: yearRangeData?.mediaAsset?.url,
+      };
+    };
+
+    return ok(formattedResults(), "YearRange data fetched!", 200);
+  } catch (error) {
+    console.log("Unexpected Error GET/year-ranges/[id]", error);
+    return errorToResponse(error);
+  }
+}
+
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  try {
+    await requireRole(req, ["ADMIN", "MODERATOR"]);
+
+    const { id } = YearRangeIdFormatSchema.parse(await context.params);
     await ifYearRangeExist(id);
 
     const body = await req.json();

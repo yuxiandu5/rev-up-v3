@@ -53,7 +53,8 @@ export default function ModelPage() {
       const res = await apiCall(`/api/admin/models/${id}`, {
         method: "DELETE",
       });
-      if(res.status === 409) return toast("You cannot delete a model while it still has badges assigned.")
+      if (res.status === 409)
+        return toast("You cannot delete a model while it still has badges assigned.");
       if (!res.ok) throw new Error(`Failed to delete model: ${res.status}`);
 
       toast("model deleted!");
