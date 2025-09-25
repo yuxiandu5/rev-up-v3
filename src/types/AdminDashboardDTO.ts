@@ -131,6 +131,24 @@ export const ModDTOSchema = z.object({
   compatibilitiesCount: z.number(),
 });
 
+export function toModDTO(raw: {
+  id: string,
+  name: string,
+  brand: string,
+  description: string | null,
+  category: string,
+  compatibilities: {id: string }[],
+}): ModResponseDTO {
+  return {
+    id: raw.id,
+    name: raw.name,
+    brand: raw.brand,
+    description: raw.description ?? undefined,
+    category: raw.category,
+    compatibilitiesCount: raw.compatibilities?.length ?? 0,
+  };
+}
+
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
 export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;
