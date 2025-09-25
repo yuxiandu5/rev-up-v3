@@ -3,7 +3,7 @@ import { requireRole } from "@/lib/auth-guard";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { prisma } from "@/lib/prisma";
 import { IdSchema, ModCategoryUpdateSchema } from "@/lib/validations";
-import { BadRequestError, NotFoundError } from "@/lib/errors/AppError";
+import { NotFoundError } from "@/lib/errors/AppError";
 import { toSlug } from "@/lib/utils";
 
 
@@ -19,12 +19,6 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     
     const body = await req.json();
     const { name, description } = ModCategoryUpdateSchema.parse(body);
-
-    const existingName = await prisma.modCategory.findFirst({
-      where: { name: { equals: name, mode: "insensitive" } },
-    });
-    if (existingName) throw new BadRequestError("Mod category with this name already exists");
-
 
     const updatedModCategory = await prisma.modCategory.update({
       where: { id },

@@ -1,4 +1,4 @@
-import { NotFoundError, ConflictError } from "@/lib/errors/AppError";
+import { NotFoundError } from "@/lib/errors/AppError";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { requireRole } from "@/lib/auth-guard";
 import { prisma } from "@/lib/prisma";
@@ -18,11 +18,6 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
     const body = await req.json();
     const { name, brand, category, description } = ModUpdateSchema.parse(body);
-
-    const existingName = await prisma.mod.findFirst({
-      where: { name: { equals: name, mode: "insensitive" } },
-    });
-    if (existingName) throw new ConflictError("Mod with this name already exists");
 
     const updatedMod = await prisma.mod.update({
       where: { id },
