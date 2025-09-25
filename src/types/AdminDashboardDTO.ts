@@ -101,6 +101,26 @@ export const YearRangeDTOSchema = z.object({
   model: z.string(),
 });
 
+export const ModCategoryDTOSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  mods: z.array(z.string()),
+});
+
+export const ModDTOSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  brand: z.string(),
+  description: z.string().optional(),
+  category: z.string(),
+  compatibilitiesCount: z.number(),
+});
+
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
 export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;
+
+// Mod related
+export type ModCategoryResponseDTO = z.infer<typeof ModCategoryDTOSchema>;
+export type ModResponseDTO = z.infer<typeof ModDTOSchema>;

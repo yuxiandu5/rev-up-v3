@@ -246,6 +246,31 @@ export const BadgeCreateSchema = z.object({
     }),
 });
 
+export const ModCategoryCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  description: z.string().optional(),
+});
+
+export const ModCategoryUpdateSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().optional(),
+});
+
+export const ModCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  brand: z.string().min(1).max(100),
+  category: z.string().min(1).max(100),
+  description: z.string().optional(),
+  modCategoryId: z.string().cuid(),
+});
+
+export const ModUpdateSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  brand: z.string().min(1).max(100).optional(),
+  category: z.string().min(1).max(100).optional(),
+  description: z.string().optional(),
+}).strip();
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -273,3 +298,12 @@ export type CreateModelInput = z.infer<typeof ModelCreateSchema>;
 export type CreateBadgeInput = z.infer<typeof BadgeCreateSchema>;
 export type CreateYearRangeInput = z.infer<typeof CarYearRangeCreateSchema>;
 export type UpdateYearRangeInput = z.infer<typeof CarYearRangeUpdateSchema>;
+
+// mod category
+export type CreateModCategoryInput = z.infer<typeof ModCategoryCreateSchema>;
+export type UpdateModCategoryInput = z.infer<typeof ModCategoryUpdateSchema>;
+
+// mod
+export type CreateModInput = z.infer<typeof ModCreateSchema>;
+export type UpdateModInput = z.infer<typeof ModUpdateSchema>;
+
