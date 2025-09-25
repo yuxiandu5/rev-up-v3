@@ -30,7 +30,7 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
       );
     },
     cell: ({ row }) => (
-      <div className="max-w-24 truncate" title={row.original.make}>
+      <div title={row.original.make}>
         {row.original.make}
       </div>
     ),
