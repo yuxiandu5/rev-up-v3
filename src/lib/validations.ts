@@ -185,11 +185,7 @@ export const CarYearRangeCreateSchema = z.object({
   chassis: z.string().optional(),
   hp: z.coerce.number().int().min(0).max(1500),
   torque: z.coerce.number().int().min(0).max(1000),
-  zeroToHundred: z.coerce
-    .number()
-    .min(0)
-    .max(20)
-    .transform((val) => val * 10),
+  zeroToHundred: z.coerce.number().min(0).max(200),
   handling: z.coerce.number().int().min(0).max(10),
   imageUrl: z.string(),
   imageDescription: z.string().optional(),
@@ -207,7 +203,7 @@ export const CarYearRangeUpdateSchema = z
     imageUrl: z.string().optional(),
     imageDescription: z.string().optional(),
   })
-  .strip()
+  .strip();
 
 export const YearRangeIdFormatSchema = IdSchema;
 
@@ -276,4 +272,4 @@ export type UpdateBuildInput = z.infer<typeof updateBuildSchema>;
 export type CreateModelInput = z.infer<typeof ModelCreateSchema>;
 export type CreateBadgeInput = z.infer<typeof BadgeCreateSchema>;
 export type CreateYearRangeInput = z.infer<typeof CarYearRangeCreateSchema>;
-export type UpdateYearRangeInput = z.infer<typeof CarYearRangeUpdateSchema>
+export type UpdateYearRangeInput = z.infer<typeof CarYearRangeUpdateSchema>;
