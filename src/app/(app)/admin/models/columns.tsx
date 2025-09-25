@@ -27,11 +27,7 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
         </Button>
       );
     },
-    cell: ({row}) => (
-      <div className="w-15">
-        {row.original.make}
-      </div>
-    )
+    cell: ({ row }) => <div className="w-15">{row.original.make}</div>,
   },
   {
     accessorKey: "name",
@@ -51,7 +47,7 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
           </Badge>
         ))}
       </div>
-    )
+    ),
   },
   {
     id: "actions",

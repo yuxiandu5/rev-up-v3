@@ -28,20 +28,20 @@ export async function GET(req: NextRequest) {
           slug: true,
           make: {
             select: {
-              name: true
-            }
+              name: true,
+            },
           },
           badges: {
             select: {
-              name: true
-            }
-          }
-        }
+              name: true,
+            },
+          },
+        },
       }),
       prisma.model.count(),
     ]);
 
-    const modelDataFormatted: ModelResponseDTO[] = modelData.map(toModelDTO)
+    const modelDataFormatted: ModelResponseDTO[] = modelData.map(toModelDTO);
 
     return okPaginated(
       modelDataFormatted,

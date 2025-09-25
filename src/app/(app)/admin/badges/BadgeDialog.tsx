@@ -25,7 +25,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface badgeDialogProps {
   onSuccess: () => void;
@@ -68,9 +68,9 @@ export function BadgeDialog({ onSuccess }: badgeDialogProps) {
   const handleSelectChange = (value: string) => {
     setForm({
       ...form,
-      modelId: value
-    })
-  }
+      modelId: value,
+    });
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

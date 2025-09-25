@@ -5,7 +5,7 @@ import { ifYearRangeExist } from "../year-ranges-helpers";
 import { prisma } from "@/lib/prisma";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 
-export async function GET(req:NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
 
@@ -13,35 +13,35 @@ export async function GET(req:NextRequest, context: { params: Promise<{ id: stri
     await ifYearRangeExist(id);
 
     const yearRangeData = await prisma.modelYearRange.findUnique({
-        where:{id},
-        select: {
-          id: true,
-          badge: {
-            select: {
-              id: true,
-              name: true,
-              model: {
-                select: {
-                  name: true,
-                  make: {
-                    select: { name: true },
-                  },
+      where: { id },
+      select: {
+        id: true,
+        badge: {
+          select: {
+            id: true,
+            name: true,
+            model: {
+              select: {
+                name: true,
+                make: {
+                  select: { name: true },
                 },
               },
             },
           },
-          startYear: true,
-          endYear: true,
-          chassis: true,
-          hp: true,
-          torque: true,
-          zeroToHundred: true,
-          handling: true,
-          mediaAsset: {
-            select: { url: true },
-          },
         },
-      })
+        startYear: true,
+        endYear: true,
+        chassis: true,
+        hp: true,
+        torque: true,
+        zeroToHundred: true,
+        handling: true,
+        mediaAsset: {
+          select: { url: true },
+        },
+      },
+    });
 
     const formattedResults = () => {
       return {
@@ -51,8 +51,8 @@ export async function GET(req:NextRequest, context: { params: Promise<{ id: stri
         badge: yearRangeData?.badge.name,
         badgeId: yearRangeData?.badge.id,
         mediaAsset: yearRangeData?.mediaAsset?.url,
-      }
-    }
+      };
+    };
 
     return ok(formattedResults(), "YearRange data fetched!", 200);
   } catch (error) {

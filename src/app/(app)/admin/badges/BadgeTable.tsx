@@ -44,11 +44,7 @@ interface DataTableProps {
   fetchBadges: () => void;
 }
 
-export function BadgeTable({
-  columns,
-  data,
-  fetchBadges,
-}: DataTableProps) {
+export function BadgeTable({ columns, data, fetchBadges }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({

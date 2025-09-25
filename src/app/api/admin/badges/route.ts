@@ -31,23 +31,23 @@ export async function GET(req: NextRequest) {
               name: true,
               make: {
                 select: {
-                  name: true
-                }
-              }
-            }
+                  name: true,
+                },
+              },
+            },
           },
           yearRanges: {
             select: {
               startYear: true,
-              endYear: true
-            }
-          }
-        }
+              endYear: true,
+            },
+          },
+        },
       }),
       prisma.badge.count(),
     ]);
 
-    const badgeDataFormatted: BadgeResponseDTO[] = badgeData.map(toBadgeDTO)
+    const badgeDataFormatted: BadgeResponseDTO[] = badgeData.map(toBadgeDTO);
 
     return okPaginated(
       badgeDataFormatted,

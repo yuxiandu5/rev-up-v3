@@ -27,13 +27,9 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
         </Button>
       );
     },
-    cell: ({row}) => {
-      return(
-        <div className="ml-6">
-          {row.original.make}
-        </div>
-      )
-    }
+    cell: ({ row }) => {
+      return <div className="ml-6">{row.original.make}</div>;
+    },
   },
   {
     accessorKey: "model",
@@ -67,7 +63,7 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
           </Badge>
         ))}
       </div>
-    )
+    ),
   },
   {
     id: "actions",
