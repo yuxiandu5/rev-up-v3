@@ -108,6 +108,20 @@ export const ModCategoryDTOSchema = z.object({
   mods: z.array(z.string()),
 });
 
+export function toModCategoryDTO(value: {
+  id: string,
+  name: string,
+  description: string | null,
+  mods: { name: string }[],
+}): ModCategoryResponseDTO {
+  return {
+    id: value.id,
+    name: value.name,
+    description: value.description ?? undefined,
+    mods: value.mods.map((m) => m.name),
+  };
+}
+
 export const ModDTOSchema = z.object({
   id: z.string(),
   name: z.string(),
