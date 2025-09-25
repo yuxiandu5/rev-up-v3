@@ -12,6 +12,11 @@ export const userColumns = (
   {
     accessorKey: "id",
     header: "ID",
+    cell: ({ row }) => (
+      <div className="font-mono text-sm truncate max-w-20" title={row.original.id}>
+        {row.original.id}
+      </div>
+    ),
   },
   {
     accessorKey: "userName",
@@ -26,6 +31,11 @@ export const userColumns = (
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate font-medium" title={row.original.userName}>
+        {row.original.userName}
+      </div>
+    ),
   },
   {
     accessorKey: "isActive",
@@ -45,8 +55,10 @@ export const userColumns = (
 
       return (
         <Button
+          size="sm"
           variant={`${user.isActive ? "outline" : "destructive"}`}
           onClick={() => onToggle(user.id, user.isActive)}
+          className="px-3"
         >
           {user.isActive ? "Active" : "Inactive"}
         </Button>
@@ -55,33 +67,55 @@ export const userColumns = (
   },
   {
     accessorKey: "role",
-    header: () => {
-      return <span className="block w-20 text-center">Role</span>;
-    },
-    cell: ({ row }) => <span className="block w-20 text-center">{row.getValue("role")}</span>,
+    header: "Role",
+    cell: ({ row }) => (
+      <div className="max-w-24 truncate text-center font-medium" title={row.getValue("role") as string}>
+        {row.getValue("role")}
+      </div>
+    ),
   },
   {
     accessorKey: "createdAt",
-    header: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate text-sm font-mono" title={row.original.createdAt}>
+        {new Date(row.original.createdAt).toLocaleDateString()}
+      </div>
+    ),
   },
   {
     accessorKey: "updatedAt",
-    header: "updatedAt",
+    header: "Updated At",
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate text-sm font-mono" title={row.original.updatedAt}>
+        {new Date(row.original.updatedAt).toLocaleDateString()}
+      </div>
+    ),
   },
   {
     accessorKey: "lastLoginAt",
     header: "Last Login",
-    cell: ({ row }) => <span className="block w-30 truncate">{row.getValue("lastLoginAt")}</span>,
+    cell: ({ row }) => {
+      const lastLogin = row.getValue("lastLoginAt") as string;
+      return (
+        <div className="max-w-32 truncate text-sm font-mono" title={lastLogin}>
+          {lastLogin ? new Date(lastLogin).toLocaleDateString() : "Never"}
+        </div>
+      );
+    },
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const user = row.original;
 
       return (
-        <Button size="sm" variant="secondary" onClick={() => onDelete(user.id)}>
-          Delete
-        </Button>
+        <div className="flex gap-2 min-w-fit">
+          <Button size="sm" variant="destructive" onClick={() => onDelete(user.id)} className="px-3">
+            Delete
+          </Button>
+        </div>
       );
     },
   },

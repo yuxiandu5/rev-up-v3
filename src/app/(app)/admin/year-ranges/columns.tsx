@@ -19,9 +19,11 @@ export const yearRangeColumns = ({
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => {
-      return <span className="block">{row.original.id}</span>;
-    },
+    cell: ({ row }) => (
+      <div className="font-mono text-sm truncate max-w-20" title={row.original.id}>
+        {row.original.id}
+      </div>
+    ),
   },
   {
     accessorKey: "make",
@@ -36,9 +38,11 @@ export const yearRangeColumns = ({
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <div className="ml-6">{row.original.make}</div>;
-    },
+    cell: ({ row }) => (
+      <div className="max-w-24 truncate" title={row.original.make}>
+        {row.original.make}
+      </div>
+    ),
   },
   {
     accessorKey: "model",
@@ -53,10 +57,20 @@ export const yearRangeColumns = ({
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate" title={row.original.model}>
+        {row.original.model}
+      </div>
+    ),
   },
   {
     accessorKey: "badge",
     header: "Badge",
+    cell: ({ row }) => (
+      <div className="max-w-28 truncate" title={row.original.badge}>
+        {row.original.badge}
+      </div>
+    ),
   },
   {
     accessorKey: "year-range",
@@ -72,18 +86,31 @@ export const yearRangeColumns = ({
   {
     accessorKey: "chassis",
     header: "Chassis",
+    cell: ({ row }) => (
+      <div className="max-w-20 truncate font-mono text-sm" title={row.original.chassis}>
+        {row.original.chassis}
+      </div>
+    ),
   },
   {
     header: "Specs",
     cell: ({ row }) => {
       const data = row.original;
       return (
-        <ul className="text-sm space-y-1">
-          <li>HP: {data.hp}</li>
-          <li>Torque: {data.torque} Nm</li>
-          <li>0–100: {(data.zeroToHundred * 0.1).toFixed(1)}s</li>
-          <li>Handling: {data.handling}</li>
-        </ul>
+        <div className="text-xs space-y-1 max-w-32">
+          <div className="flex gap-2">
+            <span className="font-medium">HP:</span> {data.hp}
+          </div>
+          <div className="flex gap-2">
+            <span className="font-medium">TQ:</span> {data.torque}
+          </div>
+          <div className="flex gap-2">
+            <span className="font-medium">0-100:</span> {(data.zeroToHundred * 0.1).toFixed(1)}s
+          </div>
+          <div className="flex gap-2">
+            <span className="font-medium">HDL:</span> {data.handling}
+          </div>
+        </div>
       );
     },
   },
@@ -93,9 +120,9 @@ export const yearRangeColumns = ({
     cell: ({ row }) => (
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="block max-w-[200px] truncate cursor-help">
+          <div className="max-w-32 truncate cursor-help font-mono text-xs" title={row.original.mediaAsset}>
             {row.original.mediaAsset}
-          </span>
+          </div>
         </TooltipTrigger>
         <TooltipContent>{row.original.mediaAsset}</TooltipContent>
       </Tooltip>
@@ -103,23 +130,15 @@ export const yearRangeColumns = ({
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const data = row.original;
 
       return (
-        <>
+        <div className="flex gap-2 min-w-fit">
           <Button
             size="sm"
-            variant="secondary"
-            onClick={() => onDelete(data.id)}
-            className="w-18 mr-4"
-          >
-            Delete
-          </Button>
-          <Button
-            size="sm"
-            variant="secondary"
-            className="w-18 mr-4"
+            variant="outline"
             onClick={() =>
               onEdit(
                 {
@@ -137,10 +156,19 @@ export const yearRangeColumns = ({
                 data.id
               )
             }
+            className="px-3"
           >
             Edit
           </Button>
-        </>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(data.id)}
+            className="px-3"
+          >
+            Delete
+          </Button>
+        </div>
       );
     },
   },

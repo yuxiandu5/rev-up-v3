@@ -8,27 +8,42 @@ export const makeColumns = (onDelete: (id: string) => void): ColumnDef<MakeItemL
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => {
-      return <span className="block w-25">{row.original.id}</span>;
-    },
+    cell: ({ row }) => (
+      <div className="font-mono text-sm truncate max-w-20" title={row.original.id}>
+        {row.original.id}
+      </div>
+    ),
   },
   {
     accessorKey: "name",
     header: "Make",
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate" title={row.original.name}>
+        {row.original.name}
+      </div>
+    ),
   },
   {
     accessorKey: "slug",
     header: "Slug",
+    cell: ({ row }) => (
+      <div className="max-w-28 truncate font-mono text-sm" title={row.original.slug}>
+        {row.original.slug}
+      </div>
+    ),
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const data = row.original;
 
       return (
-        <Button size="sm" variant="secondary" onClick={() => onDelete(data.id)}>
-          Delete
-        </Button>
+        <div className="flex gap-2 min-w-fit">
+          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+            Delete
+          </Button>
+        </div>
       );
     },
   },
