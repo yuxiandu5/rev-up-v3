@@ -11,11 +11,13 @@ export default function DashboardSideNavBar() {
                 text-center
                 "
     >
-      <LinkButton href="/admin/users">Users</LinkButton>
-      <LinkButton href="/admin/makes">Makes</LinkButton>
-      <LinkButton href="/admin/models">Models</LinkButton>
-      <LinkButton href="/admin/badges">Badges</LinkButton>
-      <LinkButton href="/admin/year-ranges">YearRanges</LinkButton>
+      <LinkButton href="/admin/users">User</LinkButton>
+      <LinkButton href="/admin/makes">Make</LinkButton>
+      <LinkButton href="/admin/models">Model</LinkButton>
+      <LinkButton href="/admin/badges">Badge</LinkButton>
+      <LinkButton href="/admin/year-ranges">YearRange</LinkButton>
+      <LinkButton href="/admin/modCategories">ModCategory</LinkButton>
+      <LinkButton href="/admin/mods">Mod</LinkButton>
     </nav>
   );
 }

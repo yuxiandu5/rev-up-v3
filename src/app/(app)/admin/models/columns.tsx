@@ -10,9 +10,11 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => {
-      return <span className="block w-25">{row.original.id}</span>;
-    },
+    cell: ({ row }) => (
+      <div className="font-mono text-sm truncate max-w-20" title={row.original.id}>
+        {row.original.id}
+      </div>
+    ),
   },
   {
     accessorKey: "make",
@@ -27,37 +29,59 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
         </Button>
       );
     },
-    cell: ({ row }) => <div className="w-15">{row.original.make}</div>,
+    cell: ({ row }) => (
+      <div className="max-w-24 truncate" title={row.original.make}>
+        {row.original.make}
+      </div>
+    ),
   },
   {
     accessorKey: "name",
     header: "Model",
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate" title={row.original.name}>
+        {row.original.name}
+      </div>
+    ),
   },
   {
     accessorKey: "slug",
     header: "Slug",
+    cell: ({ row }) => (
+      <div className="max-w-28 truncate font-mono text-sm" title={row.original.slug}>
+        {row.original.slug}
+      </div>
+    ),
   },
   {
     header: "Badges",
     cell: ({ row }) => (
-      <div className="flex flex-wrap gap-2">
-        {row.original.badges?.map((name: string) => (
-          <Badge key={name} variant="secondary">
+      <div className="flex flex-wrap gap-1 max-w-xs">
+        {row.original.badges?.slice(0, 3).map((name: string) => (
+          <Badge key={name} variant="secondary" className="text-xs px-2 py-1 truncate">
             {name}
           </Badge>
         ))}
+        {row.original.badges && row.original.badges.length > 3 && (
+          <Badge variant="outline" className="text-xs px-2 py-1">
+            +{row.original.badges.length - 3}
+          </Badge>
+        )}
       </div>
     ),
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const data = row.original;
 
       return (
-        <Button size="sm" variant="secondary" onClick={() => onDelete(data.id)}>
-          Delete
-        </Button>
+        <div className="flex gap-2 min-w-fit">
+          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+            Delete
+          </Button>
+        </div>
       );
     },
   },

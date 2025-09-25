@@ -10,9 +10,11 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => {
-      return <span className="block w-26">{row.original.id}</span>;
-    },
+    cell: ({ row }) => (
+      <div className="font-mono text-sm truncate max-w-20" title={row.original.id}>
+        {row.original.id}
+      </div>
+    ),
   },
   {
     accessorKey: "make",
@@ -27,9 +29,11 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
         </Button>
       );
     },
-    cell: ({ row }) => {
-      return <div className="ml-6">{row.original.make}</div>;
-    },
+    cell: ({ row }) => (
+      <div className="max-w-24 truncate" title={row.original.make}>
+        {row.original.make}
+      </div>
+    ),
   },
   {
     accessorKey: "model",
@@ -44,36 +48,59 @@ export const badgeColumns = (onDelete: (id: string) => void): ColumnDef<BadgeRes
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <div className="max-w-32 truncate" title={row.original.model}>
+        {row.original.model}
+      </div>
+    ),
   },
   {
     accessorKey: "name",
     header: "Badge",
+    cell: ({ row }) => (
+      <div className="max-w-28 truncate" title={row.original.name}>
+        {row.original.name}
+      </div>
+    ),
   },
   {
     accessorKey: "slug",
     header: "Slug",
+    cell: ({ row }) => (
+      <div className="max-w-28 truncate font-mono text-sm" title={row.original.slug}>
+        {row.original.slug}
+      </div>
+    ),
   },
   {
-    header: "Badges",
+    header: "Year Ranges",
     cell: ({ row }) => (
-      <div className="flex flex-wrap gap-2">
-        {row.original.yearRanges?.map((name: string) => (
-          <Badge key={name} variant="secondary">
+      <div className="flex flex-wrap gap-1 max-w-xs">
+        {row.original.yearRanges?.slice(0, 3).map((name: string) => (
+          <Badge key={name} variant="secondary" className="text-xs px-2 py-1 truncate">
             {name}
           </Badge>
         ))}
+        {row.original.yearRanges && row.original.yearRanges.length > 3 && (
+          <Badge variant="outline" className="text-xs px-2 py-1">
+            +{row.original.yearRanges.length - 3}
+          </Badge>
+        )}
       </div>
     ),
   },
   {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const data = row.original;
 
       return (
-        <Button size="sm" variant="secondary" onClick={() => onDelete(data.id)}>
-          Delete
-        </Button>
+        <div className="flex gap-2 min-w-fit">
+          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+            Delete
+          </Button>
+        </div>
       );
     },
   },
