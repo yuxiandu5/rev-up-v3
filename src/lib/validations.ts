@@ -248,7 +248,7 @@ export const BadgeCreateSchema = z.object({
 
 export const ModCategoryCreateSchema = z.object({
   name: z.string().min(1).max(100),
-  description: z.string().optional(),
+  description: z.string(),
 });
 
 export const ModCategoryUpdateSchema = z.object({
