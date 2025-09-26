@@ -16,7 +16,7 @@ export default function DashboardSideNavBar() {
       <LinkButton href="/admin/models">Model</LinkButton>
       <LinkButton href="/admin/badges">Badge</LinkButton>
       <LinkButton href="/admin/year-ranges">YearRange</LinkButton>
-      <LinkButton href="/admin/modCategories">ModCategory</LinkButton>
+      <LinkButton href="/admin/mod-categories">ModCategory</LinkButton>
       <LinkButton href="/admin/mods">Mod</LinkButton>
     </nav>
   );
