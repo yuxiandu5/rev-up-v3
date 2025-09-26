@@ -154,6 +154,7 @@ export const updateBuildSchema = z.object({
 export const PaginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(1000).default(500),
+  q: z.string().max(100).optional(),
 });
 
 export const UserFilterSchema = z.object({
@@ -168,6 +169,10 @@ export const UserFilterSchema = z.object({
 // General Validation
 export const IdSchema = z.object({
   id: z.string().cuid(),
+});
+
+export const ManyIdSchema = z.object({
+  ids: z.array(z.string().cuid()),
 });
 
 // AdminUserApi validation
@@ -270,6 +275,30 @@ export const ModUpdateSchema = z.object({
   category: z.string().min(1).max(100).optional(),
   description: z.string().optional(),
 }).strip();
+
+export const ModCompatibilityCreateSchema = z.object({
+  modId: z.string().cuid(),
+  modelYearRangeId: z.string().cuid(),
+  badgeId: z.string().cuid(),
+  modelId: z.string().cuid(),
+  makeId: z.string().cuid(),
+  modelYearRange: z.coerce.string(),
+  hpGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(-10).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(-100).max(100).optional(),
+  price: z.coerce.number().int().min(0).max(10000).optional(),
+  notes: z.string().optional(),
+});
+
+export const ModCompatibilityUpdateSchema = z.object({
+  hpGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(-10).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(-100).max(100).optional(),
+  price: z.coerce.number().int().min(0).max(10000).optional(),
+  notes: z.string().optional(),
+});
 
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;

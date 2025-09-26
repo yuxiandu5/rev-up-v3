@@ -98,8 +98,8 @@ export const userColumns = (
     cell: ({ row }) => {
       const lastLogin = row.getValue("lastLoginAt") as string;
       return (
-        <div className="max-w-32 truncate text-sm font-mono" title={lastLogin}>
-          {lastLogin ? new Date(lastLogin).toLocaleDateString() : "Never"}
+        <div className="max-w-32  text-sm font-mono" title={lastLogin}>
+          {lastLogin ? new Date(lastLogin).toLocaleString() : "Never"}
         </div>
       );
     },

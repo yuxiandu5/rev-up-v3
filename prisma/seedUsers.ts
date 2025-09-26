@@ -56,7 +56,35 @@ async function main() {
     },
   });
 
-  console.log("🌱 Users seed completed!");
+  // Generate 20 more users following the pattern
+  const users = [];
+  for (let i = 15; i <= 34; i++) {
+    const pattern = i.toString().repeat(6);
+    const roles = [Role.USER, Role.MODERATOR, Role.ADMIN];
+    const randomRole = roles[Math.floor(Math.random() * roles.length)];
+    const isActive = Math.random() > 0.2; // 80% chance of being active
+    const hasLoggedIn = Math.random() > 0.3; // 70% chance of having logged in
+    
+    const user = await prisma.user.upsert({
+      where: {
+        userName: pattern,
+      },
+      update: {},
+      create: {
+        userName: pattern,
+        passwordHash: await hash(pattern),
+        role: randomRole,
+        recoverQuestion: pattern,
+        answer: pattern,
+        isActive: isActive,
+        lastLoginAt: hasLoggedIn ? new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000) : null, // Random date within last 30 days or null
+      },
+    });
+    
+    users.push(user);
+  }
+
+  console.log(`🌱 Users seed completed! Created ${3 + users.length} users total.`);
 }
 
 main()

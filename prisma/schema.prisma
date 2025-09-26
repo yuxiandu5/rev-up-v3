@@ -93,6 +93,7 @@ model ModelYearRange {
   handling    Int        // arbitrary score, standardize scale out of 10
 
   mediaAsset  MediaAsset?
+  ModCompatibility ModCompatibility[]
 }
 
 
@@ -131,13 +132,14 @@ model ModCompatibility {
   modId    String
   mod      Mod    @relation(fields: [modId], references: [id])
 
-  // denormalized for faster queries
-  badgeId  String
-  modelId  String
-  makeId   String
+  modelYearRangeObj ModelYearRange @relation(fields: [modelYearRangeId], references: [id])
+  modelYearRangeId  String
 
+  // denormalized for faster queries
+  badgeId          String
+  modelId          String
+  makeId           String
   modelYearRange   String
-  modelYearRangeId String
 
   // performance deltas (all optional)
   hpGain          Int?   
