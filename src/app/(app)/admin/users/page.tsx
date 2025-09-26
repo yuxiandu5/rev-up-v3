@@ -21,6 +21,7 @@ export default function UsersPage() {
       setLoading(true);
 
       const res = await apiCall("/api/admin/users");
+      if (res.status === 403) throw new Error("You are no permission.");
       if (!res.ok) throw new Error(`Failed to fetch users: ${res.status}`);
 
       const json = await res.json();
@@ -79,6 +80,7 @@ export default function UsersPage() {
         method: "PATCH",
         body: JSON.stringify(statusBody),
       });
+
       if (!res.ok) throw new Error(`Failed to update user: ${res.status}`);
 
       await fetchUsers();
