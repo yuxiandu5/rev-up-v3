@@ -149,6 +149,70 @@ export function toModDTO(raw: {
   };
 }
 
+export const ModCompatibilityDTOSchema = z.object({
+  id: z.string(),
+  mod: z.string(),
+  carName: z.string(),
+  startYear: z.number().int(),
+  endYear: z.number().int().optional(),
+  badge: z.string(),
+  model: z.string(),
+  make: z.string(),
+  hpGain: z.number().int().optional(),
+  nmGain: z.number().int().optional(),
+  handlingDelta: z.number().int().optional(),
+  zeroToHundredDelta: z.number().int().optional(),
+  price: z.number().int().optional(),
+  notes: z.string().optional(),
+});
+
+export function toModCompatibilityDTO(raw: {
+  id: string,
+  mod: {
+    name: string,
+  },
+  modelYearRangeObj: {
+    startYear: number,
+    endYear: number | null,
+    badge: {
+      name: string,
+      model: {
+        name: string,
+        make: {
+          name: string,
+        },
+      },
+    },
+  },
+  hpGain: number | null,
+  nmGain: number | null,
+  handlingDelta: number | null,
+  zeroToHundredDelta: number | null,
+  price: number | null,
+  notes: string | null,
+}): ModCompatibilityResponseDTO {
+  return {
+    id: raw.id,
+    mod: raw.mod.name,
+    carName: raw.modelYearRangeObj.badge.model.make.name + " " + 
+          raw.modelYearRangeObj.badge.model.name + " " + 
+          raw.modelYearRangeObj.badge.name + " " +
+          raw.modelYearRangeObj.startYear + "-" + (raw.modelYearRangeObj.endYear ?? "present"),
+    startYear: raw.modelYearRangeObj.startYear,
+    endYear: raw.modelYearRangeObj.endYear ?? undefined,
+    badge: raw.modelYearRangeObj.badge.name,
+    model: raw.modelYearRangeObj.badge.model.name,
+    make: raw.modelYearRangeObj.badge.model.make.name,
+    hpGain: raw.hpGain ?? undefined,
+    nmGain: raw.nmGain ?? undefined,
+    handlingDelta: raw.handlingDelta ?? undefined,
+    zeroToHundredDelta: raw.zeroToHundredDelta ?? undefined,
+    price: raw.price ?? undefined,
+    notes: raw.notes ?? undefined,
+  };
+}
+
+export type ModCompatibilityResponseDTO = z.infer<typeof ModCompatibilityDTOSchema>;
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
 export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;

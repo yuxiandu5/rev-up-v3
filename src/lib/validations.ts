@@ -154,6 +154,7 @@ export const updateBuildSchema = z.object({
 export const PaginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(1000).default(500),
+  q: z.string().max(100).optional(),
 });
 
 export const UserFilterSchema = z.object({
