@@ -1,8 +1,12 @@
+-- CreateEnum
+CREATE TYPE "public"."Role" AS ENUM ('USER', 'ADMIN', 'MODERATOR');
+
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" TEXT NOT NULL,
     "userName" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
+    "role" "public"."Role" NOT NULL DEFAULT 'USER',
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "recoverQuestion" TEXT NOT NULL,
     "answer" TEXT NOT NULL,
@@ -67,7 +71,7 @@ CREATE TABLE "public"."ModelYearRange" (
     "chassis" TEXT,
     "hp" INTEGER NOT NULL,
     "torque" INTEGER NOT NULL,
-    "zeroToHundred" INTEGER,
+    "zeroToHundred" INTEGER NOT NULL,
     "handling" INTEGER NOT NULL,
 
     CONSTRAINT "ModelYearRange_pkey" PRIMARY KEY ("id")
@@ -100,11 +104,11 @@ CREATE TABLE "public"."Mod" (
 CREATE TABLE "public"."ModCompatibility" (
     "id" TEXT NOT NULL,
     "modId" TEXT NOT NULL,
+    "modelYearRangeId" TEXT NOT NULL,
     "badgeId" TEXT NOT NULL,
     "modelId" TEXT NOT NULL,
     "makeId" TEXT NOT NULL,
     "modelYearRange" TEXT NOT NULL,
-    "modelYearRangeId" TEXT NOT NULL,
     "hpGain" INTEGER,
     "nmGain" INTEGER,
     "handlingDelta" INTEGER,
@@ -118,7 +122,7 @@ CREATE TABLE "public"."ModCompatibility" (
 -- CreateTable
 CREATE TABLE "public"."ModRequirement" (
     "id" TEXT NOT NULL,
-    "prerequisiteId" TEXT NOT NULL,
+    "prerequisiteCategoryId" TEXT NOT NULL,
     "dependentId" TEXT NOT NULL,
 
     CONSTRAINT "ModRequirement_pkey" PRIMARY KEY ("id")
@@ -139,24 +143,15 @@ CREATE TABLE "public"."MediaAsset" (
 CREATE TABLE "public"."UserBuild" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "badgeId" TEXT NOT NULL,
-    "year" INTEGER NOT NULL,
+    "selectedCar" JSONB NOT NULL,
+    "baseSpecs" JSONB NOT NULL,
+    "selectedMods" JSONB NOT NULL,
     "nickname" TEXT,
     "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserBuild_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."UserBuildMod" (
-    "id" TEXT NOT NULL,
-    "buildId" TEXT NOT NULL,
-    "modId" TEXT NOT NULL,
-    "installedAt" TIMESTAMP(3),
-
-    CONSTRAINT "UserBuildMod_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -192,6 +187,12 @@ CREATE UNIQUE INDEX "ModCategory_slug_key" ON "public"."ModCategory"("slug");
 -- CreateIndex
 CREATE UNIQUE INDEX "Mod_slug_key" ON "public"."Mod"("slug");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "MediaAsset_modelYearRangeId_key" ON "public"."MediaAsset"("modelYearRangeId");
+
+-- CreateIndex
+CREATE INDEX "UserBuild_userId_idx" ON "public"."UserBuild"("userId");
+
 -- AddForeignKey
 ALTER TABLE "public"."RefreshToken" ADD CONSTRAINT "RefreshToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -211,7 +212,10 @@ ALTER TABLE "public"."Mod" ADD CONSTRAINT "Mod_modCategoryId_fkey" FOREIGN KEY (
 ALTER TABLE "public"."ModCompatibility" ADD CONSTRAINT "ModCompatibility_modId_fkey" FOREIGN KEY ("modId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_prerequisiteId_fkey" FOREIGN KEY ("prerequisiteId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."ModCompatibility" ADD CONSTRAINT "ModCompatibility_modelYearRangeId_fkey" FOREIGN KEY ("modelYearRangeId") REFERENCES "public"."ModelYearRange"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_prerequisiteCategoryId_fkey" FOREIGN KEY ("prerequisiteCategoryId") REFERENCES "public"."ModCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_dependentId_fkey" FOREIGN KEY ("dependentId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -220,13 +224,7 @@ ALTER TABLE "public"."ModRequirement" ADD CONSTRAINT "ModRequirement_dependentId
 ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_modId_fkey" FOREIGN KEY ("modId") REFERENCES "public"."Mod"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_modelYearRangeId_fkey" FOREIGN KEY ("modelYearRangeId") REFERENCES "public"."ModelYearRange"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."MediaAsset" ADD CONSTRAINT "MediaAsset_modelYearRangeId_fkey" FOREIGN KEY ("modelYearRangeId") REFERENCES "public"."ModelYearRange"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."UserBuild" ADD CONSTRAINT "UserBuild_badgeId_fkey" FOREIGN KEY ("badgeId") REFERENCES "public"."Badge"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."UserBuildMod" ADD CONSTRAINT "UserBuildMod_buildId_fkey" FOREIGN KEY ("buildId") REFERENCES "public"."UserBuild"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."UserBuildMod" ADD CONSTRAINT "UserBuildMod_modId_fkey" FOREIGN KEY ("modId") REFERENCES "public"."Mod"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."UserBuild" ADD CONSTRAINT "UserBuild_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
