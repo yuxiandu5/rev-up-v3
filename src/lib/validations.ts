@@ -272,6 +272,30 @@ export const ModUpdateSchema = z.object({
   description: z.string().optional(),
 }).strip();
 
+export const ModCompatibilityCreateSchema = z.object({
+  modId: z.string().cuid(),
+  modelYearRangeId: z.string().cuid(),
+  badgeId: z.string().cuid(),
+  modelId: z.string().cuid(),
+  makeId: z.string().cuid(),
+  modelYearRange: z.coerce.string(),
+  hpGain: z.coerce.number().int().min(0).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(0).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(0).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(0).max(100).optional(),
+  price: z.coerce.number().int().min(0).max(10000).optional(),
+  notes: z.string().optional(),
+});
+
+export const ModCompatibilityUpdateSchema = z.object({
+  hpGain: z.coerce.number().int().min(0).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(0).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(0).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(0).max(100).optional(),
+  price: z.coerce.number().int().min(0).max(10000).optional(),
+  notes: z.string().optional(),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
