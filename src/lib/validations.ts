@@ -336,3 +336,6 @@ export type UpdateModCategoryInput = z.infer<typeof ModCategoryUpdateSchema>;
 export type CreateModInput = z.infer<typeof ModCreateSchema>;
 export type UpdateModInput = z.infer<typeof ModUpdateSchema>;
 
+// mod compatibility
+export type CreateModCompatibilityInput = z.infer<typeof ModCompatibilityCreateSchema>;
+export type UpdateModCompatibilityInput = z.infer<typeof ModCompatibilityUpdateSchema>;

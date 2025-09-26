@@ -18,6 +18,7 @@ export default function DashboardSideNavBar() {
       <LinkButton href="/admin/year-ranges">YearRange</LinkButton>
       <LinkButton href="/admin/mod-categories">ModCategory</LinkButton>
       <LinkButton href="/admin/mods">Mod</LinkButton>
+      <LinkButton href="/admin/mod-compatibilities">ModCompatibility</LinkButton>
     </nav>
   );
 }
