@@ -171,6 +171,10 @@ export const IdSchema = z.object({
   id: z.string().cuid(),
 });
 
+export const ManyIdSchema = z.object({
+  ids: z.array(z.string().cuid()),
+});
+
 // AdminUserApi validation
 export const AdminToggleActiveSchema = z.object({
   isActive: z.union([z.boolean(), z.enum(["true", "false"]).transform((val) => val === "true")]),
@@ -279,19 +283,19 @@ export const ModCompatibilityCreateSchema = z.object({
   modelId: z.string().cuid(),
   makeId: z.string().cuid(),
   modelYearRange: z.coerce.string(),
-  hpGain: z.coerce.number().int().min(0).max(1000).optional(),
-  nmGain: z.coerce.number().int().min(0).max(1000).optional(),
-  handlingDelta: z.coerce.number().int().min(0).max(10).optional(),
-  zeroToHundredDelta: z.coerce.number().int().min(0).max(100).optional(),
+  hpGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(-10).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(-100).max(100).optional(),
   price: z.coerce.number().int().min(0).max(10000).optional(),
   notes: z.string().optional(),
 });
 
 export const ModCompatibilityUpdateSchema = z.object({
-  hpGain: z.coerce.number().int().min(0).max(1000).optional(),
-  nmGain: z.coerce.number().int().min(0).max(1000).optional(),
-  handlingDelta: z.coerce.number().int().min(0).max(10).optional(),
-  zeroToHundredDelta: z.coerce.number().int().min(0).max(100).optional(),
+  hpGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  nmGain: z.coerce.number().int().min(-1000).max(1000).optional(),
+  handlingDelta: z.coerce.number().int().min(-10).max(10).optional(),
+  zeroToHundredDelta: z.coerce.number().int().min(-100).max(100).optional(),
   price: z.coerce.number().int().min(0).max(10000).optional(),
   notes: z.string().optional(),
 });
