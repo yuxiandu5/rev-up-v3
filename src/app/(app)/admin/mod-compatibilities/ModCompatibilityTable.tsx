@@ -4,16 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { CreateModCompatibilityDialog } from "./CreateModCompatibilityDialog";
+import { useRef, useEffect } from "react";
 
 import {
   ColumnDef,
   ColumnFiltersState,
-  PaginationState,
   SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -37,29 +36,40 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { PaginationState } from "./page";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   fetchModCompatibilities: () => void;
+  pagination: PaginationState;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  searchQuery: string;
 }
 
 export function ModCompatibilityTable<TData, TValue>({
   columns,
   data,
   fetchModCompatibilities,
+  pagination,
+  setPagination,
+  setSearchQuery,
+  searchQuery
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -69,7 +79,6 @@ export function ModCompatibilityTable<TData, TValue>({
       columnFilters,
       pagination,
     },
-    onPaginationChange: setPagination,
   });
 
   return (
@@ -77,9 +86,10 @@ export function ModCompatibilityTable<TData, TValue>({
       {/* Search bar */}
       <div className="flex items-center py-4 justify-between">
         <Input
+          ref={inputRef}
           placeholder="Search car compatibilities..."
-          value={(table.getColumn("carInfo")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("carInfo")?.setFilterValue(event.target.value)}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
         />
         <CreateModCompatibilityDialog onSuccess={fetchModCompatibilities} />
@@ -131,7 +141,7 @@ export function ModCompatibilityTable<TData, TValue>({
           <span>Page</span>
           <span className="font-medium text-foreground">{pagination.pageIndex + 1}</span>
           <span>of</span>
-          <span className="font-medium text-foreground">{table.getPageCount()}</span>
+          <span className="font-medium text-foreground">{pagination.totalPages}</span>
           <Select
             value={String(pagination.pageSize)}
             onValueChange={(value) => {
@@ -162,8 +172,11 @@ export function ModCompatibilityTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => setPagination((prev) => ({
+              ...prev,
+              pageIndex: prev.pageIndex - 1
+            }))}
+            disabled={pagination.pageIndex === 0}
             className="mr-4"
           >
             Previous
@@ -171,8 +184,11 @@ export function ModCompatibilityTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => setPagination((prev) => ({
+              ...prev,
+              pageIndex: prev.pageIndex + 1,
+            }))}
+            disabled={(pagination.pageIndex + 1) === pagination.totalPages}
           >
             Next
           </Button>
