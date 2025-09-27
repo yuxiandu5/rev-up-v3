@@ -24,7 +24,6 @@ export async function GET(req: NextRequest) {
           },
         },
       },
-
     });
 
     const modsFormatted: ModResponseDTO[] = mods.map(toModDTO);

@@ -32,11 +32,11 @@ interface UpdateModCompatibilityDialogProps {
   setOpen: (open: boolean) => void;
 }
 
-export function UpdateModCompatibilityDialog({ 
-  fetchData, 
-  open, 
-  data, 
-  setOpen 
+export function UpdateModCompatibilityDialog({
+  fetchData,
+  open,
+  data,
+  setOpen,
 }: UpdateModCompatibilityDialogProps) {
   const [form, setForm] = useState<UpdateModCompatibilityInput>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,7 +59,7 @@ export function UpdateModCompatibilityDialog({
   }, [data]);
 
   const handleInputChange = (field: keyof UpdateModCompatibilityInput, value: string | number) => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       [field]: value === "" ? undefined : value,
     }));
@@ -92,14 +92,19 @@ export function UpdateModCompatibilityDialog({
     }
   };
 
-  const carInfo = data ? `${data.make} ${data.model} ${data.badge} (${data.startYear}${data.endYear ? `-${data.endYear}` : '+'})` : "";
+  const carInfo = data
+    ? `${data.make} ${data.model} ${data.badge} (${data.startYear}${data.endYear ? `-${data.endYear}` : "+"})`
+    : "";
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) {
-        setOpen(false);
-      }
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          setOpen(false);
+        }
+      }}
+    >
       <DialogContent className="sm:max-w-[500px]" onOpenAutoFocus={(e) => e.preventDefault()}>
         <form onSubmit={handleSave}>
           <DialogHeader>
@@ -128,7 +133,9 @@ export function UpdateModCompatibilityDialog({
                   type="number"
                   placeholder="e.g. 25"
                   value={form.hpGain || ""}
-                  onChange={(e) => handleInputChange("hpGain", e.target.value ? parseInt(e.target.value) : "")}
+                  onChange={(e) =>
+                    handleInputChange("hpGain", e.target.value ? parseInt(e.target.value) : "")
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -138,7 +145,9 @@ export function UpdateModCompatibilityDialog({
                   type="number"
                   placeholder="e.g. 40"
                   value={form.nmGain || ""}
-                  onChange={(e) => handleInputChange("nmGain", e.target.value ? parseInt(e.target.value) : "")}
+                  onChange={(e) =>
+                    handleInputChange("nmGain", e.target.value ? parseInt(e.target.value) : "")
+                  }
                 />
               </div>
             </div>
@@ -151,7 +160,12 @@ export function UpdateModCompatibilityDialog({
                   type="number"
                   placeholder="e.g. 2 or -1"
                   value={form.handlingDelta || ""}
-                  onChange={(e) => handleInputChange("handlingDelta", e.target.value ? parseInt(e.target.value) : "")}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "handlingDelta",
+                      e.target.value ? parseInt(e.target.value) : ""
+                    )
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -161,7 +175,12 @@ export function UpdateModCompatibilityDialog({
                   type="number"
                   placeholder="e.g. -5 (0.5s faster)"
                   value={form.zeroToHundredDelta || ""}
-                  onChange={(e) => handleInputChange("zeroToHundredDelta", e.target.value ? parseInt(e.target.value) : "")}
+                  onChange={(e) =>
+                    handleInputChange(
+                      "zeroToHundredDelta",
+                      e.target.value ? parseInt(e.target.value) : ""
+                    )
+                  }
                 />
               </div>
             </div>
@@ -173,7 +192,9 @@ export function UpdateModCompatibilityDialog({
                 type="number"
                 placeholder="e.g. 299"
                 value={form.price || ""}
-                onChange={(e) => handleInputChange("price", e.target.value ? parseInt(e.target.value) : "")}
+                onChange={(e) =>
+                  handleInputChange("price", e.target.value ? parseInt(e.target.value) : "")
+                }
               />
             </div>
 

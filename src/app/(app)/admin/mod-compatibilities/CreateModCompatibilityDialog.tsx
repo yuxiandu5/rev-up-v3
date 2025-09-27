@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuthStore } from "@/stores/authStore";
 
 interface CreateModCompatibilityDialogProps {
   onSuccess: () => void;
@@ -43,19 +44,19 @@ interface SelectedCar {
 }
 
 export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibilityDialogProps) {
-  const [form, setForm] = useState<CreateModCompatibilityInput>({ 
-    modId: "", 
-    modelYearRangeId: "", 
-    badgeId: "", 
-    modelId: "", 
-    makeId: "", 
-    modelYearRange: "", 
-    hpGain: 0, 
-    nmGain: 0, 
-    handlingDelta: 0, 
-    zeroToHundredDelta: 0, 
-    price: 0, 
-    notes: "" 
+  const [form, setForm] = useState<CreateModCompatibilityInput>({
+    modId: "",
+    modelYearRangeId: "",
+    badgeId: "",
+    modelId: "",
+    makeId: "",
+    modelYearRange: "",
+    hpGain: 0,
+    nmGain: 0,
+    handlingDelta: 0,
+    zeroToHundredDelta: 0,
+    price: 0,
+    notes: "",
   });
   const [mods, setMods] = useState<ModResponseDTO[]>([]);
   const [selectedCar, setSelectedCar] = useState<SelectedCar | null>(null);
@@ -63,6 +64,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   const [carDialogOpen, setCarDialogOpen] = useState<boolean>(false);
 
   const { apiCall } = useApiClient();
+  const { isInitialized } = useAuthStore();
 
   useEffect(() => {
     fetchMods();
@@ -71,6 +73,8 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   const fetchMods = async () => {
     try {
       setLoading(true);
+      if (!isInitialized) return;
+
       const res = await apiCall("/api/admin/mods");
       if (!res.ok) throw new Error(`Failed to fetch mods: ${res.status}`);
 
@@ -89,7 +93,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
 
   const handleCarSelected = (car: SelectedCar) => {
     setSelectedCar(car);
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       makeId: car.makeId,
       modelId: car.modelId,
@@ -100,7 +104,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   };
 
   const handleInputChange = (field: keyof CreateModCompatibilityInput, value: string | number) => {
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
       [field]: value === "" ? undefined : value,
     }));
@@ -108,7 +112,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!form.modId || !form.modelYearRangeId) {
       toast("Please select both a car and a mod");
       return;
@@ -138,19 +142,19 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   };
 
   const resetForm = () => {
-    setForm({ 
-      modId: "", 
-      modelYearRangeId: "", 
-      badgeId: "", 
-      modelId: "", 
-      makeId: "", 
-      modelYearRange: "", 
-      hpGain: 0, 
-      nmGain: 0, 
-      handlingDelta: 0, 
-      zeroToHundredDelta: 0, 
-      price: 0, 
-      notes: "" 
+    setForm({
+      modId: "",
+      modelYearRangeId: "",
+      badgeId: "",
+      modelId: "",
+      makeId: "",
+      modelYearRange: "",
+      hpGain: 0,
+      nmGain: 0,
+      handlingDelta: 0,
+      zeroToHundredDelta: 0,
+      price: 0,
+      notes: "",
     });
     setSelectedCar(null);
   };
@@ -169,26 +173,32 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                 Select a car configuration and mod, then set performance data.
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="grid gap-6 mt-4">
               {/* Car Selection Section */}
               <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
                 <div className="flex items-center justify-between">
                   <h3 className="font-medium text-sm">Car Selection</h3>
-                  <Button 
+                  <Button
                     type="button"
-                    variant="outline" 
+                    variant="outline"
                     size="sm"
                     onClick={() => setCarDialogOpen(true)}
                   >
                     {selectedCar ? "Change Car" : "Select Car"}
                   </Button>
                 </div>
-                
+
                 {selectedCar ? (
                   <div className="p-3 bg-secondary/20 border border-secondary rounded-md">
                     <p className="text-sm text-secondary-foreground">
-                      Selected: <strong className="text-foreground">{selectedCar.makeName} {selectedCar.modelName} {selectedCar.badgeName}</strong> <span className="text-muted-foreground">({selectedCar.yearRangeDisplay})</span>
+                      Selected:{" "}
+                      <strong className="text-foreground">
+                        {selectedCar.makeName} {selectedCar.modelName} {selectedCar.badgeName}
+                      </strong>{" "}
+                      <span className="text-muted-foreground">
+                        ({selectedCar.yearRangeDisplay})
+                      </span>
                     </p>
                   </div>
                 ) : (
@@ -199,16 +209,17 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
               {/* Mod Selection */}
               <div className="grid gap-2">
                 <Label htmlFor="mod">Mod</Label>
-                <Select 
-                  onValueChange={(value) => handleInputChange("modId", value)} 
-                  value={form.modId} 
+                <Select
+                  onValueChange={(value) => handleInputChange("modId", value)}
+                  value={form.modId}
                   disabled={!selectedCar}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder={
-                      loading ? "Loading..." : 
-                      !selectedCar ? "Select car first" : "Select mod"
-                    } />
+                    <SelectValue
+                      placeholder={
+                        loading ? "Loading..." : !selectedCar ? "Select car first" : "Select mod"
+                      }
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -226,7 +237,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
               {form.modId && (
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/20">
                   <h3 className="font-medium text-sm">Performance Data</h3>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
                       <Label htmlFor="hpGain">HP Gain</Label>
@@ -235,7 +246,12 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                         type="number"
                         placeholder="e.g. 25"
                         value={form.hpGain || ""}
-                        onChange={(e) => handleInputChange("hpGain", e.target.value ? parseInt(e.target.value) : "")}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "hpGain",
+                            e.target.value ? parseInt(e.target.value) : ""
+                          )
+                        }
                       />
                     </div>
                     <div className="grid gap-2">
@@ -245,7 +261,12 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                         type="number"
                         placeholder="e.g. 40"
                         value={form.nmGain || ""}
-                        onChange={(e) => handleInputChange("nmGain", e.target.value ? parseInt(e.target.value) : "")}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "nmGain",
+                            e.target.value ? parseInt(e.target.value) : ""
+                          )
+                        }
                       />
                     </div>
                     <div className="grid gap-2">
@@ -255,7 +276,12 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                         type="number"
                         placeholder="e.g. 2 or -1"
                         value={form.handlingDelta || ""}
-                        onChange={(e) => handleInputChange("handlingDelta", e.target.value ? parseInt(e.target.value) : "")}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "handlingDelta",
+                            e.target.value ? parseInt(e.target.value) : ""
+                          )
+                        }
                       />
                     </div>
                     <div className="grid gap-2">
@@ -265,7 +291,12 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                         type="number"
                         placeholder="e.g. -5 (0.5s faster)"
                         value={form.zeroToHundredDelta || ""}
-                        onChange={(e) => handleInputChange("zeroToHundredDelta", e.target.value ? parseInt(e.target.value) : "")}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "zeroToHundredDelta",
+                            e.target.value ? parseInt(e.target.value) : ""
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -277,7 +308,9 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
                       type="number"
                       placeholder="e.g. 299"
                       value={form.price || ""}
-                      onChange={(e) => handleInputChange("price", e.target.value ? parseInt(e.target.value) : "")}
+                      onChange={(e) =>
+                        handleInputChange("price", e.target.value ? parseInt(e.target.value) : "")
+                      }
                     />
                   </div>
 
@@ -296,10 +329,12 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
 
             <DialogFooter className="mt-6">
               <DialogClose asChild>
-                <Button variant="outline" onClick={resetForm}>Cancel</Button>
+                <Button variant="outline" onClick={resetForm}>
+                  Cancel
+                </Button>
               </DialogClose>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="min-w-24"
                 disabled={!form.modId || !form.modelYearRangeId || loading}
               >

@@ -269,12 +269,14 @@ export const ModCreateSchema = z.object({
   modCategoryId: z.string().cuid(),
 });
 
-export const ModUpdateSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  brand: z.string().min(1).max(100).optional(),
-  category: z.string().min(1).max(100).optional(),
-  description: z.string().optional(),
-}).strip();
+export const ModUpdateSchema = z
+  .object({
+    name: z.string().min(1).max(100).optional(),
+    brand: z.string().min(1).max(100).optional(),
+    category: z.string().min(1).max(100).optional(),
+    description: z.string().optional(),
+  })
+  .strip();
 
 export const ModCompatibilityCreateSchema = z.object({
   modId: z.string().cuid(),

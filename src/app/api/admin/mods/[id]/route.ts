@@ -34,7 +34,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
-    
+
     const { id } = IdSchema.parse(await context.params);
     const mod = await prisma.mod.findUnique({
       where: { id },

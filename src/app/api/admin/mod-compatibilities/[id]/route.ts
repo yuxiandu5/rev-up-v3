@@ -16,7 +16,8 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
     if (!existing) throw new NotFoundError("Mod compatibility not found");
 
     const body = await req.json();
-    const { hpGain, nmGain, handlingDelta, zeroToHundredDelta, price, notes } = ModCompatibilityUpdateSchema.parse(body);
+    const { hpGain, nmGain, handlingDelta, zeroToHundredDelta, price, notes } =
+      ModCompatibilityUpdateSchema.parse(body);
 
     const result = await prisma.modCompatibility.update({
       where: { id },

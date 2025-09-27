@@ -24,8 +24,16 @@ interface UpdateModCategoryDialogProps {
   setOpen: (open: boolean) => void;
 }
 
-export function UpdateModCategoryDialog({ fetchData, open, data, setOpen }: UpdateModCategoryDialogProps) {
-  const [form, setForm] = useState<UpdateModCategoryInput>({ name: data?.name, description: data?.description });
+export function UpdateModCategoryDialog({
+  fetchData,
+  open,
+  data,
+  setOpen,
+}: UpdateModCategoryDialogProps) {
+  const [form, setForm] = useState<UpdateModCategoryInput>({
+    name: data?.name,
+    description: data?.description,
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   const { apiCall } = useApiClient();
@@ -71,12 +79,15 @@ export function UpdateModCategoryDialog({ fetchData, open, data, setOpen }: Upda
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) {
-        setOpen(false);
-      }
-    }}>
-      <DialogContent className="sm:max-w-[425px]"  onOpenAutoFocus={(e) => e.preventDefault()}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          setOpen(false);
+        }
+      }}
+    >
+      <DialogContent className="sm:max-w-[425px]" onOpenAutoFocus={(e) => e.preventDefault()}>
         <form onSubmit={handleSave}>
           <DialogHeader>
             <DialogTitle>Update Mod Category</DialogTitle>
@@ -91,7 +102,12 @@ export function UpdateModCategoryDialog({ fetchData, open, data, setOpen }: Upda
             </div>
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <Input id="description" name="description" onChange={handleChange} value={form.description ?? ""} />
+              <Input
+                id="description"
+                name="description"
+                onChange={handleChange}
+                value={form.description ?? ""}
+              />
             </div>
           </div>
           <DialogFooter className="mt-6">

@@ -69,7 +69,10 @@ export const userColumns = (
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => (
-      <div className="max-w-24 truncate text-center font-medium" title={row.getValue("role") as string}>
+      <div
+        className="max-w-24 truncate text-center font-medium"
+        title={row.getValue("role") as string}
+      >
         {row.getValue("role")}
       </div>
     ),
@@ -112,7 +115,12 @@ export const userColumns = (
 
       return (
         <div className="flex gap-2 min-w-fit">
-          <Button size="sm" variant="destructive" onClick={() => onDelete(user.id)} className="px-3">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(user.id)}
+            className="px-3"
+          >
             Delete
           </Button>
         </div>
