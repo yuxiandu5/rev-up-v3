@@ -93,7 +93,12 @@ export default function ModCategoriesPage() {
           fetchModCategories={fetchModCategories}
         />
       </div>
-      <UpdateModCategoryDialog fetchData={fetchModCategories} open={openEditDialog} data={editData} setOpen={setOpenEditDialog} />
+      <UpdateModCategoryDialog
+        fetchData={fetchModCategories}
+        open={openEditDialog}
+        data={editData}
+        setOpen={setOpenEditDialog}
+      />
     </section>
   );
 }

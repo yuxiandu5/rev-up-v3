@@ -120,7 +120,10 @@ export const yearRangeColumns = ({
     cell: ({ row }) => (
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="max-w-32 truncate cursor-help font-mono text-xs" title={row.original.mediaAsset}>
+          <div
+            className="max-w-32 truncate cursor-help font-mono text-xs"
+            title={row.original.mediaAsset}
+          >
             {row.original.mediaAsset}
           </div>
         </TooltipTrigger>

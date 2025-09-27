@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { LoadingSpinner } from "@/components/ui/Loading";
 import {
   Dialog,
   DialogClose,
@@ -24,7 +23,12 @@ import {
 import { useState, useEffect } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { BadgeResponseDTO, MakeItemListDTO, ModelResponseDTO, YearRangeResponseDTO } from "@/types/AdminDashboardDTO";
+import {
+  BadgeResponseDTO,
+  MakeItemListDTO,
+  ModelResponseDTO,
+  YearRangeResponseDTO,
+} from "@/types/AdminDashboardDTO";
 
 interface SelectedCar {
   makeId: string;
@@ -44,11 +48,11 @@ interface CarSelectDialogProps {
   triggerButton?: React.ReactNode;
 }
 
-export function CarSelectDialog({ 
-  open, 
-  onOpenChange, 
+export function CarSelectDialog({
+  open,
+  onOpenChange,
   onCarSelected,
-  triggerButton 
+  triggerButton,
 }: CarSelectDialogProps) {
   const [makeData, setMakeData] = useState<MakeItemListDTO[]>([]);
   const [modelData, setModelData] = useState<ModelResponseDTO[]>([]);
@@ -79,7 +83,7 @@ export function CarSelectDialog({
   }, [open]);
 
   const fetchMakes = async () => {
-    setLoadingStates(prev => ({ ...prev, makes: true }));
+    setLoadingStates((prev) => ({ ...prev, makes: true }));
     try {
       const res = await apiCall("/api/car");
       if (!res.ok) throw new Error(`Failed to fetch makes: ${res.status}`);
@@ -93,12 +97,12 @@ export function CarSelectDialog({
         toast("Unknown error occurred");
       }
     } finally {
-      setLoadingStates(prev => ({ ...prev, makes: false }));
+      setLoadingStates((prev) => ({ ...prev, makes: false }));
     }
   };
 
   const fetchModels = async (makeId: string) => {
-    setLoadingStates(prev => ({ ...prev, models: true }));
+    setLoadingStates((prev) => ({ ...prev, models: true }));
     try {
       const res = await apiCall(`/api/car?makeId=${makeId}`);
       if (!res.ok) throw new Error(`Failed to fetch models: ${res.status}`);
@@ -112,12 +116,12 @@ export function CarSelectDialog({
         toast("Unknown error occurred");
       }
     } finally {
-      setLoadingStates(prev => ({ ...prev, models: false }));
+      setLoadingStates((prev) => ({ ...prev, models: false }));
     }
   };
 
   const fetchBadges = async (modelId: string) => {
-    setLoadingStates(prev => ({ ...prev, badges: true }));
+    setLoadingStates((prev) => ({ ...prev, badges: true }));
     try {
       const res = await apiCall(`/api/car?modelId=${modelId}`);
       if (!res.ok) throw new Error(`Failed to fetch badges: ${res.status}`);
@@ -131,12 +135,12 @@ export function CarSelectDialog({
         toast("Unknown error occurred");
       }
     } finally {
-      setLoadingStates(prev => ({ ...prev, badges: false }));
+      setLoadingStates((prev) => ({ ...prev, badges: false }));
     }
   };
 
   const fetchYearRanges = async (badgeId: string) => {
-    setLoadingStates(prev => ({ ...prev, yearRanges: true }));
+    setLoadingStates((prev) => ({ ...prev, yearRanges: true }));
     try {
       const res = await apiCall(`/api/car?badgeId=${badgeId}`);
       if (!res.ok) throw new Error(`Failed to fetch year ranges: ${res.status}`);
@@ -150,12 +154,12 @@ export function CarSelectDialog({
         toast("Unknown error occurred");
       }
     } finally {
-      setLoadingStates(prev => ({ ...prev, yearRanges: false }));
+      setLoadingStates((prev) => ({ ...prev, yearRanges: false }));
     }
   };
 
   const handleMakeSelect = (makeId: string) => {
-    const make = makeData.find(m => m.id === makeId);
+    const make = makeData.find((m) => m.id === makeId);
     if (!make) return;
 
     setSelectedMake(make);
@@ -170,7 +174,7 @@ export function CarSelectDialog({
   };
 
   const handleModelSelect = (modelId: string) => {
-    const model = modelData.find(m => m.id === modelId);
+    const model = modelData.find((m) => m.id === modelId);
     if (!model) return;
 
     setSelectedModel(model);
@@ -183,7 +187,7 @@ export function CarSelectDialog({
   };
 
   const handleBadgeSelect = (badgeId: string) => {
-    const badge = badgeData.find(b => b.id === badgeId);
+    const badge = badgeData.find((b) => b.id === badgeId);
     if (!badge) return;
 
     setSelectedBadge(badge);
@@ -194,7 +198,7 @@ export function CarSelectDialog({
   };
 
   const handleYearRangeSelect = (yearRangeId: string) => {
-    const yearRange = yearRangeData.find(yr => yr.id === yearRangeId);
+    const yearRange = yearRangeData.find((yr) => yr.id === yearRangeId);
     if (!yearRange) return;
 
     setSelectedYearRange(yearRange);
@@ -214,7 +218,7 @@ export function CarSelectDialog({
       badgeId: selectedBadge.id,
       badgeName: selectedBadge.name,
       yearRangeId: selectedYearRange.id,
-      yearRangeDisplay: selectedYearRange.endYear 
+      yearRangeDisplay: selectedYearRange.endYear
         ? `${selectedYearRange.startYear}-${selectedYearRange.endYear}`
         : `${selectedYearRange.startYear}+`,
     };
@@ -246,11 +250,7 @@ export function CarSelectDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      {triggerButton && (
-        <DialogTrigger asChild>
-          {triggerButton}
-        </DialogTrigger>
-      )}
+      {triggerButton && <DialogTrigger asChild>{triggerButton}</DialogTrigger>}
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Select Car Configuration</DialogTitle>
@@ -265,8 +265,8 @@ export function CarSelectDialog({
             {/* Make Selection */}
             <div className="grid gap-2">
               <Label htmlFor="make">Make</Label>
-              <Select 
-                onValueChange={handleMakeSelect} 
+              <Select
+                onValueChange={handleMakeSelect}
                 value={selectedMake?.id || ""}
                 disabled={loadingStates.makes}
               >
@@ -288,16 +288,21 @@ export function CarSelectDialog({
             {/* Model Selection */}
             <div className="grid gap-2">
               <Label htmlFor="model">Model</Label>
-              <Select 
-                onValueChange={handleModelSelect} 
-                value={selectedModel?.id || ""} 
+              <Select
+                onValueChange={handleModelSelect}
+                value={selectedModel?.id || ""}
                 disabled={!selectedMake || loadingStates.models}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={
-                    loadingStates.models ? "Loading..." : 
-                    !selectedMake ? "Select make first" : "Select model"
-                  } />
+                  <SelectValue
+                    placeholder={
+                      loadingStates.models
+                        ? "Loading..."
+                        : !selectedMake
+                          ? "Select make first"
+                          : "Select model"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -314,16 +319,21 @@ export function CarSelectDialog({
             {/* Badge Selection */}
             <div className="grid gap-2">
               <Label htmlFor="badge">Badge</Label>
-              <Select 
-                onValueChange={handleBadgeSelect} 
-                value={selectedBadge?.id || ""} 
+              <Select
+                onValueChange={handleBadgeSelect}
+                value={selectedBadge?.id || ""}
                 disabled={!selectedModel || loadingStates.badges}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={
-                    loadingStates.badges ? "Loading..." : 
-                    !selectedModel ? "Select model first" : "Select badge"
-                  } />
+                  <SelectValue
+                    placeholder={
+                      loadingStates.badges
+                        ? "Loading..."
+                        : !selectedModel
+                          ? "Select model first"
+                          : "Select badge"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -340,22 +350,29 @@ export function CarSelectDialog({
             {/* Year Range Selection */}
             <div className="grid gap-2">
               <Label htmlFor="yearRange">Year Range</Label>
-              <Select 
-                onValueChange={handleYearRangeSelect} 
-                value={selectedYearRange?.id || ""} 
+              <Select
+                onValueChange={handleYearRangeSelect}
+                value={selectedYearRange?.id || ""}
                 disabled={!selectedBadge || loadingStates.yearRanges}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={
-                    loadingStates.yearRanges ? "Loading..." : 
-                    !selectedBadge ? "Select badge first" : "Select year range"
-                  } />
+                  <SelectValue
+                    placeholder={
+                      loadingStates.yearRanges
+                        ? "Loading..."
+                        : !selectedBadge
+                          ? "Select badge first"
+                          : "Select year range"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {yearRangeData.map((yearRange) => (
                       <SelectItem key={yearRange.id} value={yearRange.id}>
-                        {yearRange.endYear ? `${yearRange.startYear}-${yearRange.endYear}` : `${yearRange.startYear}+`}
+                        {yearRange.endYear
+                          ? `${yearRange.startYear}-${yearRange.endYear}`
+                          : `${yearRange.startYear}+`}
                         {yearRange.chassis && ` (${yearRange.chassis})`}
                       </SelectItem>
                     ))}
@@ -371,9 +388,15 @@ export function CarSelectDialog({
               <div className="space-y-1">
                 <p className="text-sm font-medium text-secondary-foreground">Selected Car:</p>
                 <p className="text-sm text-secondary-foreground">
-                  <strong className="text-foreground">{selectedMake.name} {selectedModel.name} {selectedBadge.name}</strong>
+                  <strong className="text-foreground">
+                    {selectedMake.name} {selectedModel.name} {selectedBadge.name}
+                  </strong>
                   <span className="ml-2 text-muted-foreground">
-                    ({selectedYearRange.endYear ? `${selectedYearRange.startYear}-${selectedYearRange.endYear}` : `${selectedYearRange.startYear}+`})
+                    (
+                    {selectedYearRange.endYear
+                      ? `${selectedYearRange.startYear}-${selectedYearRange.endYear}`
+                      : `${selectedYearRange.startYear}+`}
+                    )
                   </span>
                 </p>
               </div>
@@ -385,11 +408,7 @@ export function CarSelectDialog({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button 
-            onClick={handleConfirm}
-            disabled={!isSelectionComplete}
-            className="min-w-24"
-          >
+          <Button onClick={handleConfirm} disabled={!isSelectionComplete} className="min-w-24">
             Confirm Selection
           </Button>
         </DialogFooter>

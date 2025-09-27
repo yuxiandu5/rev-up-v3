@@ -29,11 +29,7 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div title={row.original.make}>
-        {row.original.make}
-      </div>
-    ),
+    cell: ({ row }) => <div title={row.original.make}>{row.original.make}</div>,
   },
   {
     accessorKey: "name",
@@ -78,7 +74,12 @@ export const modelColumns = (onDelete: (id: string) => void): ColumnDef<ModelRes
 
       return (
         <div className="flex gap-2 min-w-fit">
-          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(data.id)}
+            className="px-3"
+          >
             Delete
           </Button>
         </div>

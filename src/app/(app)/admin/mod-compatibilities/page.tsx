@@ -18,7 +18,9 @@ export interface PaginationState {
 }
 
 export default function ModCompatibilitiesPage() {
-  const [modCompatibilityData, setModCompatibilityData] = useState<ModCompatibilityResponseDTO[]>([]);
+  const [modCompatibilityData, setModCompatibilityData] = useState<ModCompatibilityResponseDTO[]>(
+    []
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
   const [editData, setEditData] = useState<ModCompatibilityResponseDTO | null>(null);
@@ -37,7 +39,9 @@ export default function ModCompatibilitiesPage() {
     try {
       setLoading(true);
 
-      const res = await apiCall(`/api/admin/mod-compatibilities?page=${pagination.pageIndex + 1}&pageSize=${pagination.pageSize}&q=${debouncedSearchQuery}`);
+      const res = await apiCall(
+        `/api/admin/mod-compatibilities?page=${pagination.pageIndex + 1}&pageSize=${pagination.pageSize}&q=${debouncedSearchQuery}`
+      );
       if (!res.ok) throw new Error(`Failed to fetch mod compatibilities: ${res.status}`);
 
       const data = await res.json();
@@ -56,7 +60,7 @@ export default function ModCompatibilitiesPage() {
 
   // Reset to first page when search query changes
   useEffect(() => {
-    setPagination(prev => ({ ...prev, pageIndex: 0 }));
+    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export default function ModCompatibilitiesPage() {
         method: "DELETE",
         body: JSON.stringify({ ids }),
       });
-      
+
       if (!res.ok) throw new Error(`Failed to delete mod compatibilities: ${res.status}`);
 
       const result = await res.json();
@@ -106,20 +110,23 @@ export default function ModCompatibilitiesPage() {
     <section className="w-full h-full flex justify-center items-center">
       <div className="w-[95%] h-full">
         <ModCompatibilityTable
-          columns={modCompatibilityColumns(handleModCompatibilityDelete, handleModCompatibilityEdit)}
+          columns={modCompatibilityColumns(
+            handleModCompatibilityDelete,
+            handleModCompatibilityEdit
+          )}
           data={modCompatibilityData}
           fetchModCompatibilities={fetchModCompatibilities}
-          pagination={{...pagination, totalPages}}
+          pagination={{ ...pagination, totalPages }}
           setPagination={setPagination}
           setSearchQuery={setSearchQuery}
           searchQuery={searchQuery}
         />
       </div>
-      <UpdateModCompatibilityDialog 
-        fetchData={fetchModCompatibilities} 
-        open={openEditDialog} 
-        data={editData} 
-        setOpen={setOpenEditDialog} 
+      <UpdateModCompatibilityDialog
+        fetchData={fetchModCompatibilities}
+        open={openEditDialog}
+        data={editData}
+        setOpen={setOpenEditDialog}
       />
     </section>
   );

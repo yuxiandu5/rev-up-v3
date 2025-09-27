@@ -148,7 +148,7 @@ export function YearRangeDialog({ onSuccess }: YearRangeDialogProps) {
 
   return (
     <Dialog onOpenChange={(isOpen) => !isOpen && setOpenDialog(false)} open={open}>
-      <DialogContent className="sm:max-w-[425px]"  onOpenAutoFocus={(e) => e.preventDefault()}>
+      <DialogContent className="sm:max-w-[425px]" onOpenAutoFocus={(e) => e.preventDefault()}>
         <form onSubmit={handleSave}>
           <DialogHeader>
             <DialogTitle>{isEdit ? "Update YearRange" : "Add YearRange"}</DialogTitle>

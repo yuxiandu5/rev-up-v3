@@ -32,7 +32,13 @@ interface ModDialogProps {
 }
 
 export function ModDialog({ onSuccess }: ModDialogProps) {
-  const [form, setForm] = useState<CreateModInput>({ name: "", brand: "", category: "", modCategoryId: "", description: "" });
+  const [form, setForm] = useState<CreateModInput>({
+    name: "",
+    brand: "",
+    category: "",
+    modCategoryId: "",
+    description: "",
+  });
   const [modCategoryData, setModCategoryData] = useState<ModCategoryResponseDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 

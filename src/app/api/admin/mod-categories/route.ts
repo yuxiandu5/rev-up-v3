@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
         description: true,
         mods: {
           select: {
-          name: true,
+            name: true,
           },
         },
       },

@@ -6,17 +6,16 @@ import { IdSchema, ModCategoryUpdateSchema } from "@/lib/validations";
 import { ConflictError, NotFoundError } from "@/lib/errors/AppError";
 import { toSlug } from "@/lib/utils";
 
-
 export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
 
     const { id } = IdSchema.parse(await context.params);
-    const existing =  await prisma.modCategory.findUnique({
+    const existing = await prisma.modCategory.findUnique({
       where: { id },
     });
     if (!existing) throw new NotFoundError("Mod category not found");
-    
+
     const body = await req.json();
     const { name, description } = ModCategoryUpdateSchema.parse(body);
 
@@ -44,8 +43,9 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
       },
     });
     if (!modCategory) throw new NotFoundError("Mod category not found");
-    if (modCategory.mods.length > 0) throw new ConflictError("You cannot delete a mod category while it still has mods assigned.");
-    
+    if (modCategory.mods.length > 0)
+      throw new ConflictError("You cannot delete a mod category while it still has mods assigned.");
+
     const res = await prisma.modCategory.delete({
       where: { id },
     });

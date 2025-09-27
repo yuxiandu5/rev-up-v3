@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown } from "lucide-react";
 
 export const modCompatibilityColumns = (
-  onDelete: (ids: string[]) => void, 
+  onDelete: (ids: string[]) => void,
   onEdit: (id: string) => void
 ): ColumnDef<ModCompatibilityResponseDTO>[] => [
   {
@@ -52,18 +52,14 @@ export const modCompatibilityColumns = (
       );
     },
     cell: ({ row }) => {
-      return (
-        <div className="max-w-xs">
-          {row.original.carName}
-        </div>
-      );
+      return <div className="max-w-xs">{row.original.carName}</div>;
     },
   },
   {
     accessorKey: "performance",
     header: "Performance",
     cell: ({ row }) => {
-      const { hpGain, nmGain, handlingDelta, zeroToHundredDelta } = row.original;    
+      const { hpGain, nmGain, handlingDelta, zeroToHundredDelta } = row.original;
       return (
         <div className="flex flex-wrap gap-1 max-w-xs">
           {hpGain && (
@@ -78,12 +74,14 @@ export const modCompatibilityColumns = (
           )}
           {handlingDelta && (
             <Badge variant="secondary" className="text-xs px-2 py-1">
-              H{handlingDelta > 0 ? '+' : ''}{handlingDelta}
+              H{handlingDelta > 0 ? "+" : ""}
+              {handlingDelta}
             </Badge>
           )}
-          {zeroToHundredDelta !== 0 && zeroToHundredDelta !== undefined && ( 
+          {zeroToHundredDelta !== 0 && zeroToHundredDelta !== undefined && (
             <Badge variant="secondary" className="text-xs px-2 py-1">
-              {zeroToHundredDelta > 0 ? '+' : ''}{(zeroToHundredDelta / 10).toFixed(1)}s
+              {zeroToHundredDelta > 0 ? "+" : ""}
+              {(zeroToHundredDelta / 10).toFixed(1)}s
             </Badge>
           )}
         </div>
@@ -106,9 +104,7 @@ export const modCompatibilityColumns = (
     cell: ({ row }) => {
       const price = row.original.price;
       return price ? (
-        <div className="font-medium">
-          ${price.toLocaleString()}
-        </div>
+        <div className="font-medium">${price.toLocaleString()}</div>
       ) : (
         <div className="text-muted-foreground text-sm">N/A</div>
       );
@@ -134,7 +130,12 @@ export const modCompatibilityColumns = (
           <Button size="sm" variant="outline" onClick={() => onEdit(data.id)} className="px-3">
             Edit
           </Button>
-          <Button size="sm" variant="destructive" onClick={() => onDelete([data.id])} className="px-3">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete([data.id])}
+            className="px-3"
+          >
             Delete
           </Button>
         </div>

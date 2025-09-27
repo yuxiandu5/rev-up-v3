@@ -93,7 +93,12 @@ export default function ModPage() {
           fetchMods={fetchMods}
         />
       </div>
-      <ModUpdateDialog fetchData={fetchMods} open={openUpdateDialog} data={updateData} setOpen={setOpenUpdateDialog} />
+      <ModUpdateDialog
+        fetchData={fetchMods}
+        open={openUpdateDialog}
+        data={updateData}
+        setOpen={setOpenUpdateDialog}
+      />
     </section>
   );
 }

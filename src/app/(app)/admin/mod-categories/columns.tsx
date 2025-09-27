@@ -6,7 +6,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown } from "lucide-react";
 
-export const modCategoryColumns = (onDelete: (id: string) => void, onEdit: (id: string) => void): ColumnDef<ModCategoryResponseDTO>[] => [
+export const modCategoryColumns = (
+  onDelete: (id: string) => void,
+  onEdit: (id: string) => void
+): ColumnDef<ModCategoryResponseDTO>[] => [
   {
     accessorKey: "id",
     header: "ID",
@@ -68,7 +71,12 @@ export const modCategoryColumns = (onDelete: (id: string) => void, onEdit: (id: 
           <Button size="sm" variant="outline" onClick={() => onEdit(data.id)} className="px-3">
             Edit
           </Button>
-          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(data.id)}
+            className="px-3"
+          >
             Delete
           </Button>
         </div>

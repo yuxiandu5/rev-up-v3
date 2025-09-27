@@ -55,11 +55,11 @@ export function ModCompatibilityTable<TData, TValue>({
   pagination,
   setPagination,
   setSearchQuery,
-  searchQuery
+  searchQuery,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -172,10 +172,12 @@ export function ModCompatibilityTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setPagination((prev) => ({
-              ...prev,
-              pageIndex: prev.pageIndex - 1
-            }))}
+            onClick={() =>
+              setPagination((prev) => ({
+                ...prev,
+                pageIndex: prev.pageIndex - 1,
+              }))
+            }
             disabled={pagination.pageIndex === 0}
             className="mr-4"
           >
@@ -184,11 +186,13 @@ export function ModCompatibilityTable<TData, TValue>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setPagination((prev) => ({
-              ...prev,
-              pageIndex: prev.pageIndex + 1,
-            }))}
-            disabled={(pagination.pageIndex + 1) === pagination.totalPages}
+            onClick={() =>
+              setPagination((prev) => ({
+                ...prev,
+                pageIndex: prev.pageIndex + 1,
+              }))
+            }
+            disabled={pagination.pageIndex + 1 === pagination.totalPages}
           >
             Next
           </Button>

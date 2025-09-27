@@ -5,7 +5,10 @@ import { ModResponseDTO } from "@/types/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-export const modColumns = (onDelete: (id: string) => void, onEdit: (id: string) => void): ColumnDef<ModResponseDTO>[] => [
+export const modColumns = (
+  onDelete: (id: string) => void,
+  onEdit: (id: string) => void
+): ColumnDef<ModResponseDTO>[] => [
   {
     accessorKey: "id",
     header: "ID",
@@ -28,11 +31,7 @@ export const modColumns = (onDelete: (id: string) => void, onEdit: (id: string) 
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div title={row.original.name}>
-        {row.original.name}
-      </div>
-    ),
+    cell: ({ row }) => <div title={row.original.name}>{row.original.name}</div>,
   },
   {
     accessorKey: "brand",
@@ -87,7 +86,12 @@ export const modColumns = (onDelete: (id: string) => void, onEdit: (id: string) 
           <Button size="sm" variant="outline" onClick={() => onEdit(data.id)} className="px-3">
             Edit
           </Button>
-          <Button size="sm" variant="destructive" onClick={() => onDelete(data.id)} className="px-3">
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={() => onDelete(data.id)}
+            className="px-3"
+          >
             Delete
           </Button>
         </div>

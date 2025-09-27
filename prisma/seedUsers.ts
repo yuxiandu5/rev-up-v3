@@ -64,7 +64,7 @@ async function main() {
     const randomRole = roles[Math.floor(Math.random() * roles.length)];
     const isActive = Math.random() > 0.2; // 80% chance of being active
     const hasLoggedIn = Math.random() > 0.3; // 70% chance of having logged in
-    
+
     const user = await prisma.user.upsert({
       where: {
         userName: pattern,
@@ -77,10 +77,12 @@ async function main() {
         recoverQuestion: pattern,
         answer: pattern,
         isActive: isActive,
-        lastLoginAt: hasLoggedIn ? new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000) : null, // Random date within last 30 days or null
+        lastLoginAt: hasLoggedIn
+          ? new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000)
+          : null, // Random date within last 30 days or null
       },
     });
-    
+
     users.push(user);
   }
 

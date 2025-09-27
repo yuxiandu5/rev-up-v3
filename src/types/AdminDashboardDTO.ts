@@ -109,10 +109,10 @@ export const ModCategoryDTOSchema = z.object({
 });
 
 export function toModCategoryDTO(value: {
-  id: string,
-  name: string,
-  description: string | null,
-  mods: { name: string }[],
+  id: string;
+  name: string;
+  description: string | null;
+  mods: { name: string }[];
 }): ModCategoryResponseDTO {
   return {
     id: value.id,
@@ -132,12 +132,12 @@ export const ModDTOSchema = z.object({
 });
 
 export function toModDTO(raw: {
-  id: string,
-  name: string,
-  brand: string,
-  description: string | null,
-  category: string,
-  compatibilities: {id: string }[],
+  id: string;
+  name: string;
+  brand: string;
+  description: string | null;
+  category: string;
+  compatibilities: { id: string }[];
 }): ModResponseDTO {
   return {
     id: raw.id,
@@ -167,37 +167,43 @@ export const ModCompatibilityDTOSchema = z.object({
 });
 
 export function toModCompatibilityDTO(raw: {
-  id: string,
+  id: string;
   mod: {
-    name: string,
-  },
+    name: string;
+  };
   modelYearRangeObj: {
-    startYear: number,
-    endYear: number | null,
+    startYear: number;
+    endYear: number | null;
     badge: {
-      name: string,
+      name: string;
       model: {
-        name: string,
+        name: string;
         make: {
-          name: string,
-        },
-      },
-    },
-  },
-  hpGain: number | null,
-  nmGain: number | null,
-  handlingDelta: number | null,
-  zeroToHundredDelta: number | null,
-  price: number | null,
-  notes: string | null,
+          name: string;
+        };
+      };
+    };
+  };
+  hpGain: number | null;
+  nmGain: number | null;
+  handlingDelta: number | null;
+  zeroToHundredDelta: number | null;
+  price: number | null;
+  notes: string | null;
 }): ModCompatibilityResponseDTO {
   return {
     id: raw.id,
     mod: raw.mod.name,
-    carName: raw.modelYearRangeObj.badge.model.make.name + " " + 
-          raw.modelYearRangeObj.badge.model.name + " " + 
-          raw.modelYearRangeObj.badge.name + " " +
-          raw.modelYearRangeObj.startYear + "-" + (raw.modelYearRangeObj.endYear ?? "present"),
+    carName:
+      raw.modelYearRangeObj.badge.model.make.name +
+      " " +
+      raw.modelYearRangeObj.badge.model.name +
+      " " +
+      raw.modelYearRangeObj.badge.name +
+      " " +
+      raw.modelYearRangeObj.startYear +
+      "-" +
+      (raw.modelYearRangeObj.endYear ?? "present"),
     startYear: raw.modelYearRangeObj.startYear,
     endYear: raw.modelYearRangeObj.endYear ?? undefined,
     badge: raw.modelYearRangeObj.badge.name,

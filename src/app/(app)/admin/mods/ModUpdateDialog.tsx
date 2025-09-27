@@ -25,14 +25,24 @@ interface ModUpdateDialogProps {
 }
 
 export function ModUpdateDialog({ fetchData, open, data, setOpen }: ModUpdateDialogProps) {
-  const [form, setForm] = useState<UpdateModInput>({ name: "", brand: "", category: "", description: "" });
+  const [form, setForm] = useState<UpdateModInput>({
+    name: "",
+    brand: "",
+    category: "",
+    description: "",
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   const { apiCall } = useApiClient();
 
   useEffect(() => {
     if (data) {
-      setForm({ name: data.name, brand: data.brand, category: data.category, description: data.description });
+      setForm({
+        name: data.name,
+        brand: data.brand,
+        category: data.category,
+        description: data.description,
+      });
     } else {
       setForm({ name: "", brand: "", category: "", description: "" });
     }
@@ -71,12 +81,15 @@ export function ModUpdateDialog({ fetchData, open, data, setOpen }: ModUpdateDia
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) {
-        setOpen(false);
-      }
-    }}>
-      <DialogContent className="sm:max-w-[425px]"  onOpenAutoFocus={(e) => e.preventDefault()}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          setOpen(false);
+        }
+      }}
+    >
+      <DialogContent className="sm:max-w-[425px]" onOpenAutoFocus={(e) => e.preventDefault()}>
         <form onSubmit={handleSave}>
           <DialogHeader>
             <DialogTitle>Update Mod</DialogTitle>
@@ -95,11 +108,21 @@ export function ModUpdateDialog({ fetchData, open, data, setOpen }: ModUpdateDia
             </div>
             <div className="grid gap-3">
               <Label htmlFor="category">Category</Label>
-              <Input id="category" name="category" onChange={handleChange} value={form.category ?? ""} />
+              <Input
+                id="category"
+                name="category"
+                onChange={handleChange}
+                value={form.category ?? ""}
+              />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <Input id="description" name="description" onChange={handleChange} value={form.description ?? ""} />
+              <Input
+                id="description"
+                name="description"
+                onChange={handleChange}
+                value={form.description ?? ""}
+              />
             </div>
           </div>
           <DialogFooter className="mt-6">
