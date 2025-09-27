@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuthStore } from "@/stores/authStore";
 
 interface CreateModCompatibilityDialogProps {
   onSuccess: () => void;
@@ -63,6 +64,7 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   const [carDialogOpen, setCarDialogOpen] = useState<boolean>(false);
 
   const { apiCall } = useApiClient();
+  const { isInitialized } = useAuthStore();
 
   useEffect(() => {
     fetchMods();
@@ -71,6 +73,8 @@ export function CreateModCompatibilityDialog({ onSuccess }: CreateModCompatibili
   const fetchMods = async () => {
     try {
       setLoading(true);
+      if(!isInitialized) return;
+
       const res = await apiCall("/api/admin/mods");
       if (!res.ok) throw new Error(`Failed to fetch mods: ${res.status}`);
 
