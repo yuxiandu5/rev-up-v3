@@ -39,21 +39,22 @@ export const modCompatibilityColumns = (
     ),
   },
   {
-    accessorKey: "carInfo",
-    header: "Car",
+    accessorKey: "carName",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Car
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      const { make, model, badge, startYear, endYear } = row.original;
-      const yearRange = endYear ? `${startYear}-${endYear}` : `${startYear}+`;
-      const carInfo = `${make} ${model} ${badge} (${yearRange})`;
-      
       return (
         <div className="max-w-xs">
-          <div className="font-medium truncate" title={carInfo}>
-            {make} {model}
-          </div>
-          <div className="text-sm text-muted-foreground truncate">
-            {badge} • {yearRange}
-          </div>
+          {row.original.carName}
         </div>
       );
     },
