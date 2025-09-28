@@ -1,5 +1,5 @@
 import { Role } from "./dtos";
-import { z } from "zod";
+import { string, z } from "zod";
 
 export interface AdminUserListItemDTO {
   id: string;
@@ -218,6 +218,43 @@ export function toModCompatibilityDTO(raw: {
   };
 }
 
+export const ModRequirementDTOSchema = z.object({
+  id: z.string(),
+  dependent: z.string(),
+  category: z.string(),
+  prerequisiteCategory: z.string().array(),
+});
+
+type ModRequirementItem = {
+  id: string;
+  dependent: string;
+  category: string;
+  prerequisiteCategory: string[];
+};
+
+export function toModRequirementDTO(data: {
+  id: string;
+  prerequisiteCategory: { name: string };
+  dependent: { name: string; brand: string; category: string };
+}[]): ModRequirementItem[] {
+    const formattedResults = Object.values(
+      data.reduce((acc, curr) => {
+        if(!acc[curr.dependent.name]){
+          acc[curr.dependent.name] = {
+            id: curr.id,
+            dependent: curr.dependent.brand + " " + curr.dependent.name,
+            category: curr.dependent.category,
+            prerequisiteCategory: []
+          }
+        }
+
+        acc[curr.dependent.name].prerequisiteCategory.push(curr.prerequisiteCategory.name)
+        return acc
+      } ,{} as Record<string, ModRequirementItem>)
+    )
+    return formattedResults
+}
+
 export type ModCompatibilityResponseDTO = z.infer<typeof ModCompatibilityDTOSchema>;
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
@@ -226,3 +263,4 @@ export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;
 // Mod related
 export type ModCategoryResponseDTO = z.infer<typeof ModCategoryDTOSchema>;
 export type ModResponseDTO = z.infer<typeof ModDTOSchema>;
+export type ModRequirementResponseDTO = z.infer<typeof ModRequirementDTOSchema>;
