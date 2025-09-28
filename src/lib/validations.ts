@@ -302,6 +302,11 @@ export const ModCompatibilityUpdateSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const ModRequirementCreateSchema = z.object({
+  prerequisiteCategoryId: z.string().cuid(),
+  dependentId: z.string().cuid(),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -341,3 +346,6 @@ export type UpdateModInput = z.infer<typeof ModUpdateSchema>;
 // mod compatibility
 export type CreateModCompatibilityInput = z.infer<typeof ModCompatibilityCreateSchema>;
 export type UpdateModCompatibilityInput = z.infer<typeof ModCompatibilityUpdateSchema>;
+
+// mod requirement
+export type CreateModRequirementInput = z.infer<typeof ModRequirementCreateSchema>;
