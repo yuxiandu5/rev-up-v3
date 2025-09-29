@@ -79,6 +79,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
       handling,
       imageUrl,
       imageDescription,
+      imageName,
     } = CarYearRangeUpdateSchema.parse(body);
 
     const result = await prisma.modelYearRange.update({
@@ -94,8 +95,8 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
         mediaAsset: imageUrl
           ? {
               upsert: {
-                create: { url: imageUrl, alt: imageDescription },
-                update: { url: imageUrl, alt: imageDescription },
+                create: { url: imageUrl, alt: imageDescription, name: imageName },
+                update: { url: imageUrl, alt: imageDescription, name: imageName },
               },
             }
           : undefined,

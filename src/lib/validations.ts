@@ -194,6 +194,7 @@ export const CarYearRangeCreateSchema = z.object({
   handling: z.coerce.number().int().min(0).max(10),
   imageUrl: z.string(),
   imageDescription: z.string().optional(),
+  imageName: z.string(),
 });
 
 export const CarYearRangeUpdateSchema = z
@@ -207,6 +208,7 @@ export const CarYearRangeUpdateSchema = z
     handling: z.coerce.number().int().min(0).max(10).optional(),
     imageUrl: z.string().optional(),
     imageDescription: z.string().optional(),
+    imageName: z.string(),
   })
   .strip();
 
@@ -307,6 +309,44 @@ export const ModRequirementCreateSchema = z.object({
   dependentId: z.string().cuid(),
 });
 
+// media asset
+export const MediaAssetCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  url: z.string().url(),
+  modId: z.string().cuid().optional(),
+  modelYearRangeId: z.string().cuid().optional(),
+})
+.refine(
+  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
+  {
+    message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
+    path: ["modId"], // where the error will attach
+  }
+);
+
+export const MediaAssetUpdateSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  url: z.string().url().optional(),
+  modId: z.string().cuid().optional(),
+  modelYearRangeId: z.string().cuid().optional(),
+})
+.refine(
+  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
+  {
+    message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
+    path: ["modId"], // where the error will attach
+  }
+);
+
+export const fileUploadSchema = z.object({
+  fileName: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/\.(png|jpe?g|webp)$/i, "File must be .png, .jpg, .jpeg, or .webp"),
+  contentType: z.enum(["image/png", "image/jpeg", "image/webp"]),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -349,3 +389,8 @@ export type UpdateModCompatibilityInput = z.infer<typeof ModCompatibilityUpdateS
 
 // mod requirement
 export type CreateModRequirementInput = z.infer<typeof ModRequirementCreateSchema>;
+
+// media asset
+export type CreateMediaAssetInput = z.infer<typeof MediaAssetCreateSchema>;
+export type UpdateMediaAssetInput = z.infer<typeof MediaAssetUpdateSchema>;
+export type FileUploadInput = z.infer<typeof fileUploadSchema>;

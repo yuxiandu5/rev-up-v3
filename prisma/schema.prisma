@@ -117,7 +117,7 @@ model Mod {
   brand       String
   category    String // intake, exhaust, tune, suspension, etc.
   description String?
-  media       MediaAsset[]
+  media       MediaAsset?
 
   // Relations
   compatibilities ModCompatibility[]
@@ -170,11 +170,12 @@ model ModRequirement {
 // ----------------------
 model MediaAsset {
   id  String  @id @default(cuid())
+  name String
   url String
   alt String?
 
   // For mods (product photos)
-  modId String?
+  modId String? @unique
   mod   Mod?    @relation(fields: [modId], references: [id])
 
   // For badges (reference images of trims/cars)

@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
           zeroToHundred: true,
           handling: true,
           mediaAsset: {
-            select: { url: true },
+            select: { url: true, name: true },
           },
         },
       }),
@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
       model: item.badge.model.name,
       badge: item.badge.name,
       mediaAsset: item.mediaAsset?.url,
+      imageName: item.mediaAsset?.name,
     }));
 
     return okPaginated(
@@ -86,6 +87,7 @@ export async function POST(req: NextRequest) {
       handling,
       imageUrl,
       imageDescription,
+      imageName,
     } = CarYearRangeCreateSchema.parse(body);
 
     const result = await prisma.modelYearRange.create({
@@ -101,6 +103,7 @@ export async function POST(req: NextRequest) {
           create: {
             url: imageUrl,
             alt: imageDescription,
+            name: imageName ?? "",
           },
         },
         badge: {
