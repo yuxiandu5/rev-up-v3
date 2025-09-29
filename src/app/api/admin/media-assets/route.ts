@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002") {
-        return errorToResponse(new ConflictError("Media asset with this modId or modelYearRangeId already exists"), 409);
+        return errorToResponse(new ConflictError("Media asset with this modId or modelYearRangeId already exists"));
       }
     }
     console.log("Unexpected error in POST /media-assets:", error);

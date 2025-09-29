@@ -99,6 +99,7 @@ export const YearRangeDTOSchema = z.object({
   mediaAsset: z.string(),
   make: z.string(),
   model: z.string(),
+  imageName: z.string().optional(),
 });
 
 export const ModCategoryDTOSchema = z.object({

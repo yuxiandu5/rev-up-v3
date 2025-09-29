@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
           zeroToHundred: true,
           handling: true,
           mediaAsset: {
-            select: { url: true },
+            select: { url: true, name: true },
           },
         },
       }),
@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
       model: item.badge.model.name,
       badge: item.badge.name,
       mediaAsset: item.mediaAsset?.url,
+      imageName: item.mediaAsset?.name,
     }));
 
     return okPaginated(

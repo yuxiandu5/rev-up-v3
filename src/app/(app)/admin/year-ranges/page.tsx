@@ -8,7 +8,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
 import Loading from "@/components/ui/Loading";
-import { CreateYearRangeInput } from "@/lib/validations";
+import { CreateYearRangeInput, UpdateYearRangeInput } from "@/lib/validations";
 import { OpenDialogContext } from "./context";
 
 export default function YearRangePage() {
@@ -75,8 +75,8 @@ export default function YearRangePage() {
     }
   };
 
-  const handleYearRangeEdit = (rowData: CreateYearRangeInput, id: string) => {
-    setData(rowData);
+  const handleYearRangeEdit = (rowData: UpdateYearRangeInput, id: string) => {
+    setData(rowData as CreateYearRangeInput);
     setIsEdit(true);
     setOpenDialog(true);
     setId(id);

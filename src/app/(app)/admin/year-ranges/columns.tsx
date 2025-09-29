@@ -5,11 +5,11 @@ import { YearRangeResponseDTO } from "@/types/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { CreateYearRangeInput } from "@/lib/validations";
+import { UpdateYearRangeInput } from "@/lib/validations";
 
 interface yearRangeColumnsProps {
   onDelete: (id: string) => void;
-  onEdit: (data: CreateYearRangeInput, id: string) => void;
+  onEdit: (data: UpdateYearRangeInput, id: string) => void;
 }
 
 export const yearRangeColumns = ({
@@ -145,7 +145,6 @@ export const yearRangeColumns = ({
             onClick={() =>
               onEdit(
                 {
-                  badgeId: data.id,
                   startYear: data.startYear,
                   hp: data.hp,
                   torque: data.torque,
@@ -155,6 +154,7 @@ export const yearRangeColumns = ({
                   imageDescription: "",
                   chassis: data.chassis,
                   endYear: data.endYear,
+                  imageName: data.imageName ?? "",
                 },
                 data.id
               )
