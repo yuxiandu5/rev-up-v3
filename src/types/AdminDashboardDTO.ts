@@ -255,10 +255,29 @@ export function toModRequirementDTO(data: {
     return formattedResults
 }
 
+export const MediaAssetDTOSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  url: z.string(),
+});
+
+export function toMediaAssetDTO(raw: {
+  id: string;
+  name: string;
+  url: string;
+}): MediaAssetResponseDTO {
+  return {
+    id: raw.id,
+    name: raw.name,
+    url: raw.url,
+  };
+}
+
 export type ModCompatibilityResponseDTO = z.infer<typeof ModCompatibilityDTOSchema>;
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
 export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;
+export type MediaAssetResponseDTO = z.infer<typeof MediaAssetDTOSchema>;
 
 // Mod related
 export type ModCategoryResponseDTO = z.infer<typeof ModCategoryDTOSchema>;

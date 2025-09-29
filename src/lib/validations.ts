@@ -338,6 +338,10 @@ export const MediaAssetUpdateSchema = z.object({
   }
 );
 
+export const fileUploadSchema = z.object({
+  fileName: z.string().min(1).max(100),
+  contentType: z.string().min(1).max(100),
+});
 
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
@@ -381,3 +385,8 @@ export type UpdateModCompatibilityInput = z.infer<typeof ModCompatibilityUpdateS
 
 // mod requirement
 export type CreateModRequirementInput = z.infer<typeof ModRequirementCreateSchema>;
+
+// media asset
+export type CreateMediaAssetInput = z.infer<typeof MediaAssetCreateSchema>;
+export type UpdateMediaAssetInput = z.infer<typeof MediaAssetUpdateSchema>;
+export type FileUploadInput = z.infer<typeof fileUploadSchema>;
