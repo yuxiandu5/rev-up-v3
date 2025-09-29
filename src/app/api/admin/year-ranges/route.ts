@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
       handling,
       imageUrl,
       imageDescription,
+      imageName,
     } = CarYearRangeCreateSchema.parse(body);
 
     const result = await prisma.modelYearRange.create({
@@ -101,6 +102,7 @@ export async function POST(req: NextRequest) {
           create: {
             url: imageUrl,
             alt: imageDescription,
+            name: imageName ?? "",
           },
         },
         badge: {

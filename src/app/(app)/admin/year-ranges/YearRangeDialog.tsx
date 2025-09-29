@@ -48,6 +48,7 @@ export function YearRangeDialog({ onSuccess }: YearRangeDialogProps) {
     handling: 0,
     imageUrl: "",
     imageDescription: "",
+    imageName: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [badgeData, setBadgeData] = useState<BadgeResponseDTO[]>([]);
@@ -80,6 +81,7 @@ export function YearRangeDialog({ onSuccess }: YearRangeDialogProps) {
     handling: form.handling,
     imageUrl: form.imageUrl,
     imageDescription: form.imageDescription,
+    imageName: form.imageName,
   };
 
   useEffect(() => {
@@ -101,6 +103,7 @@ export function YearRangeDialog({ onSuccess }: YearRangeDialogProps) {
         handling: 0,
         imageUrl: "",
         imageDescription: "",
+        imageName: "",
       });
     }
   }, [isEdit, data]);
@@ -294,6 +297,16 @@ export function YearRangeDialog({ onSuccess }: YearRangeDialogProps) {
                   onChange={handleChange}
                   className="w-full"
                   value={form.imageUrl ?? ""}
+                />
+                <Label htmlFor="imageName" className="text-sm font-medium">
+                  Image Name
+                </Label>
+                <Input
+                  id="imageName"
+                  name="imageName"
+                  onChange={handleChange}
+                  className="w-full"
+                  value={form.imageName ?? ""}
                 />
               </div>
             </div>

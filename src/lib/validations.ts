@@ -194,6 +194,7 @@ export const CarYearRangeCreateSchema = z.object({
   handling: z.coerce.number().int().min(0).max(10),
   imageUrl: z.string(),
   imageDescription: z.string().optional(),
+  imageName: z.string(),
 });
 
 export const CarYearRangeUpdateSchema = z
@@ -207,6 +208,7 @@ export const CarYearRangeUpdateSchema = z
     handling: z.coerce.number().int().min(0).max(10).optional(),
     imageUrl: z.string().optional(),
     imageDescription: z.string().optional(),
+    imageName: z.string(),
   })
   .strip();
 
