@@ -10,12 +10,17 @@ export async function POST(req: NextRequest) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
 
-    const { fileName, contentType } = fileUploadSchema.parse(req.body);
+    if(!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_REGION || !process.env.S3_BUCKET_NAME) {
+      throw new Error("Missing AWS credentials. Set AWS_BUCKET_NAME, AWS_REGION, and S3_BUCKET_NAME in .env.local");
+    }
+
+    const body = await req.json();
+    const { fileName, contentType } = fileUploadSchema.parse(body);
 
     const key = `${fileName}`;
 
     const command = new PutObjectCommand({
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: process.env.S3_BUCKET_NAME,
       Key: key,
       ContentType: contentType,
     });

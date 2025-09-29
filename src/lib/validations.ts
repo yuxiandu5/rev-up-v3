@@ -339,8 +339,12 @@ export const MediaAssetUpdateSchema = z.object({
 );
 
 export const fileUploadSchema = z.object({
-  fileName: z.string().min(1).max(100),
-  contentType: z.string().min(1).max(100),
+  fileName: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/\.(png|jpe?g|webp)$/i, "File must be .png, .jpg, .jpeg, or .webp"),
+  contentType: z.enum(["image/png", "image/jpeg", "image/webp"]),
 });
 
 // Type exports
