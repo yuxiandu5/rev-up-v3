@@ -309,6 +309,36 @@ export const ModRequirementCreateSchema = z.object({
   dependentId: z.string().cuid(),
 });
 
+// media asset
+export const MediaAssetCreateSchema = z.object({
+  name: z.string().min(1).max(100),
+  url: z.string().url(),
+  modId: z.string().cuid().optional(),
+  modelYearRangeId: z.string().cuid().optional(),
+})
+.refine(
+  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
+  {
+    message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
+    path: ["modId"], // where the error will attach
+  }
+);
+
+export const MediaAssetUpdateSchema = z.object({
+  name: z.string().min(1).max(100).optional(),
+  url: z.string().url().optional(),
+  modId: z.string().cuid().optional(),
+  modelYearRangeId: z.string().cuid().optional(),
+})
+.refine(
+  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
+  {
+    message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
+    path: ["modId"], // where the error will attach
+  }
+);
+
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
