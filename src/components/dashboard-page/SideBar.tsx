@@ -20,6 +20,7 @@ export default function DashboardSideNavBar() {
       <LinkButton href="/admin/mods">Mod</LinkButton>
       <LinkButton href="/admin/mod-compatibilities">ModCompatibility</LinkButton>
       <LinkButton href="/admin/mod-requirements">ModRequirement</LinkButton>
+      <LinkButton href="/admin/media-assets">MediaAsset</LinkButton>
     </nav>
   );
 }

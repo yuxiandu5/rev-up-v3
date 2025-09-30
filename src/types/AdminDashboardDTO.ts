@@ -274,11 +274,17 @@ export function toMediaAssetDTO(raw: {
   };
 }
 
+export const MediaAssetUploadDTOSchema = z.object({
+  uploadUrl: z.string(),
+  publicUrl: z.string(),
+});
+
 export type ModCompatibilityResponseDTO = z.infer<typeof ModCompatibilityDTOSchema>;
 export type ModelResponseDTO = z.infer<typeof ModelDTOSchema>;
 export type BadgeResponseDTO = z.infer<typeof BadgeDTOSchema>;
 export type YearRangeResponseDTO = z.infer<typeof YearRangeDTOSchema>;
 export type MediaAssetResponseDTO = z.infer<typeof MediaAssetDTOSchema>;
+export type MediaAssetUploadResponseDTO = z.infer<typeof MediaAssetUploadDTOSchema>;
 
 // Mod related
 export type ModCategoryResponseDTO = z.infer<typeof ModCategoryDTOSchema>;
