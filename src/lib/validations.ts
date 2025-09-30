@@ -315,6 +315,7 @@ export const MediaAssetCreateSchema = z.object({
   url: z.string().url(),
   modId: z.string().cuid().optional(),
   modelYearRangeId: z.string().cuid().optional(),
+  type: z.enum(["mod", "car"]),
 })
 .refine(
   (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
@@ -345,6 +346,7 @@ export const fileUploadSchema = z.object({
     .max(100)
     .regex(/\.(png|jpe?g|webp)$/i, "File must be .png, .jpg, .jpeg, or .webp"),
   contentType: z.enum(["image/png", "image/jpeg", "image/webp"]),
+  type: z.enum(["mod", "car"]),
 });
 
 // Type exports

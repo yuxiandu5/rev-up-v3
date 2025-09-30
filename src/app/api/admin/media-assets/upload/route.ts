@@ -6,6 +6,11 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3 } from "@/lib/s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+const MEDIA_ASSET_TYPES = {
+  mod: "mod-sketch",
+  car: "car-sketch",
+}
+
 export async function POST(req: NextRequest) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
@@ -15,9 +20,9 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { fileName, contentType } = fileUploadSchema.parse(body);
+    const { fileName, contentType, type } = fileUploadSchema.parse(body);
 
-    const key = `${fileName}`;
+    const key = `${MEDIA_ASSET_TYPES[type]}/${fileName}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.S3_BUCKET_NAME,
