@@ -10,27 +10,25 @@ export async function GET(request: NextRequest) {
   try {
     await requireRole(request, ["ADMIN", "MODERATOR"]);
 
-    const res = await prisma.modRequirement.findMany(
-      {
-        select: {
-          id: true,
-          prerequisiteCategory: {
-            select: {
-              name: true,
-            },
-          },
-          dependent: {
-            select: {
-              name: true,
-              brand: true,
-              category: true,
-            },
+    const res = await prisma.modRequirement.findMany({
+      select: {
+        id: true,
+        prerequisiteCategory: {
+          select: {
+            name: true,
           },
         },
-      }
-    );
+        dependent: {
+          select: {
+            name: true,
+            brand: true,
+            category: true,
+          },
+        },
+      },
+    });
 
-    const formatted = toModRequirementDTO(res)
+    const formatted = toModRequirementDTO(res);
     return ok(formatted, "Mod requirements fetched successfully", 200);
   } catch (error) {
     console.log("Unexpected error in GET /mod-requirements: ", error);
@@ -38,7 +36,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) { 
+export async function POST(request: NextRequest) {
   try {
     await requireRole(request, ["ADMIN", "MODERATOR"]);
 
@@ -48,19 +46,21 @@ export async function POST(request: NextRequest) {
     const existing = await prisma.modRequirement.findFirst({
       where: {
         prerequisiteCategoryId,
-        dependentId
-      }
-    })
+        dependentId,
+      },
+    });
     console.log("existing", existing);
-    if(existing) throw new ConflictError("Mod requirement with this prerequisite category and dependent already exists");
+    if (existing)
+      throw new ConflictError(
+        "Mod requirement with this prerequisite category and dependent already exists"
+      );
 
     const res = await prisma.modRequirement.create({
       data: {
         prerequisiteCategoryId,
-        dependentId
-      }
-    })
-
+        dependentId,
+      },
+    });
 
     return ok(res, "Mod requirements created successfully", 200);
   } catch (error) {

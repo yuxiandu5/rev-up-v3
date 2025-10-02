@@ -37,7 +37,9 @@ export function UpdateMediaAssetDialog({
   data,
   setOpen,
 }: UpdateMediaAssetDialogProps) {
-  const [form, setForm] = useState<UpdateMediaAssetInput & { modId?: string; modelYearRangeId?: string }>({
+  const [form, setForm] = useState<
+    UpdateMediaAssetInput & { modId?: string; modelYearRangeId?: string }
+  >({
     name: data?.name,
     url: data?.url,
     modId: data?.modId,
@@ -49,18 +51,18 @@ export function UpdateMediaAssetDialog({
 
   useEffect(() => {
     if (data) {
-      setForm({ 
-        name: data.name, 
+      setForm({
+        name: data.name,
         url: data.url,
         modId: data.modId,
-        modelYearRangeId: data.modelYearRangeId
+        modelYearRangeId: data.modelYearRangeId,
       });
     } else {
-      setForm({ 
-        name: "", 
+      setForm({
+        name: "",
         url: "",
         modId: undefined,
-        modelYearRangeId: undefined
+        modelYearRangeId: undefined,
       });
     }
   }, [data]);
@@ -156,12 +158,7 @@ export function UpdateMediaAssetDialog({
           <div className="grid gap-4 mt-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
-              <Input 
-                id="name" 
-                name="name" 
-                onChange={handleChange} 
-                value={form.name ?? ""} 
-              />
+              <Input id="name" name="name" onChange={handleChange} value={form.name ?? ""} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="url">URL</Label>
@@ -188,11 +185,11 @@ export function UpdateMediaAssetDialog({
             {form.modId !== undefined && (
               <div className="grid gap-3">
                 <Label htmlFor="modId">Mod ID</Label>
-                <Input 
-                  id="modId" 
-                  name="modId" 
+                <Input
+                  id="modId"
+                  name="modId"
                   value={form.modId}
-                  onChange={handleIdChange} 
+                  onChange={handleIdChange}
                   placeholder="Enter Mod ID"
                 />
               </div>
@@ -200,11 +197,11 @@ export function UpdateMediaAssetDialog({
             {form.modelYearRangeId !== undefined && (
               <div className="grid gap-3">
                 <Label htmlFor="modelYearRangeId">Model Year Range ID</Label>
-                <Input 
-                  id="modelYearRangeId" 
-                  name="modelYearRangeId" 
+                <Input
+                  id="modelYearRangeId"
+                  name="modelYearRangeId"
                   value={form.modelYearRangeId}
-                  onChange={handleIdChange} 
+                  onChange={handleIdChange}
                   placeholder="Enter Model Year Range ID"
                 />
               </div>

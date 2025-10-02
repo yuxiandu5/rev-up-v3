@@ -50,13 +50,11 @@ export function CreateModRequirementDialog({ onSuccess }: CreateModRequirementDi
         apiCall("/api/admin/mods"),
       ]);
 
-      if (!categoriesRes.ok) throw new Error(`Failed to fetch mod categories: ${categoriesRes.status}`);
+      if (!categoriesRes.ok)
+        throw new Error(`Failed to fetch mod categories: ${categoriesRes.status}`);
       if (!modsRes.ok) throw new Error(`Failed to fetch mods: ${modsRes.status}`);
 
-      const [categoriesData, modsData] = await Promise.all([
-        categoriesRes.json(),
-        modsRes.json(),
-      ]);
+      const [categoriesData, modsData] = await Promise.all([categoriesRes.json(), modsRes.json()]);
 
       setModCategories(categoriesData.data || categoriesData);
       setMods(modsData.data || modsData);
@@ -80,7 +78,7 @@ export function CreateModRequirementDialog({ onSuccess }: CreateModRequirementDi
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!form.prerequisiteCategoryId || !form.dependentId) {
       toast("Please select both prerequisite category and dependent mod");
       return;
@@ -122,10 +120,11 @@ export function CreateModRequirementDialog({ onSuccess }: CreateModRequirementDi
           <DialogHeader>
             <DialogTitle>Add Mod Requirement</DialogTitle>
             <DialogDescription>
-              Create a new mod requirement relationship. Select a prerequisite category and the dependent mod that requires it.
+              Create a new mod requirement relationship. Select a prerequisite category and the
+              dependent mod that requires it.
             </DialogDescription>
           </DialogHeader>
-          
+
           {dataLoading ? (
             <div className="flex justify-center items-center py-8">
               <LoadingSpinner size="md" />
@@ -152,7 +151,7 @@ export function CreateModRequirementDialog({ onSuccess }: CreateModRequirementDi
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="grid gap-3">
                 <Label htmlFor="dependentId">Dependent Mod</Label>
                 <Select
@@ -175,14 +174,14 @@ export function CreateModRequirementDialog({ onSuccess }: CreateModRequirementDi
               </div>
             </div>
           )}
-          
+
           <DialogFooter className="mt-6">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button 
-              type="submit" 
-              className="min-w-24" 
+            <Button
+              type="submit"
+              className="min-w-24"
               disabled={loading || dataLoading || !form.prerequisiteCategoryId || !form.dependentId}
             >
               {loading ? <LoadingSpinner size="sm" /> : "Add Requirement"}

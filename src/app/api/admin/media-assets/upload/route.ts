@@ -9,14 +9,16 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const MEDIA_ASSET_TYPES = {
   mod: "mod-sketch",
   car: "car-sketch",
-}
+};
 
 export async function POST(req: NextRequest) {
   try {
     await requireRole(req, ["ADMIN", "MODERATOR"]);
 
-    if(!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_REGION || !process.env.S3_BUCKET_NAME) {
-      throw new Error("Missing AWS credentials. Set AWS_BUCKET_NAME, AWS_REGION, and S3_BUCKET_NAME in .env.local");
+    if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_REGION || !process.env.S3_BUCKET_NAME) {
+      throw new Error(
+        "Missing AWS credentials. Set AWS_BUCKET_NAME, AWS_REGION, and S3_BUCKET_NAME in .env.local"
+      );
     }
 
     const body = await req.json();

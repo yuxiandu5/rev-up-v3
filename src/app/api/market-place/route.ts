@@ -1,25 +1,26 @@
-import { ProductResponseDTO, toProductDTO } from './../../../types/DTO/MarketPlaceDTO';
+import { ProductResponseDTO, toProductDTO } from "./../../../types/DTO/MarketPlaceDTO";
 import { NextRequest } from "next/server";
 import { errorToResponse, okPaginated } from "@/lib/apiResponse";
 import { prisma } from "@/lib/prisma";
 import { MarketPlacePaginationSchema } from "@/lib/validations";
 import { Prisma } from "@prisma/client";
 
-export async function GET(req:NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const { page, pageSize, search, sort, category, brand, make, model, badge, year } = MarketPlacePaginationSchema.parse({
-      page: searchParams.get("page") ?? undefined,
-      pageSize: searchParams.get("pageSize") ?? undefined,
-      search: searchParams.get("search") ?? undefined,
-      sort: searchParams.get("sort") ?? undefined,
-      category: searchParams.get("category") ?? undefined,
-      brand: searchParams.get("brand") ?? undefined,
-      make: searchParams.get("make") ?? undefined,
-      model: searchParams.get("model") ?? undefined,
-      badge: searchParams.get("badge") ?? undefined,
-      year: searchParams.get("year") ?? undefined,
-    })
+    const { page, pageSize, search, sort, category, brand, make, model, badge, year } =
+      MarketPlacePaginationSchema.parse({
+        page: searchParams.get("page") ?? undefined,
+        pageSize: searchParams.get("pageSize") ?? undefined,
+        search: searchParams.get("search") ?? undefined,
+        sort: searchParams.get("sort") ?? undefined,
+        category: searchParams.get("category") ?? undefined,
+        brand: searchParams.get("brand") ?? undefined,
+        make: searchParams.get("make") ?? undefined,
+        model: searchParams.get("model") ?? undefined,
+        badge: searchParams.get("badge") ?? undefined,
+        year: searchParams.get("year") ?? undefined,
+      });
 
     const where: Prisma.ProductWhereInput = {
       isActive: true,
@@ -28,33 +29,36 @@ export async function GET(req:NextRequest) {
           { name: { contains: search, mode: "insensitive" } },
           { description: { contains: search, mode: "insensitive" } },
           { mod: { brand: { contains: search, mode: "insensitive" } } },
-          { mod: { category: { contains: search, mode: "insensitive" } } }
-        ]
+          { mod: { category: { contains: search, mode: "insensitive" } } },
+        ],
       }),
       ...(category && { mod: { category: category } }),
       ...(brand && { mod: { brand: brand } }),
-      ...(make && { compatibility: { modelYearRangeObj: { badge: { model: { make: { name: make}} } } } }),
+      ...(make && {
+        compatibility: { modelYearRangeObj: { badge: { model: { make: { name: make } } } } },
+      }),
       ...(model && { compatibility: { modelYearRangeObj: { badge: { model: { name: model } } } } }),
-      ...(badge && { compatibility: { modelYearRangeObj: { badge: { name: badge} } } } ),
-      ...(year && { compatibility: { modelYearRangeObj: { startYear: { lte: year }, endYear: { gte: year } } } })
-    }
+      ...(badge && { compatibility: { modelYearRangeObj: { badge: { name: badge } } } }),
+      ...(year && {
+        compatibility: { modelYearRangeObj: { startYear: { lte: year }, endYear: { gte: year } } },
+      }),
+    };
 
-
-    let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "asc" }
+    let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "asc" };
 
     switch (sort) {
       case "price_asc":
-        orderBy = { priceCents: "asc" }
-        break
+        orderBy = { priceCents: "asc" };
+        break;
       case "price_desc":
-        orderBy = { priceCents: "desc" }
-        break
+        orderBy = { priceCents: "desc" };
+        break;
       case "createdAt_asc":
-        orderBy = { createdAt: "asc" }
-        break
+        orderBy = { createdAt: "asc" };
+        break;
       case "createdAt_desc":
-        orderBy = { createdAt: "desc" }
-        break
+        orderBy = { createdAt: "desc" };
+        break;
     }
 
     const [data, count] = await Promise.all([
@@ -65,12 +69,12 @@ export async function GET(req:NextRequest) {
         take: pageSize,
         include: {
           mod: {
-            select:{
+            select: {
               id: true,
               name: true,
               brand: true,
-              category: true
-            }
+              category: true,
+            },
           },
           compatibility: {
             select: {
@@ -86,23 +90,23 @@ export async function GET(req:NextRequest) {
                           name: true,
                           make: {
                             select: {
-                              name: true
-                            }
+                              name: true,
+                            },
                           },
-                        }
-                      }
-                    }
-                  }
-                }
+                        },
+                      },
+                    },
+                  },
+                },
               },
-            }
-          }
-        }
+            },
+          },
+        },
       }),
-      prisma.product.count({where})
-    ])
+      prisma.product.count({ where }),
+    ]);
 
-    const formattedData: ProductResponseDTO[] = data.map(toProductDTO)
+    const formattedData: ProductResponseDTO[] = data.map(toProductDTO);
 
     return okPaginated(formattedData, page, pageSize, count, "Successfully fetched products data!");
   } catch (e) {

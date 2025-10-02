@@ -13,12 +13,12 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       where: { id },
       include: {
         mod: {
-          select:{
+          select: {
             id: true,
             name: true,
             brand: true,
-            category: true
-          }
+            category: true,
+          },
         },
         compatibility: {
           select: {
@@ -34,19 +34,19 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
                         name: true,
                         make: {
                           select: {
-                            name: true
-                          }
+                            name: true,
+                          },
                         },
-                      }
-                    }
-                  }
-                }
-              }
+                      },
+                    },
+                  },
+                },
+              },
             },
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
     if (!product) throw new NotFoundError("Product not found!");
 
     const formattedProduct = toProductDTO(product);
@@ -56,5 +56,4 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
     console.log("Unexpected error in GET /market-place/:id: ", e);
     return errorToResponse(e);
   }
-  
 }

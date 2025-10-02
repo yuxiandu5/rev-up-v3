@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting product seed...");
 
-  const modCompatibilities = await prisma.modCompatibility.findMany({    
+  const modCompatibilities = await prisma.modCompatibility.findMany({
     include: {
       mod: true,
       modelYearRangeObj: {
@@ -13,15 +13,15 @@ async function main() {
             include: {
               model: {
                 include: {
-                  make: true
-                }
-              }
-            }
-          }
-        }
-      }
-    }}
-  );
+                  make: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 
   for (const modCompatibility of modCompatibilities) {
     await prisma.product.create({
@@ -30,7 +30,7 @@ async function main() {
         description: modCompatibility.mod.description,
         priceCents: modCompatibility.price ? modCompatibility.price * 100 : 0,
         modId: modCompatibility.modId,
-        compatibilityId: modCompatibility.id
+        compatibilityId: modCompatibility.id,
       },
     });
   }
