@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MakeItemListDTO } from "@/types/AdminDashboardDTO";
+import { MakeItemListDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const makeColumns = (onDelete: (id: string) => void): ColumnDef<MakeItemListDTO>[] => [

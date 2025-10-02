@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { badgeColumns } from "./columns";
 import { BadgeTable } from "./BadgeTable";
-import { BadgeResponseDTO } from "@/types/AdminDashboardDTO";
+import { BadgeResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { modColumns } from "./columns";
 import { ModTable } from "./ModTable";
-import { ModResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";

@@ -3,7 +3,7 @@
 import { useEffect, useState, useContext } from "react";
 import { yearRangeColumns } from "./columns";
 import { YearRangeTable } from "./YearRangeTable";
-import { YearRangeResponseDTO } from "@/types/AdminDashboardDTO";
+import { YearRangeResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";

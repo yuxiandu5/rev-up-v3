@@ -2,7 +2,7 @@ import { requireRole } from "@/lib/auth-guard";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { prisma } from "@/lib/prisma";
 import { NextRequest } from "next/server";
-import { toModRequirementDTO } from "@/types/AdminDashboardDTO";
+import { toModRequirementDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ModRequirementCreateSchema } from "@/lib/validations";
 import { ConflictError } from "@/lib/errors/AppError";
 

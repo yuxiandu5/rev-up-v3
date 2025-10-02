@@ -4,7 +4,7 @@ import { updateBuildSchema } from "@/lib/validations";
 import { verifyAccessJWT, extractBearerToken } from "@/lib/jwt";
 import { prisma } from "@/lib/prisma";
 import { mapToBuildDetailDTO } from "@/lib/dto-mappers";
-import type { ApiSuccessResponse } from "@/types/dtos";
+import type { ApiSuccessResponse } from "@/types/DTO/dtos";
 
 /**
  * GET /api/builds/[id] - Get specific build (must be owned by user)

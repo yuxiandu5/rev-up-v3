@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { MediaAssetCreateSchema } from "@/lib/validations";
 import { Prisma } from "@prisma/client";
 import { ConflictError } from "@/lib/errors/AppError";
-import { toMediaAssetDTO } from "@/types/AdminDashboardDTO";
+import { toMediaAssetDTO } from "@/types/DTO/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {

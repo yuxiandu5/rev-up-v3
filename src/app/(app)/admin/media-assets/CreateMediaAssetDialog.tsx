@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MediaAssetUploadDTOSchema } from "@/types/AdminDashboardDTO";
+import { MediaAssetUploadDTOSchema } from "@/types/DTO/AdminDashboardDTO";
 
 interface CreateMediaAssetDialogProps {
   onSuccess: () => void;

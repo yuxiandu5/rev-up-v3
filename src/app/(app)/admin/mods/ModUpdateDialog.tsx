@@ -15,7 +15,7 @@ import { UpdateModInput } from "@/lib/validations";
 import { useEffect, useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 interface ModUpdateDialogProps {
   fetchData: () => void;

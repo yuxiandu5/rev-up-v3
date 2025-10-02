@@ -16,7 +16,7 @@ import { CreateModCompatibilityInput } from "@/lib/validations";
 import { useState, useEffect } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { CarSelectDialog } from "./CarSelectDialog";
 import {
   Select,

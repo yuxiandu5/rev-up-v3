@@ -1,5 +1,5 @@
 import { Role } from "./dtos";
-import { string, z } from "zod";
+import { z } from "zod";
 
 export interface AdminUserListItemDTO {
   id: string;

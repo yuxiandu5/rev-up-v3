@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MediaAssetResponseDTO } from "@/types/AdminDashboardDTO";
+import { MediaAssetResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ExternalLink } from "lucide-react";
 

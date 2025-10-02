@@ -15,7 +15,7 @@ import { CreateYearRangeInput, UpdateYearRangeInput } from "@/lib/validations";
 import { useContext, useEffect, useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { BadgeResponseDTO } from "@/types/AdminDashboardDTO";
+import { BadgeResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

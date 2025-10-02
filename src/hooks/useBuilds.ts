@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useApiClient } from "./useApiClient";
 import { useAuthStore } from "@/stores/authStore";
-import type { BuildSummaryDTO, ApiSuccessResponse, ApiErrorResponse } from "@/types/dtos";
+import type { BuildSummaryDTO, ApiSuccessResponse, ApiErrorResponse } from "@/types/DTO/dtos";
 
 // Legacy interface for backward compatibility
 export interface Build {

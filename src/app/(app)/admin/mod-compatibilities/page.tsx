@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { modCompatibilityColumns } from "./columns";
 import { ModCompatibilityTable } from "./ModCompatibilityTable";
-import { ModCompatibilityResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModCompatibilityResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { useDebounce } from "@/hooks/useDebounce";

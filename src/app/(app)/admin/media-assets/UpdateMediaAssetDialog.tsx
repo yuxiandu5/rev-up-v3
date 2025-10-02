@@ -15,7 +15,7 @@ import { UpdateMediaAssetInput } from "@/lib/validations";
 import { useEffect, useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { MediaAssetResponseDTO } from "@/types/AdminDashboardDTO";
+import { MediaAssetResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import {
   Select,
   SelectContent,

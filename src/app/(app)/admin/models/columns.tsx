@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ModelResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModelResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown } from "lucide-react";

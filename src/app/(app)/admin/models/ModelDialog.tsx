@@ -16,7 +16,7 @@ import { CreateModelInput } from "@/lib/validations";
 import { useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { MakeItemListDTO } from "@/types/AdminDashboardDTO";
+import { MakeItemListDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

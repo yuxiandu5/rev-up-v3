@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { mediaAssetColumns } from "./columns";
 import { MediaAssetTable } from "./MediaAssetTable";
-import { MediaAssetResponseDTO } from "@/types/AdminDashboardDTO";
+import { MediaAssetResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AdminUserListItemDTO } from "@/types/AdminDashboardDTO";
+import { AdminUserListItemDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 

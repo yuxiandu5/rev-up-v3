@@ -2,7 +2,7 @@ import { errorToResponse, ok } from "@/lib/apiResponse";
 import { requireRole } from "@/lib/auth-guard";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { ModResponseDTO, toModDTO } from "@/types/AdminDashboardDTO";
+import { ModResponseDTO, toModDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ModCreateSchema } from "@/lib/validations";
 import { toSlug } from "@/lib/utils";
 import { ConflictError } from "@/lib/errors/AppError";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { BuildDetailDTO } from "@/types/dtos";
+import { BuildDetailDTO } from "@/types/DTO/dtos";
 import PublicCard from "@/components/gallery-page/PublicCard";
 import { Loading } from "@/components/ui/Loading";
 import { NotFoundError, NoDataError, ErrorDisplay } from "@/components/ui/ErrorDisplay";

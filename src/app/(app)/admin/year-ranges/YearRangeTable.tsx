@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { YearRangeResponseDTO } from "@/types/AdminDashboardDTO";
+import { YearRangeResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

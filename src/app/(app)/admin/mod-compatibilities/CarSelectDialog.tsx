@@ -28,7 +28,7 @@ import {
   MakeItemListDTO,
   ModelResponseDTO,
   YearRangeResponseDTO,
-} from "@/types/AdminDashboardDTO";
+} from "@/types/DTO/AdminDashboardDTO";
 
 interface SelectedCar {
   makeId: string;

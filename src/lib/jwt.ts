@@ -1,4 +1,4 @@
-import { Role } from "@/types/dtos";
+import { Role } from "@/types/DTO/dtos";
 import { SignJWT, jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(

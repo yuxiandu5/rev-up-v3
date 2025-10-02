@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { makeColumns } from "./columns";
 import { MakeTable } from "./MakeTable";
-import { MakeItemListDTO } from "@/types/AdminDashboardDTO";
+import { MakeItemListDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";

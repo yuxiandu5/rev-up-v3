@@ -1,7 +1,7 @@
 "use client";
 
 import { UserTable } from "./UserTable";
-import { AdminUserListItemDTO } from "@/types/AdminDashboardDTO";
+import { AdminUserListItemDTO } from "@/types/DTO/AdminDashboardDTO";
 import { userColumns } from "./columns";
 import { useApiClient } from "@/hooks/useApiClient";
 import { useEffect, useState } from "react";

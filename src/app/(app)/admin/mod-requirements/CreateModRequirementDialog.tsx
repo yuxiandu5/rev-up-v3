@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateModRequirementInput } from "@/lib/validations";
-import { ModCategoryResponseDTO, ModResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModCategoryResponseDTO, ModResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
