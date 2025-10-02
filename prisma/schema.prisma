@@ -14,19 +14,21 @@ enum Role {
 }
 
 model User {
-  id              String    @id @default(cuid())
-  userName        String    @unique
+  id              String      @id @default(cuid())
+  userName        String      @unique
   passwordHash    String
-  role            Role      @default(USER)
-  isActive        Boolean   @default(true)
+  role            Role        @default(USER)
+  isActive        Boolean     @default(true)
   recoverQuestion String
   answer          String
   lastLoginAt     DateTime?
   builds          UserBuild[]
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   refreshTokens RefreshToken[]
+  Cart          Cart?
+  Order         Order[]
 }
 
 // Rotating, single‑use refresh tokens. Store **hashes** only.
@@ -68,52 +70,51 @@ model Model {
 }
 
 model Badge {
-  id              String             @id @default(cuid())
-  name            String // e.g. "330i", "320i"
-  slug            String
-  modelId         String
-  model           Model              @relation(fields: [modelId], references: [id])
-  yearRanges      ModelYearRange[]
+  id         String           @id @default(cuid())
+  name       String // e.g. "330i", "320i"
+  slug       String
+  modelId    String
+  model      Model            @relation(fields: [modelId], references: [id])
+  yearRanges ModelYearRange[]
 
   @@unique([modelId, name])
 }
 
 model ModelYearRange {
-  id          String @id @default(cuid())
-  badgeId     String
-  badge       Badge   @relation(fields: [badgeId], references: [id])
+  id      String @id @default(cuid())
+  badgeId String
+  badge   Badge  @relation(fields: [badgeId], references: [id])
 
-  startYear   Int
-  endYear     Int?       // null = ongoing
-  chassis     String?    // e.g. "F30"
+  startYear Int
+  endYear   Int? // null = ongoing
+  chassis   String? // e.g. "F30"
 
-  hp          Int
-  torque      Int
-  zeroToHundred Int     // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
-  handling    Int        // arbitrary score, standardize scale out of 10
+  hp            Int
+  torque        Int
+  zeroToHundred Int // 0–100 km/h in tenths of a second, e.g. 62 = 6.2s
+  handling      Int // arbitrary score, standardize scale out of 10
 
-  mediaAsset  MediaAsset?
+  mediaAsset       MediaAsset?
   ModCompatibility ModCompatibility[]
 }
-
 
 // ----------------------
 // Mods
 // ----------------------
 
 model ModCategory {
-  id          String  @id @default(cuid())
-  name        String  @unique // e.g. "Intake"
-  slug        String  @unique // e.g. "intake"
-  description String?
-  mods        Mod[]
+  id              String           @id @default(cuid())
+  name            String           @unique // e.g. "Intake"
+  slug            String           @unique // e.g. "intake"
+  description     String?
+  mods            Mod[]
   prerequisiteFor ModRequirement[] @relation("Requirement_prerequisite")
 }
 
 model Mod {
-  id          String       @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
-  slug        String       @unique
+  slug        String      @unique
   brand       String
   category    String // intake, exhaust, tune, suspension, etc.
   description String?
@@ -124,33 +125,35 @@ model Mod {
   dependentOn     ModRequirement[]   @relation("Requirement_dependent")
   ModCategory     ModCategory?       @relation(fields: [modCategoryId], references: [id])
   modCategoryId   String?
+  Product         Product[]
 }
 
 model ModCompatibility {
-  id       String @id @default(cuid())
-  
-  modId    String
-  mod      Mod    @relation(fields: [modId], references: [id])
+  id String @id @default(cuid())
+
+  modId String
+  mod   Mod    @relation(fields: [modId], references: [id])
 
   modelYearRangeObj ModelYearRange @relation(fields: [modelYearRangeId], references: [id])
   modelYearRangeId  String
 
   // denormalized for faster queries
-  badgeId          String
-  modelId          String
-  makeId           String
-  modelYearRange   String
+  badgeId        String
+  modelId        String
+  makeId         String
+  modelYearRange String
 
   // performance deltas (all optional)
-  hpGain          Int?   
-  nmGain          Int?
-  handlingDelta   Int?   
-  zeroToHundredDelta Int? 
+  hpGain             Int?
+  nmGain             Int?
+  handlingDelta      Int?
+  zeroToHundredDelta Int?
 
   // pricing per car compatibility
-  price           Int?
+  price Int?
 
-  notes           String?
+  notes   String?
+  Product Product[]
 }
 
 model ModRequirement {
@@ -169,37 +172,147 @@ model ModRequirement {
 // Media
 // ----------------------
 model MediaAsset {
-  id  String  @id @default(cuid())
+  id   String  @id @default(cuid())
   name String
-  url String
-  alt String?
+  url  String
+  alt  String?
 
   // For mods (product photos)
   modId String? @unique
   mod   Mod?    @relation(fields: [modId], references: [id])
 
   // For badges (reference images of trims/cars)
-  modelYearRangeId String?  @unique
-  modelYearRange   ModelYearRange?  @relation(fields: [modelYearRangeId], references: [id], onDelete: Cascade)
+  modelYearRangeId String?         @unique
+  modelYearRange   ModelYearRange? @relation(fields: [modelYearRangeId], references: [id], onDelete: Cascade)
+  Product          Product?        @relation(fields: [productId], references: [id])
+  productId        String?
 }
 
 // ----------------------
 // User builds (saved configurations)
 // ----------------------
 model UserBuild {
-  id           String   @id @default(cuid())
-  userId       String 
+  id     String @id @default(cuid())
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  selectedCar  Json     
-  baseSpecs    Json     
-  selectedMods Json  
-  
-  nickname     String?
-  notes        String?
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+
+  selectedCar  Json
+  baseSpecs    Json
+  selectedMods Json
+
+  nickname String?
+  notes    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+// -----------------------------------
+// Product: what's for sale
+// -----------------------------------
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  priceCents  Int
+  currency    String  @default("AUD")
+  stock       Int?
+  isActive    Boolean @default(true)
+
+  // Relations
+  modId String
+  mod   Mod    @relation(fields: [modId], references: [id])
+
+  compatibilityId String?
+  compatibility   ModCompatibility? @relation(fields: [compatibilityId], references: [id])
+
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+  mediaAssets MediaAsset[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([modId])
+  @@index([compatibilityId])
+  @@index([isActive, priceCents])
+}
+
+// -----------------------------------
+// Cart: one per user
+// -----------------------------------
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id     String @id @default(cuid())
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity       Int      @default(1)
+  unitPriceCents Int? // optional snapshot at time of add
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([cartId, productId]) // no duplicate products in same cart
+}
+
+// -----------------------------------
+// Order: checkout receipt
+// -----------------------------------
+model Order {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  status     OrderStatus @default(PENDING)
+  totalCents Int
+  currency   String      @default("AUD")
+
+  // Stripe refs
+  stripeSessionId String?
+  stripePaymentId String?
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+// -----------------------------------
+// OrderItem: products inside an order
+// -----------------------------------
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity       Int @default(1)
+  unitPriceCents Int // snapshot of product price at purchase
+
+  createdAt DateTime @default(now())
 }
