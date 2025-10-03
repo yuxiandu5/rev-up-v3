@@ -15,7 +15,6 @@ const eslintConfig = [
     rules: {
       "@typescript-eslint/no-unused-vars": ["warn"],
       "no-console": "warn",
-      // Let Prettier handle these
       semi: "off",
       quotes: "off",
     },
