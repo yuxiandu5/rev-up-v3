@@ -5,7 +5,7 @@ import { BadgeCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
-import { BadgeResponseDTO, toBadgeDTO } from "@/types/AdminDashboardDTO";
+import { BadgeResponseDTO, toBadgeDTO } from "@/types/DTO/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {

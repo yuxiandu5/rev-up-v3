@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BadgeResponseDTO } from "@/types/AdminDashboardDTO";
+import { BadgeResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

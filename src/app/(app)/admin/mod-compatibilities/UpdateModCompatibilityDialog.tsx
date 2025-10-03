@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModCompatibilityResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModCompatibilityResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 interface UpdateModCompatibilityInput {
   hpGain?: number;

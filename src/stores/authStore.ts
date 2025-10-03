@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import { UserDTO } from "@/types/dtos";
+import { UserDTO } from "@/types/DTO/dtos";
 
 interface AuthState {
   user: UserDTO | null;

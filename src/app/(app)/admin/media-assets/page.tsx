@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { mediaAssetColumns } from "./columns";
 import { MediaAssetTable } from "./MediaAssetTable";
-import { MediaAssetResponseDTO } from "@/types/AdminDashboardDTO";
+import { MediaAssetResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { useAuthStore } from "@/stores/authStore";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
@@ -14,7 +14,9 @@ export default function MediaAssetsPage() {
   const [mediaAssetData, setMediaAssetData] = useState<MediaAssetResponseDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
-  const [editData, setEditData] = useState<(MediaAssetResponseDTO & { modId?: string; modelYearRangeId?: string }) | null>(null);
+  const [editData, setEditData] = useState<
+    (MediaAssetResponseDTO & { modId?: string; modelYearRangeId?: string }) | null
+  >(null);
 
   const { apiCall } = useApiClient();
   const { isInitialized } = useAuthStore();
@@ -76,7 +78,7 @@ export default function MediaAssetsPage() {
   const handleMediaAssetEdit = async (id: string) => {
     const data = mediaAssetData.find((mediaAsset) => mediaAsset.id === id);
     if (!data) return;
-    
+
     // Note: The current MediaAssetResponseDTO doesn't include modId/modelYearRangeId
     // You might need to fetch the full details or update the DTO to include these fields
     setEditData(data as MediaAssetResponseDTO & { modId?: string; modelYearRangeId?: string });

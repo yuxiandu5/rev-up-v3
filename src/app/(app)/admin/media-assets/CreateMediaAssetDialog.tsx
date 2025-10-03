@@ -23,19 +23,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MediaAssetUploadDTOSchema } from "@/types/AdminDashboardDTO";
+import { MediaAssetUploadDTOSchema } from "@/types/DTO/AdminDashboardDTO";
 
 interface CreateMediaAssetDialogProps {
   onSuccess: () => void;
 }
 
 export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProps) {
-  const [form, setForm] = useState<CreateMediaAssetInput>({ 
-    name: "", 
+  const [form, setForm] = useState<CreateMediaAssetInput>({
+    name: "",
     url: "",
     modId: undefined,
     modelYearRangeId: undefined,
-    type: "mod"
+    type: "mod",
   });
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,14 +55,14 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
         ...form,
         modId: "",
         modelYearRangeId: undefined,
-        type: "mod"
+        type: "mod",
       });
     } else if (value === "car") {
       setForm({
         ...form,
         modId: undefined,
         modelYearRangeId: "",
-        type: "car"
+        type: "car",
       });
     }
   };
@@ -74,14 +74,14 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
         ...form,
         modId: value,
         modelYearRangeId: undefined,
-        type: "mod"
+        type: "mod",
       });
     } else if (name === "modelYearRangeId") {
       setForm({
         ...form,
         modId: undefined,
         modelYearRangeId: value,
-        type: "car"
+        type: "car",
       });
     }
   };
@@ -95,10 +95,10 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
           method: "POST",
           body: JSON.stringify({ fileName: file.name, contentType: file.type, type: form.type }),
         });
-        const data = await res.json()
+        const data = await res.json();
         const { uploadUrl, publicUrl } = data.data;
         if (!res.ok) throw new Error(`Failed to upload file: ${res.status}`);
-        
+
         const uploadRes = await fetch(uploadUrl, {
           method: "PUT",
           body: file,
@@ -118,7 +118,7 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
         toast("Media asset created!");
         onSuccess();
         setForm({ name: "", url: "", modId: undefined, modelYearRangeId: undefined, type: "mod" });
-        return
+        return;
       }
 
       const res = await apiCall("/api/admin/media-assets", {
@@ -170,29 +170,23 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
           <div className="grid gap-4 mt-4">
             <div className="grid gap-3">
               <Label htmlFor="name">Name</Label>
-              <Input 
-                id="name" 
-                name="name" 
-                value={form.name}
-                onChange={handleChange} 
-                required
-              />
+              <Input id="name" name="name" value={form.name} onChange={handleChange} required />
             </div>
             <div className="grid gap-3">
               <Label>File</Label>
-              <Input 
-                id="file" 
-                name="file" 
+              <Input
+                id="file"
+                name="file"
                 type="file"
-                onChange={handleFileChange} 
+                onChange={handleFileChange}
                 className="cursor-pointer hover:scale-98 transition-all duration-300"
               />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="url">URL (Optional)</Label>
-              <Input 
-                id="url" 
-                name="url" 
+              <Input
+                id="url"
+                name="url"
                 type="url"
                 value={form.url}
                 onChange={handleChange}
@@ -214,11 +208,11 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
             {form.modId !== undefined && (
               <div className="grid gap-3">
                 <Label htmlFor="modId">Mod ID</Label>
-                <Input 
-                  id="modId" 
-                  name="modId" 
+                <Input
+                  id="modId"
+                  name="modId"
                   value={form.modId}
-                  onChange={handleIdChange} 
+                  onChange={handleIdChange}
                   placeholder="Enter Mod ID"
                   required
                 />
@@ -227,11 +221,11 @@ export function CreateMediaAssetDialog({ onSuccess }: CreateMediaAssetDialogProp
             {form.modelYearRangeId !== undefined && (
               <div className="grid gap-3">
                 <Label htmlFor="modelYearRangeId">Model Year Range ID</Label>
-                <Input 
-                  id="modelYearRangeId" 
-                  name="modelYearRangeId" 
+                <Input
+                  id="modelYearRangeId"
+                  name="modelYearRangeId"
                   value={form.modelYearRangeId}
-                  onChange={handleIdChange} 
+                  onChange={handleIdChange}
                   placeholder="Enter Model Year Range ID"
                   required
                 />

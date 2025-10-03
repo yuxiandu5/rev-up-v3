@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { MediaAssetResponseDTO } from "@/types/AdminDashboardDTO";
+import { MediaAssetResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, ExternalLink } from "lucide-react";
 
@@ -44,7 +44,7 @@ export const mediaAssetColumns = (
           size="sm"
           variant="ghost"
           className="h-6 w-6 p-0"
-          onClick={() => window.open(row.original.url, '_blank')}
+          onClick={() => window.open(row.original.url, "_blank")}
         >
           <ExternalLink className="h-3 w-3" />
         </Button>

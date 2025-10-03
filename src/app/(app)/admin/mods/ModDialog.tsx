@@ -16,7 +16,7 @@ import { CreateModInput } from "@/lib/validations";
 import { useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModCategoryResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModCategoryResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

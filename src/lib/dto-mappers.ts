@@ -15,7 +15,7 @@ import {
   ModificationDTO,
   UserSummaryDTO,
   UserProfileDTO,
-} from "@/types/dtos";
+} from "@/types/DTO/dtos";
 
 // ============================================================================
 // Database Entity Types (extend Prisma types for better type safety)

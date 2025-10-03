@@ -1,4 +1,4 @@
-import { BuildDetailDTO } from "@/types/dtos";
+import { BuildDetailDTO } from "@/types/DTO/dtos";
 import { motion } from "framer-motion";
 import CarDisplay from "../mod-page/sub-comp/carDisplay";
 import CarSpecDisplay from "../mod-page/sub-comp/carSpecDisplay";

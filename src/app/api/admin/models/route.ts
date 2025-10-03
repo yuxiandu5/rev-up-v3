@@ -5,7 +5,7 @@ import { ModelCreateSchema, PaginationSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
 import { toSlug } from "@/lib/utils";
 import { NotFoundError } from "@/lib/errors/AppError";
-import { ModelResponseDTO, toModelDTO } from "@/types/AdminDashboardDTO";
+import { ModelResponseDTO, toModelDTO } from "@/types/DTO/AdminDashboardDTO";
 
 export async function GET(req: NextRequest) {
   try {

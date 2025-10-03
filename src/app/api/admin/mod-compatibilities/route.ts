@@ -4,7 +4,7 @@ import { ConflictError } from "@/lib/errors/AppError";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ModCompatibilityCreateSchema, PaginationSchema, ManyIdSchema } from "@/lib/validations";
-import { ModCompatibilityResponseDTO, toModCompatibilityDTO } from "@/types/AdminDashboardDTO";
+import { ModCompatibilityResponseDTO, toModCompatibilityDTO } from "@/types/DTO/AdminDashboardDTO";
 import { NotFoundError } from "@/lib/errors/AppError";
 
 export async function GET(req: NextRequest) {

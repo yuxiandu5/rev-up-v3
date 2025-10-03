@@ -15,7 +15,7 @@ import { UpdateModCategoryInput } from "@/lib/validations";
 import { useEffect, useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModCategoryResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModCategoryResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 interface UpdateModCategoryDialogProps {
   fetchData: () => void;

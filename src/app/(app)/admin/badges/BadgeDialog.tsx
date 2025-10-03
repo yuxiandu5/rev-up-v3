@@ -16,7 +16,7 @@ import { CreateBadgeInput } from "@/lib/validations";
 import { useState } from "react";
 import { useApiClient } from "@/hooks/useApiClient";
 import { toast } from "sonner";
-import { ModelResponseDTO } from "@/types/AdminDashboardDTO";
+import { ModelResponseDTO } from "@/types/DTO/AdminDashboardDTO";
 
 import {
   Select,

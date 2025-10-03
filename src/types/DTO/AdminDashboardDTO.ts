@@ -1,5 +1,5 @@
 import { Role } from "./dtos";
-import { string, z } from "zod";
+import { z } from "zod";
 
 export interface AdminUserListItemDTO {
   id: string;
@@ -233,27 +233,32 @@ type ModRequirementItem = {
   prerequisiteCategory: string[];
 };
 
-export function toModRequirementDTO(data: {
-  id: string;
-  prerequisiteCategory: { name: string };
-  dependent: { name: string; brand: string; category: string };
-}[]): ModRequirementItem[] {
-    const formattedResults = Object.values(
-      data.reduce((acc, curr) => {
-        if(!acc[curr.dependent.name]){
+export function toModRequirementDTO(
+  data: {
+    id: string;
+    prerequisiteCategory: { name: string };
+    dependent: { name: string; brand: string; category: string };
+  }[]
+): ModRequirementItem[] {
+  const formattedResults = Object.values(
+    data.reduce(
+      (acc, curr) => {
+        if (!acc[curr.dependent.name]) {
           acc[curr.dependent.name] = {
             id: curr.id,
             dependent: curr.dependent.brand + " " + curr.dependent.name,
             category: curr.dependent.category,
-            prerequisiteCategory: []
-          }
+            prerequisiteCategory: [],
+          };
         }
 
-        acc[curr.dependent.name].prerequisiteCategory.push(curr.prerequisiteCategory.name)
-        return acc
-      } ,{} as Record<string, ModRequirementItem>)
+        acc[curr.dependent.name].prerequisiteCategory.push(curr.prerequisiteCategory.name);
+        return acc;
+      },
+      {} as Record<string, ModRequirementItem>
     )
-    return formattedResults
+  );
+  return formattedResults;
 }
 
 export const MediaAssetDTOSchema = z.object({

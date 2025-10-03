@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { mapToBuildDetailDTO } from "@/lib/dto-mappers";
-import type { ApiSuccessResponse } from "@/types/dtos";
+import type { ApiSuccessResponse } from "@/types/DTO/dtos";
 
 /**
  * GET /api/builds/public/[id] - Get build for public viewing (no auth required)

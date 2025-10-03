@@ -166,6 +166,26 @@ export const UserFilterSchema = z.object({
   isActive: z.preprocess((val) => (val === null ? undefined : val), z.coerce.boolean().optional()),
 });
 
+export const MarketPlacePaginationSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(1000).default(50),
+  search: z.string().max(100).optional(),
+  sort: z
+    .enum(["price_asc", "price_desc", "createdAt_asc", "createdAt_desc"])
+    .default("createdAt_asc"),
+  category: z.string().max(100).optional(),
+  brand: z.string().max(100).optional(),
+  make: z.string().max(100).optional(),
+  model: z.string().max(100).optional(),
+  badge: z.string().max(100).optional(),
+  year: z.coerce
+    .number()
+    .int()
+    .min(2000)
+    .max(new Date().getFullYear() + 1)
+    .optional(),
+});
+
 // General Validation
 export const IdSchema = z.object({
   id: z.string().cuid(),
@@ -310,34 +330,30 @@ export const ModRequirementCreateSchema = z.object({
 });
 
 // media asset
-export const MediaAssetCreateSchema = z.object({
-  name: z.string().min(1).max(100),
-  url: z.string().url(),
-  modId: z.string().cuid().optional(),
-  modelYearRangeId: z.string().cuid().optional(),
-  type: z.enum(["mod", "car"]),
-})
-.refine(
-  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
-  {
+export const MediaAssetCreateSchema = z
+  .object({
+    name: z.string().min(1).max(100),
+    url: z.string().url(),
+    modId: z.string().cuid().optional(),
+    modelYearRangeId: z.string().cuid().optional(),
+    type: z.enum(["mod", "car"]),
+  })
+  .refine((data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId), {
     message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
     path: ["modId"], // where the error will attach
-  }
-);
+  });
 
-export const MediaAssetUpdateSchema = z.object({
-  name: z.string().min(1).max(100).optional(),
-  url: z.string().url().optional(),
-  modId: z.string().cuid().optional(),
-  modelYearRangeId: z.string().cuid().optional(),
-})
-.refine(
-  (data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId),
-  {
+export const MediaAssetUpdateSchema = z
+  .object({
+    name: z.string().min(1).max(100).optional(),
+    url: z.string().url().optional(),
+    modId: z.string().cuid().optional(),
+    modelYearRangeId: z.string().cuid().optional(),
+  })
+  .refine((data) => (data.modId ? !data.modelYearRangeId : !!data.modelYearRangeId), {
     message: "Provide either a modId OR a modelYearRangeId (not both, not neither)",
     path: ["modId"], // where the error will attach
-  }
-);
+  });
 
 export const fileUploadSchema = z.object({
   fileName: z

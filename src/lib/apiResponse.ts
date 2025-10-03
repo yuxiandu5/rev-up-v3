@@ -73,15 +73,15 @@ export function errorToResponse(error: unknown) {
     // Format Zod validation errors into user-friendly messages
     const formatZodError = (zodError: ZodError): string => {
       const issues = zodError.issues.map((issue) => {
-        const path = issue.path.length > 0 ? issue.path.join('.') : 'field';
+        const path = issue.path.length > 0 ? issue.path.join(".") : "field";
         return `${path}: ${issue.message}`;
       });
-      
+
       if (issues.length === 1) {
         return `Validation error: ${issues[0]}`;
       }
-      
-      return `Validation errors: ${issues.join(', ')}`;
+
+      return `Validation errors: ${issues.join(", ")}`;
     };
 
     return NextResponse.json<ApiResponse<null>>(

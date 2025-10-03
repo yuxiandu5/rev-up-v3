@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { BuildSummaryDTO, BuildDetailDTO } from "@/types/dtos";
+import { BuildSummaryDTO, BuildDetailDTO } from "@/types/DTO/dtos";
 import CarDisplay from "../mod-page/sub-comp/carDisplay";
 import CarSpecDisplay from "../mod-page/sub-comp/carSpecDisplay";
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
