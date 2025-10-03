@@ -11,7 +11,7 @@ describe("Test Configuration", () => {
 
   it("should resolve path aliases", async () => {
     // This tests if our @ alias works
-    const { prisma } = await import("@/lib/prisma");
+    const { prisma } = await import("../src/lib/prisma");
     expect(prisma).toBeDefined();
   });
 });
