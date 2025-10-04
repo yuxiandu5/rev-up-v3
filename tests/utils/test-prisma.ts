@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 // Ensure we're using the test database URL
-const testDatabaseUrl = "postgresql://postgres:postgres@localhost:5434/revup_test";
+const testDatabaseUrl = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5434/revup_test";
 
 if (process.env.NODE_ENV !== "test") {
   throw new Error("Test Prisma client should only be used in test environment!");

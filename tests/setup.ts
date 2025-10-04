@@ -4,7 +4,9 @@ import { beforeAll, afterAll, vi } from "vitest";
 Object.assign(process.env, {
   NODE_ENV: "test",
   JWT_SECRET: "test-jwt-secret",
-  DATABASE_URL: "postgresql://postgres:postgres@localhost:5434/revup_test",
+  DATABASE_URL: process.env.CI
+  ? "postgresql://postgres:postgres@localhost:5432/revup_test"
+  : "postgresql://postgres:postgres@localhost:5434/revup_test",
 });
 
 beforeAll(async () => {
