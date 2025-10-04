@@ -29,68 +29,68 @@ describe("Market Place API Route", () => {
 
   it("should return products with default pagination", async () => {
     const mockProducts = [
-        {
-          id: "cmg98y5du000fock3azfcvudc",
-          name: "Stage 1 ECU Tune BMW 3 Series 320i 2013-2018",
-          description: "Stage 1 ECU tune for stock hardware",
-          priceCents: 58400,
-          currency: "AUD",
-          stock: null,
-          isActive: true,
-          modId: "cmg98y52f000nocjg9ccjhln1",
-          compatibilityId: "cmg98y52m0019ocjgirtc17xx",
-          createdAt: new Date("2025-10-02T10:02:33.282Z"),
-          updatedAt: new Date("2025-10-02T10:02:33.282Z"),
-          mod: {
-              id: "cmg98y52f000nocjg9ccjhln1",
-              name: "Stage 1 ECU Tune",
-              brand: "APR",
-              category: "tune"
+      {
+        id: "cmg98y5du000fock3azfcvudc",
+        name: "Stage 1 ECU Tune BMW 3 Series 320i 2013-2018",
+        description: "Stage 1 ECU tune for stock hardware",
+        priceCents: 58400,
+        currency: "AUD",
+        stock: null,
+        isActive: true,
+        modId: "cmg98y52f000nocjg9ccjhln1",
+        compatibilityId: "cmg98y52m0019ocjgirtc17xx",
+        createdAt: new Date("2025-10-02T10:02:33.282Z"),
+        updatedAt: new Date("2025-10-02T10:02:33.282Z"),
+        mod: {
+          id: "cmg98y52f000nocjg9ccjhln1",
+          name: "Stage 1 ECU Tune",
+          brand: "APR",
+          category: "tune",
+        },
+        compatibility: {
+          id: "cmg98y52m0019ocjgirtc17xx",
+          modelYearRange: "2013-2018",
+          modelYearRangeObj: {
+            badge: {
+              name: "320i",
+              model: {
+                name: "3 Series",
+                make: {
+                  name: "BMW",
+                },
+              },
+            },
           },
-          compatibility: {
-              id: "cmg98y52m0019ocjgirtc17xx",
-              modelYearRange: "2013-2018",
-              modelYearRangeObj: {
-                  badge: {
-                      "name": "320i",
-                      "model": {
-                          "name": "3 Series",
-                          "make": {
-                              "name": "BMW"
-                          }
-                      }
-                  }
-              }
-          }
+        },
       },
     ];
 
     const mockFormattedProducts = [
-        {
-          id: "cmg98y5du000fock3azfcvudc",
-          name: "Stage 1 ECU Tune BMW 3 Series 320i 2013-2018",
-          description: "Stage 1 ECU tune for stock hardware",
-          price: {
-              amountCents: 58400,
-              currency: "AUD",
-              formatted: "AUD 584.00"
-          },
-          stock: null,
-          isActive: true,
-          compatibility: {
-              id: "cmg98y52m0019ocjgirtc17xx",
-              make: "BMW",
-              model: "3 Series",
-              badge: "320i",
-              yearRange: "2013-2018"
-          },
-          mod: {
-              id: "cmg98y52f000nocjg9ccjhln1",
-              brand: "APR",
-              category: "tune"
-          },
-          createdAt: "2025-10-02T10:02:33.282Z",
-          updatedAt: "2025-10-02T10:02:33.282Z"
+      {
+        id: "cmg98y5du000fock3azfcvudc",
+        name: "Stage 1 ECU Tune BMW 3 Series 320i 2013-2018",
+        description: "Stage 1 ECU tune for stock hardware",
+        price: {
+          amountCents: 58400,
+          currency: "AUD",
+          formatted: "AUD 584.00",
+        },
+        stock: null,
+        isActive: true,
+        compatibility: {
+          id: "cmg98y52m0019ocjgirtc17xx",
+          make: "BMW",
+          model: "3 Series",
+          badge: "320i",
+          yearRange: "2013-2018",
+        },
+        mod: {
+          id: "cmg98y52f000nocjg9ccjhln1",
+          brand: "APR",
+          category: "tune",
+        },
+        createdAt: "2025-10-02T10:02:33.282Z",
+        updatedAt: "2025-10-02T10:02:33.282Z",
       },
     ];
 
@@ -136,7 +136,7 @@ describe("Market Place API Route", () => {
   it("should handle search parameter", async () => {
     const { prisma } = await import("@/lib/prisma");
     const { MarketPlacePaginationSchema } = await import("@/lib/validations");
-    
+
     vi.mocked(MarketPlacePaginationSchema.parse).mockReturnValue({
       page: 1,
       pageSize: 50,
@@ -171,7 +171,7 @@ describe("Market Place API Route", () => {
   it("should handle sorting parameters", async () => {
     const { prisma } = await import("@/lib/prisma");
     const { MarketPlacePaginationSchema } = await import("@/lib/validations");
-    
+
     vi.mocked(MarketPlacePaginationSchema.parse).mockReturnValue({
       page: 1,
       pageSize: 50,
@@ -194,7 +194,7 @@ describe("Market Place API Route", () => {
 
   it("should handle errors gracefully", async () => {
     const { MarketPlacePaginationSchema } = await import("@/lib/validations");
-    
+
     vi.mocked(MarketPlacePaginationSchema.parse).mockImplementation(() => {
       throw new Error("Invalid parameters");
     });

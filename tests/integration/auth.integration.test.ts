@@ -17,13 +17,13 @@ describe("Authentication Integration Tests", () => {
         userName: "testuser123",
         password: "SecurePass123!",
         recoverQuestion: "What is your favorite color?",
-        answer: "blue"
+        answer: "blue",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await registerPOST(request);
@@ -34,7 +34,7 @@ describe("Authentication Integration Tests", () => {
 
       // Verify user was created in database
       const dbUser = await prisma.user.findUnique({
-        where: { userName: "testuser123" }
+        where: { userName: "testuser123" },
       });
       expect(dbUser).toBeTruthy();
       expect(dbUser?.userName).toBe("testuser123");
@@ -47,21 +47,21 @@ describe("Authentication Integration Tests", () => {
           userName: "duplicate",
           passwordHash: "hashedpass",
           recoverQuestion: "test",
-          answer: "test"
-        }
+          answer: "test",
+        },
       });
 
       const userData = {
         userName: "duplicate",
         password: "SecurePass123!",
         recoverQuestion: "What is your favorite color?",
-        answer: "blue"
+        answer: "blue",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await registerPOST(request);
@@ -76,17 +76,17 @@ describe("Authentication Integration Tests", () => {
         userName: "testuser",
         password: "weak", // Too weak
         recoverQuestion: "What is your favorite color?",
-        answer: "blue"
+        answer: "blue",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await registerPOST(request);
-      
+
       expect(response.status).toBe(400);
     });
   });
@@ -98,13 +98,13 @@ describe("Authentication Integration Tests", () => {
         userName: "logintest",
         password: "SecurePass123!",
         recoverQuestion: "What is your favorite color?",
-        answer: "blue"
+        answer: "blue",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       await registerPOST(request);
@@ -113,13 +113,13 @@ describe("Authentication Integration Tests", () => {
     it("should login with valid credentials", async () => {
       const loginData = {
         userName: "logintest",
-        password: "SecurePass123!"
+        password: "SecurePass123!",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/login", {
         method: "POST",
         body: JSON.stringify(loginData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await loginPOST(request);
@@ -131,7 +131,7 @@ describe("Authentication Integration Tests", () => {
 
       // Verify refresh token was created
       const refreshTokens = await prisma.refreshToken.findMany({
-        where: { user: { userName: "logintest" } }
+        where: { user: { userName: "logintest" } },
       });
       expect(refreshTokens.length).toBe(1);
     });
@@ -139,13 +139,13 @@ describe("Authentication Integration Tests", () => {
     it("should reject invalid credentials", async () => {
       const loginData = {
         userName: "logintest",
-        password: "WrongPassword123!"
+        password: "WrongPassword123!",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/login", {
         method: "POST",
         body: JSON.stringify(loginData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await loginPOST(request);
@@ -158,13 +158,13 @@ describe("Authentication Integration Tests", () => {
     it("should reject non-existent user", async () => {
       const loginData = {
         userName: "nonexistent",
-        password: "SecurePass123!"
+        password: "SecurePass123!",
       };
 
       const request = new NextRequest("http://localhost:3000/api/auth/login", {
         method: "POST",
         body: JSON.stringify(loginData),
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
 
       const response = await loginPOST(request);
@@ -183,26 +183,26 @@ describe("Authentication Integration Tests", () => {
           userName: "cascadetest",
           passwordHash: "hashedpass",
           recoverQuestion: "test",
-          answer: "test"
-        }
+          answer: "test",
+        },
       });
 
       await prisma.refreshToken.create({
         data: {
           userId: user.id,
           tokenHash: "testhash",
-          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24) // 24 hours
-        }
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
+        },
       });
 
       // Delete user
       await prisma.user.delete({
-        where: { id: user.id }
+        where: { id: user.id },
       });
 
       // Verify refresh tokens were also deleted (cascade)
       const remainingTokens = await prisma.refreshToken.findMany({
-        where: { userId: user.id }
+        where: { userId: user.id },
       });
       expect(remainingTokens.length).toBe(0);
     });

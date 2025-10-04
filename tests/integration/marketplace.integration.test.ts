@@ -2,12 +2,21 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { testPrisma as prisma } from "../utils/test-prisma";
 import { GET as marketplaceGET } from "../../src/app/api/market-place/route";
 import { NextRequest } from "next/server";
-import { Badge, Make, Mod, ModCategory, ModCompatibility, Model, ModelYearRange, Product } from "@prisma/client";
+import {
+  Badge,
+  Make,
+  Mod,
+  ModCategory,
+  ModCompatibility,
+  Model,
+  ModelYearRange,
+  Product,
+} from "@prisma/client";
 
 describe("Marketplace Integration Tests", () => {
   let testMake: Make;
   let testModel: Model;
-  let testBadge: Badge  ;
+  let testBadge: Badge;
   let testYearRange: ModelYearRange;
   let testModCategory: ModCategory;
   let testMod: Mod;
@@ -19,24 +28,24 @@ describe("Marketplace Integration Tests", () => {
     testMake = await prisma.make.create({
       data: {
         name: "BMW",
-        slug: "bmw"
-      }
+        slug: "bmw",
+      },
     });
 
     testModel = await prisma.model.create({
       data: {
         name: "3 Series",
         slug: "3-series",
-        makeId: testMake.id
-      }
+        makeId: testMake.id,
+      },
     });
 
     testBadge = await prisma.badge.create({
       data: {
         name: "320i",
         slug: "320i",
-        modelId: testModel.id
-      }
+        modelId: testModel.id,
+      },
     });
 
     testYearRange = await prisma.modelYearRange.create({
@@ -48,16 +57,16 @@ describe("Marketplace Integration Tests", () => {
         hp: 184,
         torque: 270,
         zeroToHundred: 75,
-        handling: 80
-      }
+        handling: 80,
+      },
     });
 
     testModCategory = await prisma.modCategory.create({
       data: {
         name: "ECU Tune",
         slug: "ecu-tune",
-        description: "Engine control unit modifications"
-      }
+        description: "Engine control unit modifications",
+      },
     });
 
     testMod = await prisma.mod.create({
@@ -67,8 +76,8 @@ describe("Marketplace Integration Tests", () => {
         brand: "APR",
         category: "tune",
         description: "Stage 1 ECU tune for stock hardware",
-        modCategoryId: testModCategory.id
-      }
+        modCategoryId: testModCategory.id,
+      },
     });
 
     testCompatibility = await prisma.modCompatibility.create({
@@ -84,8 +93,8 @@ describe("Marketplace Integration Tests", () => {
         handlingDelta: 5,
         zeroToHundredDelta: -8,
         price: 584,
-        notes: "Requires 95+ octane fuel"
-      }
+        notes: "Requires 95+ octane fuel",
+      },
     });
 
     testProduct = await prisma.product.create({
@@ -97,8 +106,8 @@ describe("Marketplace Integration Tests", () => {
         stock: 10,
         isActive: true,
         modId: testMod.id,
-        compatibilityId: testCompatibility.id
-      }
+        compatibilityId: testCompatibility.id,
+      },
     });
   });
 
@@ -116,7 +125,7 @@ describe("Marketplace Integration Tests", () => {
   describe("GET /api/market-place", () => {
     it("should return products with default pagination", async () => {
       const request = new NextRequest("http://localhost:3000/api/market-place");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
@@ -139,12 +148,12 @@ describe("Marketplace Integration Tests", () => {
           priceCents: 35000,
           currency: "AUD",
           isActive: true,
-          modId: testMod.id
-        }
+          modId: testMod.id,
+        },
       });
 
       const request = new NextRequest("http://localhost:3000/api/market-place?search=ECU");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
@@ -163,13 +172,13 @@ describe("Marketplace Integration Tests", () => {
             priceCents: 10000 + i * 1000,
             currency: "AUD",
             isActive: true,
-            modId: testMod.id
-          }
+            modId: testMod.id,
+          },
         });
       }
 
       const request = new NextRequest("http://localhost:3000/api/market-place?page=2&pageSize=5");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
@@ -189,12 +198,12 @@ describe("Marketplace Integration Tests", () => {
           priceCents: 25000,
           currency: "AUD",
           isActive: false, // Inactive
-          modId: testMod.id
-        }
+          modId: testMod.id,
+        },
       });
 
       const request = new NextRequest("http://localhost:3000/api/market-place");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
@@ -205,17 +214,17 @@ describe("Marketplace Integration Tests", () => {
 
     it("should include mod and compatibility data", async () => {
       const request = new NextRequest("http://localhost:3000/api/market-place");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
       expect(response.status).toBe(200);
       const product = data.data[0];
-      
+
       expect(product.mod).toBeDefined();
       expect(product.mod.category).toBe("tune");
       expect(product.mod.brand).toBe("APR");
-      
+
       expect(product.compatibility).toBeDefined();
       expect(product.compatibility.hpGain).toBe(30);
       expect(product.compatibility.nmGain).toBe(50);
@@ -223,7 +232,7 @@ describe("Marketplace Integration Tests", () => {
 
     it("should handle empty results", async () => {
       const request = new NextRequest("http://localhost:3000/api/market-place?search=nonexistent");
-      
+
       const response = await marketplaceGET(request);
       const data = await response.json();
 
@@ -241,27 +250,27 @@ describe("Marketplace Integration Tests", () => {
         include: {
           mod: {
             include: {
-              ModCategory: true
-            }
+              ModCategory: true,
+            },
           },
-              compatibility: {
+          compatibility: {
+            include: {
+              modelYearRangeObj: {
                 include: {
-                  modelYearRangeObj: {
+                  badge: {
                     include: {
-                      badge: {
+                      model: {
                         include: {
-                          model: {
-                            include: {
-                              make: true
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-        }
+                          make: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
 
       expect(product).toBeTruthy();
@@ -276,20 +285,20 @@ describe("Marketplace Integration Tests", () => {
       const compatibility = await prisma.modCompatibility.findUnique({
         where: { id: testCompatibility.id },
         include: {
-          modelYearRangeObj: true
-        }
+          modelYearRangeObj: true,
+        },
       });
 
       expect(compatibility).toBeTruthy();
-      
+
       // Base stats
       const baseHp = compatibility?.modelYearRangeObj.hp || 0;
       const baseTorque = compatibility?.modelYearRangeObj.torque || 0;
-      
+
       // With mod
       const modifiedHp = baseHp + (compatibility?.hpGain || 0);
       const modifiedTorque = baseTorque + (compatibility?.nmGain || 0);
-      
+
       expect(modifiedHp).toBe(214); // 184 + 30
       expect(modifiedTorque).toBe(320); // 270 + 50
     });

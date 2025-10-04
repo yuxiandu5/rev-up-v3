@@ -13,13 +13,16 @@ process.env.DATABASE_URL = testDatabaseUrl;
 export const testPrisma = new PrismaClient({
   datasources: {
     db: {
-      url: testDatabaseUrl
-    }
-  }
+      url: testDatabaseUrl,
+    },
+  },
 });
 
 // Verify we're connected to the test database
-testPrisma.$connect().then(async () => {
-  const result = await testPrisma.$queryRaw`SELECT current_database() as db_name`;
-  console.log("🔗 Connected to test database:", result);
-}).catch(console.error);
+testPrisma
+  .$connect()
+  .then(async () => {
+    const result = await testPrisma.$queryRaw`SELECT current_database() as db_name`;
+    console.log("🔗 Connected to test database:", result);
+  })
+  .catch(console.error);
