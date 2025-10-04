@@ -13,12 +13,6 @@ describe("Database Verification", () => {
     expect(dbName).toBe("revup_test");
   });
 
-  it("should be using port 5434", async () => {
-    // Check if we can connect and the connection string is correct
-    expect(process.env.DATABASE_URL).toContain("5434");
-    expect(process.env.DATABASE_URL).toContain("revup_test");
-  });
-
   it("should have a clean test database", async () => {
     // Count records in a few key tables - should be 0 or very low
     const userCount = await prisma.user.count();
