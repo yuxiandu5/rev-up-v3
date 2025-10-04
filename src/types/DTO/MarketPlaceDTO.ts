@@ -18,6 +18,10 @@ export interface ProductResponseDTO {
     model: string;
     badge: string;
     yearRange: string; // e.g. "2013–2018"
+    hpGain?: number | null;
+    nmGain?: number | null;
+    handlingDelta?: number | null;
+    zeroToHundredDelta?: number | null;
   } | null;
 
   mod: {
@@ -52,6 +56,10 @@ export function toProductDTO(
           };
         };
       };
+      hpGain?: number | null;
+      nmGain?: number | null;
+      handlingDelta?: number | null;
+      zeroToHundredDelta?: number | null;
     } | null;
   }
 ): ProductResponseDTO {
@@ -73,6 +81,10 @@ export function toProductDTO(
           model: product.compatibility.modelYearRangeObj.badge.model.name,
           badge: product.compatibility.modelYearRangeObj.badge.name,
           yearRange: product.compatibility.modelYearRange,
+          hpGain: product.compatibility.hpGain ?? undefined,
+          nmGain: product.compatibility.nmGain ?? undefined,
+          handlingDelta: product.compatibility.handlingDelta ?? undefined,
+          zeroToHundredDelta: product.compatibility.zeroToHundredDelta ?? undefined,
         }
       : undefined,
     mod: {

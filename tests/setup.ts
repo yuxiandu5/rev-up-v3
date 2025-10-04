@@ -1,10 +1,15 @@
 import { beforeAll, afterAll, vi } from "vitest";
 
+// Set test environment variables BEFORE any imports
+Object.assign(process.env, {
+  NODE_ENV: "test",
+  JWT_SECRET: "test-jwt-secret",
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5434/revup_test"
+});
+
 beforeAll(async () => {
   console.log("🧪 Setting up test environment...");
-
-  process.env.JWT_SECRET = "test-jwt-secret";
-  process.env.DATABASE_URL = "postgresql://postgres:postgres@localhost:5434/revup_test";
+  console.log("📊 Using test database:", process.env.DATABASE_URL);
 });
 
 afterAll(async () => {
