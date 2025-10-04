@@ -150,6 +150,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [lint, typecheck, format-check, test]
 
+    env:
+      AWS_ACCESS_KEY_ID: dummy-key-for-build
+      AWS_SECRET_ACCESS_KEY: dummy-secret-for-build
+      AWS_REGION: ap-southeast-2
+      S3_BUCKET_NAME: dummy-bucket
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
