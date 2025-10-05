@@ -6,12 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { mapToBuildSummaryDTOs, mapToBuildSummaryDTO, filterValidBuilds } from "@/lib/dto-mappers";
 import type { ApiSuccessResponse } from "@/types/DTO/dtos";
 
-/**
- * GET /api/builds - Get all builds for authenticated user
- */
 export async function GET(request: NextRequest) {
   try {
-    // Extract and verify JWT token
     const authHeader = request.headers.get("authorization");
     const token = extractBearerToken(authHeader);
 
@@ -22,7 +18,6 @@ export async function GET(request: NextRequest) {
     const payload = await verifyAccessJWT(token);
     const userId = payload.sub;
 
-    // Fetch user's builds
     const rawBuilds = await prisma.userBuild.findMany({
       where: {
         userId: userId,
@@ -32,12 +27,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Filter out invalid builds and transform to DTOs
     const validBuilds = filterValidBuilds(rawBuilds);
-    const buildDTOs = mapToBuildSummaryDTOs(validBuilds);
+    const buildDTO = mapToBuildSummaryDTOs(validBuilds);
 
-    const response: ApiSuccessResponse<typeof buildDTOs> = {
-      data: buildDTOs,
+    const response: ApiSuccessResponse<typeof buildDTO> = {
+      data: buildDTO,
     };
 
     return NextResponse.json(response, { status: 200 });
@@ -52,12 +46,8 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * POST /api/builds - Create new build for authenticated user
- */
 export async function POST(request: NextRequest) {
   try {
-    // Extract and verify JWT token
     const authHeader = request.headers.get("authorization");
     const token = extractBearerToken(authHeader);
 
@@ -68,7 +58,6 @@ export async function POST(request: NextRequest) {
     const payload = await verifyAccessJWT(token);
     const userId = payload.sub;
 
-    // Parse and validate request body
     const body = await request.json();
     const validatedData = createBuildSchema.parse(body);
 
