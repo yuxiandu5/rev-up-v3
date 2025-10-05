@@ -96,3 +96,21 @@ export function toProductDTO(
     updatedAt: product.updatedAt.toISOString(),
   };
 }
+
+export interface CartResponseDTO{
+  id: string,
+  items: CartItemDTO[],
+  subtotalCents: number,
+  itemCount: number
+}
+
+export interface CartItemDTO {
+  id: string,
+  productId: string,
+  productName: string,
+  productDescription?:string,
+  productImageUrl?: string,
+  unitPriceCents: number,
+  quantity: number,
+  totalPriceCents: number
+}
