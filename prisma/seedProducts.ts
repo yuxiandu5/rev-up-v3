@@ -8,8 +8,8 @@ async function main() {
     include: {
       mod: {
         include: {
-          media: true
-        }
+          media: true,
+        },
       },
       modelYearRangeObj: {
         include: {
@@ -35,7 +35,7 @@ async function main() {
         priceCents: modCompatibility.price ? modCompatibility.price * 100 : 0,
         modId: modCompatibility.modId,
         compatibilityId: modCompatibility.id,
-        imageUrl: modCompatibility.mod.media?.url
+        imageUrl: modCompatibility.mod.media?.url,
       },
     });
   }

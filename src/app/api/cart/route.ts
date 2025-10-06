@@ -1,16 +1,14 @@
-
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { requireAuth } from "@/lib/auth-guard";
 import { prisma } from "@/lib/prisma";
 import { CartResponseDTO, toCartDTO } from "@/types/DTO/MarketPlaceDTO";
 import { NextRequest } from "next/server";
 
-
-export async function GET(req:NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const userPayload = await requireAuth(req);
     const userId = userPayload.sub;
-    
+
     const cart = await prisma.cart.findUnique({
       where: { userId },
       select: {
@@ -23,35 +21,38 @@ export async function GET(req:NextRequest) {
                 id: true,
                 name: true,
                 description: true,
-                imageUrl: true
-              }
+                imageUrl: true,
+              },
             },
             quantity: true,
-            unitPriceCents: true
-          }
+            unitPriceCents: true,
+          },
         },
-      }
+      },
     });
 
-    if(!cart) {
-      return ok({
-        id: null,
-        items: [],
-        subtotalCents: 0,
-        itemCount: 0
-      }, "Cart is empty")
+    if (!cart) {
+      return ok(
+        {
+          id: null,
+          items: [],
+          subtotalCents: 0,
+          itemCount: 0,
+        },
+        "Cart is empty"
+      );
     }
 
-    const formattedCart: CartResponseDTO = toCartDTO(cart)
+    const formattedCart: CartResponseDTO = toCartDTO(cart);
 
-    return ok(formattedCart,"Cart fetched successfully!");
+    return ok(formattedCart, "Cart fetched successfully!");
   } catch (e) {
     console.log(e);
-    return errorToResponse(e)
+    return errorToResponse(e);
   }
 }
 
-export async function DELETE(req:NextRequest) {
+export async function DELETE(req: NextRequest) {
   try {
     const userPayload = await requireAuth(req);
     const userId = userPayload.sub;
@@ -60,13 +61,16 @@ export async function DELETE(req:NextRequest) {
       where: { userId },
     });
 
-    if(!cart) {
-      return ok({
-        id: null,
-        items: [],
-        subtotalCents: 0,
-        itemCount: 0
-      }, "Cart is empty or cart does not exist!");
+    if (!cart) {
+      return ok(
+        {
+          id: null,
+          items: [],
+          subtotalCents: 0,
+          itemCount: 0,
+        },
+        "Cart is empty or cart does not exist!"
+      );
     }
 
     await prisma.cartItem.deleteMany({
@@ -77,12 +81,12 @@ export async function DELETE(req:NextRequest) {
       id: cart.id,
       items: [],
       subtotalCents: 0,
-      itemCount: 0
-    }
+      itemCount: 0,
+    };
 
     return ok(emptyCart, "Cart cleared successfully!");
   } catch (e) {
     console.log(e);
-    return errorToResponse(e)
+    return errorToResponse(e);
   }
 }

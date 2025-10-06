@@ -97,22 +97,22 @@ export function toProductDTO(
   };
 }
 
-export interface CartResponseDTO{
-  id: string,
-  items: CartItemDTO[],
-  subtotalCents: number,
-  itemCount: number
+export interface CartResponseDTO {
+  id: string;
+  items: CartItemDTO[];
+  subtotalCents: number;
+  itemCount: number;
 }
 
 export interface CartItemDTO {
-  id: string,
-  productId: string,
-  productName: string,
-  productDescription:string,
-  productImageUrl: string,
-  unitPriceCents: number,
-  quantity: number,
-  totalPriceCents: number
+  id: string;
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productImageUrl: string;
+  unitPriceCents: number;
+  quantity: number;
+  totalPriceCents: number;
 }
 
 type PrismaCartWithItems = {
@@ -131,7 +131,7 @@ type PrismaCartWithItems = {
 };
 
 // Helper: Map single CartItem
-function toCartItemDTO(cartItem: PrismaCartWithItems['items'][0]): CartItemDTO {
+function toCartItemDTO(cartItem: PrismaCartWithItems["items"][0]): CartItemDTO {
   return {
     id: cartItem.id,
     productId: cartItem.product.id,
@@ -146,14 +146,14 @@ function toCartItemDTO(cartItem: PrismaCartWithItems['items'][0]): CartItemDTO {
 
 export function toCartDTO(cart: PrismaCartWithItems): CartResponseDTO {
   const items = cart.items.map((item) => toCartItemDTO(item));
-  
+
   const subtotalCents = items.reduce((acc, cur) => {
-    return acc += cur.totalPriceCents
+    return (acc += cur.totalPriceCents);
   }, 0);
   const itemCount = items.reduce((acc, cur) => {
-    return acc += cur.quantity
-  }, 0)
-  
+    return (acc += cur.quantity);
+  }, 0);
+
   return {
     id: cart.id,
     items: items,
