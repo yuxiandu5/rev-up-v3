@@ -370,6 +370,15 @@ export const addCartItemSchema = z.object({
   quantity: z.number().int().min(1).max(99),
 })
 
+export const updateCartItemSchema = z.object({
+  cartItemId: z.string().cuid(),
+  quantity: z.number().int().min(0).max(99),
+})
+
+export const deleteCartItemSchema = z.object({
+  cartItemId: z.string().cuid()
+})
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -420,3 +429,5 @@ export type FileUploadInput = z.infer<typeof fileUploadSchema>;
 
 // cartItems
 export type addCartItemInput = z.infer<typeof addCartItemSchema>
+export type updateCartItemInput = z.infer<typeof updateCartItemSchema>
+export type deleteCartItemInput = z.infer<typeof deleteCartItemSchema>

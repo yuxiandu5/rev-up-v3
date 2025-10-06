@@ -2,9 +2,12 @@ import { errorToResponse, ok } from "@/lib/apiResponse";
 import { requireAuth } from "@/lib/auth-guard";
 import { NotFoundError } from "@/lib/errors/AppError";
 import { prisma } from "@/lib/prisma";
-import { addCartItemSchema } from "@/lib/validations";
+import { addCartItemSchema, deleteCartItemSchema, updateCartItemSchema } from "@/lib/validations";
 import { NextRequest } from "next/server";
-import { CartResponseDTO, toCartDTO } from "@/types/DTO/MarketPlaceDTO";
+import { CartResponseDTO } from "@/types/DTO/MarketPlaceDTO";
+import { fetchUserCart } from "../helpers";
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,34 +34,82 @@ export async function POST(req: NextRequest) {
         update: { quantity: { increment: quantity } }
       })
     })
-    const updatedCart = await prisma.cart.findUnique({
-      where: { userId },
-      select: {
-        id: true,
-        items: {
-          select: {
-            id: true,
-            product: {
-              select: {
-                id: true,
-                name: true,
-                description: true,
-                imageUrl: true
-              }
-            },
-            quantity: true,
-            unitPriceCents: true
-          }
-        },
-      }
-    });
-    if(!updatedCart) throw new NotFoundError("User Cart not found!")
 
-    const formattedCart: CartResponseDTO = toCartDTO(updatedCart)
+    const formattedCart: CartResponseDTO = await fetchUserCart(userId)
 
     return ok(formattedCart, "Item added successfully!")
   } catch (e) {
     console.log("POST /api/cart/items error:", e);
+    return errorToResponse(e);
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { cartItemId, quantity } = updateCartItemSchema.parse(body)
+
+    const userPayload = await requireAuth(req)
+    const userId = userPayload.sub
+
+    const cartItem = await prisma.cartItem.findUnique({
+      where: {id: cartItemId},
+      include: {
+        cart: true
+      }
+    })
+
+    if(!cartItem || cartItem.cart.userId !== userId){
+      throw new NotFoundError("Cart item not found")
+    }
+
+    if(quantity === 0){
+      await prisma.cartItem.delete({
+        where: {id: cartItemId}
+      })
+    } else {
+      await prisma.cartItem.update({
+        where: { id: cartItemId},
+        data: { quantity }
+      })
+    }
+
+    const formattedCart: CartResponseDTO = await fetchUserCart(userId)
+
+    return ok(formattedCart, "Cart item updated successfully!")
+
+  } catch (e) {
+    console.log("PATCH /api/cart/items error:", e);
+    return errorToResponse(e);
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { cartItemId } = deleteCartItemSchema.parse(body)
+
+    const userPayload = await requireAuth(req)
+    const userId = userPayload.sub
+
+    const cartItem = await prisma.cartItem.findUnique({
+      where: { id: cartItemId},
+      include: {
+        cart: true
+      }
+    })
+    if(!cartItem || cartItem.cart.userId !== userId) {
+      throw new NotFoundError("Cart item not found")
+    }
+
+    await prisma.cartItem.delete({
+      where: {id: cartItemId}
+    })
+
+    const formattedCart: CartResponseDTO = await fetchUserCart(userId)
+
+    return ok(formattedCart, "Cart item deleted successfully!")
+  } catch (e) {
     return errorToResponse(e);
   }
 }
