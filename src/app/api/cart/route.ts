@@ -50,3 +50,39 @@ export async function GET(req:NextRequest) {
     return errorToResponse(e)
   }
 }
+
+export async function DELETE(req:NextRequest) {
+  try {
+    const userPayload = await requireAuth(req);
+    const userId = userPayload.sub;
+
+    const cart = await prisma.cart.findUnique({
+      where: { userId },
+    });
+
+    if(!cart) {
+      return ok({
+        id: null,
+        items: [],
+        subtotalCents: 0,
+        itemCount: 0
+      }, "Cart is empty or cart does not exist!");
+    }
+
+    await prisma.cartItem.deleteMany({
+      where: { cartId: cart.id },
+    });
+
+    const emptyCart: CartResponseDTO = {
+      id: cart.id,
+      items: [],
+      subtotalCents: 0,
+      itemCount: 0
+    }
+
+    return ok(emptyCart, "Cart cleared successfully!");
+  } catch (e) {
+    console.log(e);
+    return errorToResponse(e)
+  }
+}
