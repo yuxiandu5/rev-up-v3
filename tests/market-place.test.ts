@@ -37,6 +37,7 @@ describe("Market Place API Route", () => {
         currency: "AUD",
         stock: null,
         isActive: true,
+        imageUrl: "https://example.com/product.jpg",
         modId: "cmg98y52f000nocjg9ccjhln1",
         compatibilityId: "cmg98y52m0019ocjgirtc17xx",
         createdAt: new Date("2025-10-02T10:02:33.282Z"),
