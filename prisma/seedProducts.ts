@@ -6,7 +6,11 @@ async function main() {
 
   const modCompatibilities = await prisma.modCompatibility.findMany({
     include: {
-      mod: true,
+      mod: {
+        include: {
+          media: true,
+        },
+      },
       modelYearRangeObj: {
         include: {
           badge: {
@@ -31,6 +35,7 @@ async function main() {
         priceCents: modCompatibility.price ? modCompatibility.price * 100 : 0,
         modId: modCompatibility.modId,
         compatibilityId: modCompatibility.id,
+        imageUrl: modCompatibility.mod.media?.url,
       },
     });
   }

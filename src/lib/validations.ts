@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { cuid, z } from "zod";
 
 // Backend schemas (for API validation)
 export const registerSchema = z.object({
@@ -365,6 +365,20 @@ export const fileUploadSchema = z.object({
   type: z.enum(["mod", "car"]),
 });
 
+export const addCartItemSchema = z.object({
+  productId: z.string().cuid(),
+  quantity: z.number().int().min(1).max(99),
+});
+
+export const updateCartItemSchema = z.object({
+  cartItemId: z.string().cuid(),
+  quantity: z.number().int().min(0).max(99),
+});
+
+export const deleteCartItemSchema = z.object({
+  cartItemId: z.string().cuid(),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -412,3 +426,8 @@ export type CreateModRequirementInput = z.infer<typeof ModRequirementCreateSchem
 export type CreateMediaAssetInput = z.infer<typeof MediaAssetCreateSchema>;
 export type UpdateMediaAssetInput = z.infer<typeof MediaAssetUpdateSchema>;
 export type FileUploadInput = z.infer<typeof fileUploadSchema>;
+
+// cartItems
+export type addCartItemInput = z.infer<typeof addCartItemSchema>;
+export type updateCartItemInput = z.infer<typeof updateCartItemSchema>;
+export type deleteCartItemInput = z.infer<typeof deleteCartItemSchema>;

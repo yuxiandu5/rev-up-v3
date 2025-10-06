@@ -184,8 +184,6 @@ model MediaAsset {
   // For badges (reference images of trims/cars)
   modelYearRangeId String?         @unique
   modelYearRange   ModelYearRange? @relation(fields: [modelYearRangeId], references: [id], onDelete: Cascade)
-  Product          Product?        @relation(fields: [productId], references: [id])
-  productId        String?
 }
 
 // ----------------------
@@ -220,6 +218,7 @@ model Product {
   currency    String  @default("AUD")
   stock       Int?
   isActive    Boolean @default(true)
+  imageUrl    String  @default("placeholder")
 
   // Relations
   modId String
@@ -228,9 +227,8 @@ model Product {
   compatibilityId String?
   compatibility   ModCompatibility? @relation(fields: [compatibilityId], references: [id])
 
-  orderItems  OrderItem[]
-  cartItems   CartItem[]
-  mediaAssets MediaAsset[]
+  orderItems OrderItem[]
+  cartItems  CartItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -245,8 +243,8 @@ model Product {
 // -----------------------------------
 model Cart {
   id        String     @id @default(cuid())
-  userId    String?     @unique
-  user      User?       @relation(fields: [userId], references: [id])
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id])
   items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -261,7 +259,7 @@ model CartItem {
   product   Product @relation(fields: [productId], references: [id])
 
   quantity       Int      @default(1)
-  unitPriceCents Int? // optional snapshot at time of add
+  unitPriceCents Int // optional snapshot at time of add
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
