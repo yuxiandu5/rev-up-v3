@@ -1,4 +1,4 @@
-import { cuid, z } from "zod";
+import { z } from "zod";
 
 // Backend schemas (for API validation)
 export const registerSchema = z.object({
@@ -379,6 +379,17 @@ export const deleteCartItemSchema = z.object({
   cartItemId: z.string().cuid(),
 });
 
+export const syncCartSchema = z.object({
+  guestCartItems: z
+    .array(
+      z.object({
+        productId: z.string().cuid(),
+        quantity: z.coerce.number().int().min(1).max(99),
+      })
+    )
+    .max(50),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -431,3 +442,4 @@ export type FileUploadInput = z.infer<typeof fileUploadSchema>;
 export type addCartItemInput = z.infer<typeof addCartItemSchema>;
 export type updateCartItemInput = z.infer<typeof updateCartItemSchema>;
 export type deleteCartItemInput = z.infer<typeof deleteCartItemSchema>;
+export type syncCartInput = z.infer<typeof syncCartSchema>;
