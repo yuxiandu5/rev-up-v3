@@ -86,6 +86,12 @@ async function main() {
       category: "intake",
       description: "High-flow cold air intake system for improved airflow and sound",
       modCategoryId: intakeCategory.id,
+      media: {
+        create: {
+          name: "performance-cold-air-intake-k&n",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/performance-cold-air-intake-k%26n.png",
+        },
+      },
     },
   });
 
@@ -99,6 +105,12 @@ async function main() {
       category: "intake",
       description: "Lightweight carbon fiber intake with performance gains",
       modCategoryId: intakeCategory.id,
+      media: {
+        create: {
+          name: "carbon-fiber-intake-bmc",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/carbon-fiber-intake-system-bmc.png",
+        },
+      },
     },
   });
 
@@ -113,6 +125,12 @@ async function main() {
       category: "exhaust",
       description: "Full cat-back exhaust system with aggressive sound",
       modCategoryId: exhaustCategory.id,
+      media: {
+        create: {
+          name: "performance-cat-back-exhaust-borla",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/performance-cat-back-exhaust-borla.png",
+        },
+      },
     },
   });
 
@@ -126,6 +144,12 @@ async function main() {
       category: "exhaust",
       description: "High-flow catted downpipe for turbo applications",
       modCategoryId: exhaustCategory.id,
+      media: {
+        create: {
+          name: "high-flow-downpipe-cobb",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/high-flow-downpipe-cobb.png",
+        },
+      },
     },
   });
 
@@ -139,6 +163,12 @@ async function main() {
       category: "exhaust",
       description: "Electronic valve-controlled exhaust system",
       modCategoryId: exhaustCategory.id,
+      media: {
+        create: {
+          name: "valvetronic-exhaust-system-fiexhaust",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/valvetronic-exhaust-system-fi-exhaust.png",
+        },
+      },
     },
   });
 
@@ -153,6 +183,12 @@ async function main() {
       category: "suspension",
       description: "Adjustable height and damping coilover system",
       modCategoryId: suspensionCategory.id,
+      media: {
+        create: {
+          name: "performance-coilovers-kw",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/performance-coilovers-kw.png",
+        },
+      },
     },
   });
 
@@ -166,6 +202,12 @@ async function main() {
       category: "suspension",
       description: "Progressive rate lowering springs",
       modCategoryId: suspensionCategory.id,
+      media: {
+        create: {
+          name: "sport-lowering-springs-eibach",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/sport-lowering-springs.png",
+        },
+      },
     },
   });
 
@@ -179,6 +221,12 @@ async function main() {
       category: "suspension",
       description: "Front and rear sway bar set for reduced body roll",
       modCategoryId: suspensionCategory.id,
+      media: {
+        create: {
+          name: "performance-sway-bars-hotchkis",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/performance-sway-bars.png",
+        },
+      },
     },
   });
 
@@ -193,6 +241,12 @@ async function main() {
       category: "tune",
       description: "Stage 1 ECU tune for stock hardware",
       modCategoryId: tuneCategory.id,
+      media: {
+        create: {
+          name: "stage-1-tune-apr",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/stage1-ecu-tune-apr.png",
+        },
+      },
     },
   });
 
@@ -206,6 +260,12 @@ async function main() {
       category: "tune",
       description: "Stage 2 ECU tune requiring downpipe and intake",
       modCategoryId: tuneCategory.id,
+      media: {
+        create: {
+          name: "stage-2-tune-apr",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/stage2-ecu-tune-apr.png",
+        },
+      },
     },
   });
 
@@ -220,6 +280,12 @@ async function main() {
       category: "turbo",
       description: "Upgraded hybrid turbocharger for increased power",
       modCategoryId: turboCategory.id,
+      media: {
+        create: {
+          name: "hybrid-turbo-upgrade-garrett",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/hybird-turbo-upgrade.png",
+        },
+      },
     },
   });
 
@@ -234,6 +300,12 @@ async function main() {
       category: "intercooler",
       description: "Large front-mount intercooler upgrade",
       modCategoryId: intercoolerCategory.id,
+      media: {
+        create: {
+          name: "front-mount-intercooler-mishimoto",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/front-mount-intercooler-mishimoto.png",
+        },
+      },
     },
   });
 
