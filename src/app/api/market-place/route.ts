@@ -74,6 +74,11 @@ export async function GET(req: NextRequest) {
               name: true,
               brand: true,
               category: true,
+              media: {
+                select: {
+                  url: true,
+                },
+              },
             },
           },
           compatibility: {

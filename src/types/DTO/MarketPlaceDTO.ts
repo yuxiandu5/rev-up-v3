@@ -4,6 +4,7 @@ export interface ProductResponseDTO {
   id: string;
   name: string;
   description: string | null;
+  imageUrl: string;
   price: {
     amountCents: number;
     currency: string;
@@ -67,6 +68,7 @@ export function toProductDTO(
     id: product.id,
     name: product.name,
     description: product.description,
+    imageUrl: product.imageUrl,
     price: {
       amountCents: product.priceCents,
       currency: product.currency,
@@ -130,7 +132,6 @@ type PrismaCartWithItems = {
   }[];
 };
 
-// Helper: Map single CartItem
 function toCartItemDTO(cartItem: PrismaCartWithItems["items"][0]): CartItemDTO {
   return {
     id: cartItem.id,
