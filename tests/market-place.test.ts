@@ -71,6 +71,7 @@ describe("Market Place API Route", () => {
         id: "cmg98y5du000fock3azfcvudc",
         name: "Stage 1 ECU Tune BMW 3 Series 320i 2013-2018",
         description: "Stage 1 ECU tune for stock hardware",
+        imageUrl: "https://example.com/product.jpg",
         price: {
           amountCents: 58400,
           currency: "AUD",
