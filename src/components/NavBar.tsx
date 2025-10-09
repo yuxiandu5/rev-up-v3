@@ -30,7 +30,7 @@ export default function NavBar() {
   return (
     <nav
       className="
-      flex justify-between items-center px-4 py-0 md:px-6 lg:px-8 lg:py-3
+      flex justify-between items-center px-4 py-0 md:px-6 lg:px-8 lg:py-2
       bg-[var(--bg-dark1)] border-b border-[var(--bg-dark3)]
       fixed top-0 left-0 right-0 z-50 shadow-xl backdrop-blur-sm
     "
@@ -49,7 +49,6 @@ export default function NavBar() {
         />
       </div>
 
-      {/* Desktop Center Navigation */}
       <div className="hidden md:flex items-center space-x-8 lg:space-x-12 flex-1 justify-center">
         <Link
           href="/"
@@ -60,16 +59,6 @@ export default function NavBar() {
           "
         >
           Home
-        </Link>
-        <Link
-          href="/profile"
-          className="
-            text-[var(--text1)] font-medium transition-all duration-200
-            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
-            px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
-          "
-        >
-          Profile
         </Link>
         <Link
           href="/mod"
@@ -91,6 +80,16 @@ export default function NavBar() {
         >
           Gallery
         </Link>
+        <Link
+          href="/market-place"
+          className="
+            text-[var(--text1)] font-medium transition-all duration-200
+            hover:text-[var(--highlight)] hover:scale-105 active:scale-95
+            px-3 py-2 rounded-md hover:bg-[var(--bg-dark2)]
+          "
+        >
+          Market Place
+        </Link>
         {isStaffRole && (
           <Link
             href="/admin"
@@ -105,13 +104,10 @@ export default function NavBar() {
         )}
       </div>
 
-      {/* Desktop Auth Links */}
       <div className="hidden md:flex items-center space-x-4">
         {isLoading ? (
-          // Loading state
           <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
         ) : user ? (
-          // Authenticated user
           <div className="flex items-center space-x-3">
             <Link
               href="/profile"
@@ -139,7 +135,6 @@ export default function NavBar() {
             </button>
           </div>
         ) : (
-          // Guest user
           <>
             <Link
               href="/login"
@@ -210,17 +205,6 @@ export default function NavBar() {
               Home
             </Link>
             <Link
-              href="/profile"
-              className="
-                text-[var(--text1)] font-medium transition-all duration-200
-                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
-                px-4 py-3 rounded-md block text-center
-              "
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Profile
-            </Link>
-            <Link
               href="/mod"
               className="
                 text-[var(--text1)] font-medium transition-all duration-200
@@ -231,6 +215,41 @@ export default function NavBar() {
             >
               Mod
             </Link>
+            <Link
+              href="/gallery"
+              className="
+                text-[var(--text1)] font-medium transition-all duration-200
+                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
+                px-4 py-3 rounded-md block text-center
+              "
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Gallery
+            </Link>
+            <Link
+              href="/market-place"
+              className="
+                text-[var(--text1)] font-medium transition-all duration-200
+                hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
+                px-4 py-3 rounded-md block text-center
+              "
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Market Place
+            </Link>
+            {isStaffRole && (
+              <Link
+                href="/admin"
+                className="
+                  text-[var(--text1)] font-medium transition-all duration-200
+                  hover:text-[var(--highlight)] hover:bg-[var(--bg-dark2)]
+                  px-4 py-3 rounded-md block text-center
+                "
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
+            )}
 
             {/* Mobile Auth Links */}
             <div className="border-t border-[var(--bg-dark3)] pt-4 mt-4 space-y-1">
