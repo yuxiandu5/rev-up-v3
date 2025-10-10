@@ -23,8 +23,8 @@ interface CartState {
   syncGuestCart: () => Promise<void>;
   fetchCart: () => Promise<void>;
 
-  _revertOptimisticUpdate: () => void;
-  _showError: (message: string) => void;
+  revertOptimisticUpdate: () => void;
+  showError: (message: string) => void;
 }
 
 export const useCartStore = create<CartState>()(
@@ -62,9 +62,9 @@ export const useCartStore = create<CartState>()(
           set({ dbCart: data });
         } catch (e) {
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
@@ -112,9 +112,9 @@ export const useCartStore = create<CartState>()(
         } catch (e) {
           set({ dbCart: originalCart });
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
@@ -158,9 +158,9 @@ export const useCartStore = create<CartState>()(
         } catch (e) {
           set({ dbCart: originalCart });
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
@@ -200,9 +200,9 @@ export const useCartStore = create<CartState>()(
         } catch (e) {
           set({ dbCart: originalCart });
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
@@ -229,9 +229,9 @@ export const useCartStore = create<CartState>()(
         } catch (e) {
           set({ dbCart: originalCart });
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
@@ -259,20 +259,20 @@ export const useCartStore = create<CartState>()(
           set({ guestCart: [] });
         } catch (e) {
           if (e instanceof Error) {
-            get()._showError(e.message);
+            get().showError(e.message);
           } else {
-            get()._showError("Unexpected error");
+            get().showError("Unexpected error");
           }
         } finally {
           set({ isLoading: false });
         }
       },
 
-      _revertOptimisticUpdate: () => {
+      revertOptimisticUpdate: () => {
         get().fetchCart();
       },
 
-      _showError: (message) => {
+      showError: (message) => {
         toast.error(message);
       },
     }),
