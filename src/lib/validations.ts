@@ -443,3 +443,6 @@ export type addCartItemInput = z.infer<typeof addCartItemSchema>;
 export type updateCartItemInput = z.infer<typeof updateCartItemSchema>;
 export type deleteCartItemInput = z.infer<typeof deleteCartItemSchema>;
 export type syncCartInput = z.infer<typeof syncCartSchema>;
+
+// market place
+export type MarketPlacePaginationInput = z.infer<typeof MarketPlacePaginationSchema>;
