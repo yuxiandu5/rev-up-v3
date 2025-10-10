@@ -16,8 +16,8 @@ interface CartState {
   getActiveCart: () => CartItemDTO[];
   getSubtotalCents: () => number;
   getItemCount: () => number;
-  addItem: (product: CartItemDTO) => Promise<void>;
-  updateQuantity: (itemId: string, quantity: number) => Promise<void>;
+  addItem: (cartItem: CartItemDTO) => Promise<void>;
+  updateQuantity: (cartItemId: string, quantity: number) => Promise<void>;
   removeItem: (cartItemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   syncGuestCart: () => Promise<void>;
@@ -122,11 +122,15 @@ export const useCartStore = create<CartState>()(
       },
 
       updateQuantity: async (cartItemId, quantity) => {
+        if (quantity < 1 || quantity > 99) {
+          get().showError("Quantity must be between 1 and 99");
+          return;
+        }
         const { user } = useAuthStore.getState();
         if (!user) {
           set({
             guestCart: get().guestCart.map((item) =>
-              item.id === cartItemId ? { ...item, quantity: quantity } : item
+              item.productId === cartItemId ? { ...item, quantity: quantity } : item
             ),
           });
           return;
@@ -172,7 +176,7 @@ export const useCartStore = create<CartState>()(
 
         if (!user) {
           set({
-            guestCart: get().guestCart.filter((item) => item.id !== cartItemId),
+            guestCart: get().guestCart.filter((item) => item.productId !== cartItemId),
           });
           return;
         }
@@ -239,7 +243,7 @@ export const useCartStore = create<CartState>()(
       },
 
       syncGuestCart: async () => {
-        set({ isLoading: true });
+        set({ isSyncing: true });
         const { guestCart } = get();
         const formattedGuestCart = guestCart.map((item) => {
           return {
@@ -255,7 +259,7 @@ export const useCartStore = create<CartState>()(
             }),
           });
           if (!res.ok) throw new Error("Failed to sync cart");
-          get().fetchCart();
+          await get().fetchCart();
           set({ guestCart: [] });
         } catch (e) {
           if (e instanceof Error) {
