@@ -283,7 +283,7 @@ async function main() {
       media: {
         create: {
           name: "hybrid-turbo-upgrade-garrett",
-          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/hybird-turbo-upgrade.png",
+          url: "https://revup-images-yushi-2025.s3.ap-southeast-2.amazonaws.com/mod-scketch/hybird-turbo-upgrade-garrett.png",
         },
       },
     },
