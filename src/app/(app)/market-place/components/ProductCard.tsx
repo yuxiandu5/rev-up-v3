@@ -24,9 +24,9 @@ export function MarketPlaceProductCard({ product }: { product: ProductResponseDT
         />
       </div>
 
-      <div className="p-4 flex flex-col flex-grow">
-        <h3 className="font-semibold text-[var(--text1)] mb-2 group-hover:text-[var(--highlight)] transition-colors h-6 overflow-hidden">
-          <span className="line-clamp-1">{product.name}</span>
+      <div className="p-4 flex flex-col flex-grow justify-between">
+        <h3 className="font-semibold text-[var(--text1)] mb-2 group-hover:text-[var(--highlight)] transition-colors min-h-[1.5rem] overflow-hidden">
+          {product.name}
         </h3>
 
         <p className="text-sm text-[var(--text2)] mb-3 h-10 overflow-hidden">

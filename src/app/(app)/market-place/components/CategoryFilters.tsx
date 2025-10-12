@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { MarketPlacePaginationInput } from "@/lib/validations";
 import { useModStore } from "@/stores/modStore";
 import { useEffect } from "react";
 
 interface CategoryFiltersProps {
-  setFilters: (filters: Partial<MarketPlacePaginationInput>) => void;
+  handleCategoryFilter: (category: string) => void;
   selectedCategory: string;
   loading: boolean;
 }
 
 export default function CategoryFilters({
-  setFilters,
+  handleCategoryFilter,
   selectedCategory,
   loading,
 }: CategoryFiltersProps) {
@@ -26,9 +25,7 @@ export default function CategoryFilters({
         variant={selectedCategory === "" ? "default" : "outline"}
         className="whitespace-nowrap px-4 py-2 border border-transparent data-[variant=default]:border-primary data-[variant=outline]:border-input"
         onClick={() => {
-          setFilters({
-            category: "",
-          });
+          handleCategoryFilter("");
         }}
       >
         All Categories
@@ -41,9 +38,7 @@ export default function CategoryFilters({
           }
           className="whitespace-nowrap px-4 py-2 border border-transparent data-[variant=default]:border-primary data-[variant=outline]:border-input"
           onClick={() => {
-            setFilters({
-              category: category.name.toLowerCase(),
-            });
+            handleCategoryFilter(category.name.toLowerCase());
           }}
           disabled={loading}
         >
