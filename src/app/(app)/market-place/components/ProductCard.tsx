@@ -1,10 +1,14 @@
 import { ProductResponseDTO } from "@/types/DTO/MarketPlaceDTO";
 import Image from "next/image";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export function MarketPlaceProductCard({ product }: { product: ProductResponseDTO }) {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
       className="bg-[var(--bg-dark2)] border border-[var(--bg-dark3)] rounded-lg overflow-hidden hover:border-[var(--highlight)] transition-all duration-200 group h-full flex flex-col cursor-pointer"
       onClick={() => {
         toast.message("Dialog Opened!");
@@ -40,6 +44,6 @@ export function MarketPlaceProductCard({ product }: { product: ProductResponseDT
           <span className="truncate">Seller: {product.mod.brand}</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

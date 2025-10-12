@@ -42,7 +42,6 @@ export function useMarketplace(): UseMarketplaceReturn {
       );
       const params = new URLSearchParams(validFilters as Record<string, string>);
       const searchQuery = params.toString() ? `?${params.toString()}` : "";
-
       const res = await fetch(`/api/market-place${searchQuery}`);
       if (!res.ok) throw new Error("Failed to fetch products");
 
@@ -70,7 +69,7 @@ export function useMarketplace(): UseMarketplaceReturn {
     setFiltersState((prev) => ({
       ...prev,
       ...newFilters,
-      page: newFilters.page ? newFilters.page : 1,
+      page: newFilters.page !== undefined ? newFilters.page : 1,
     }));
   }, []);
 
