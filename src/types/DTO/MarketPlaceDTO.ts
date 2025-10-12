@@ -72,7 +72,7 @@ export function toProductDTO(
     price: {
       amountCents: product.priceCents,
       currency: product.currency,
-      formatted: `${product.currency} ${(product.priceCents / 100).toFixed(2)}`,
+      formatted: `$${(product.priceCents / 100).toFixed(2)}`,
     },
     stock: product.stock,
     isActive: product.isActive,
