@@ -1,27 +1,17 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 interface ConfirmationDialogProps {
-  /** Whether the dialog is open */
   isOpen: boolean;
-  /** Function to call when the dialog should close */
   onClose: () => void;
-  /** Function to call when the user confirms the action */
   onConfirm: () => void;
-  /** Title of the dialog */
   title: string;
-  /** Message/description in the dialog */
   message: string;
-  /** Text for the confirm button */
   confirmText?: string;
-  /** Text for the cancel button */
   cancelText?: string;
-  /** Whether the confirm action is loading */
   isLoading?: boolean;
-  /** Variant of the confirm button - determines color */
-  confirmVariant?: "primary" | "secondary";
 }
 
 export const ConfirmationDialog = ({
@@ -33,7 +23,6 @@ export const ConfirmationDialog = ({
   confirmText = "Confirm",
   cancelText = "Cancel",
   isLoading = false,
-  confirmVariant = "primary",
 }: ConfirmationDialogProps) => {
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget && !isLoading) {
@@ -61,7 +50,7 @@ export const ConfirmationDialog = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4"
           onClick={handleBackdropClick}
         >
           <motion.div
@@ -73,31 +62,30 @@ export const ConfirmationDialog = ({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="px-6 py-4 border-b border-[var(--bg-dark1)]">
+            <div className="px-6 py-4 border-b">
               <h3 className="text-lg font-semibold text-[var(--text1)]">{title}</h3>
             </div>
 
             {/* Content */}
-            <div className="px-6 py-4">
+            <div className="px-6 py-14">
               <p className="text-[var(--text2)] leading-relaxed">{message}</p>
             </div>
 
             {/* Actions */}
-            <div className="px-6 py-4 border-t border-[var(--bg-dark1)] flex items-center justify-end gap-3">
+            <div className="px-6 py-4 border-t flex items-center justify-end gap-3">
               <Button
-                variant="secondary"
+                variant="outline"
                 onClick={handleCancel}
                 disabled={isLoading}
-                className="min-w-[80px]"
+                className="min-w-[80px] bg-transparent border-[var(--bg-dark1)] text-[var(--text1)] hover:bg-[var(--bg-dark1)] hover:border-[var(--bg-dark3)]"
               >
                 {cancelText}
               </Button>
               <Button
-                variant={confirmVariant}
+                variant="destructive"
                 onClick={handleConfirm}
-                loading={isLoading}
                 disabled={isLoading}
-                className="min-w-[80px] bg-red-600 hover:bg-red-700 text-white"
+                className="min-w-[80px] bg-red-400 hover:bg-red-700 text-white disabled:bg-red-800"
               >
                 {confirmText}
               </Button>
