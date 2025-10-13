@@ -1,18 +1,20 @@
 import { ProductResponseDTO } from "@/types/DTO/MarketPlaceDTO";
 import Image from "next/image";
-import { toast } from "sonner";
 import { motion } from "framer-motion";
 
-export function MarketPlaceProductCard({ product }: { product: ProductResponseDTO }) {
+interface MarketPlaceProductCardProps {
+  product: ProductResponseDTO;
+  handleOpenDialog: () => void;
+}
+
+export function MarketPlaceProductCard({ product, handleOpenDialog }: MarketPlaceProductCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
       className="bg-[var(--bg-dark2)] border border-[var(--bg-dark3)] rounded-lg overflow-hidden hover:border-[var(--highlight)] transition-all duration-200 group h-full flex flex-col cursor-pointer"
-      onClick={() => {
-        toast.message("Dialog Opened!");
-      }}
+      onClick={handleOpenDialog}
     >
       <div className="aspect-square bg-[var(--bg-dark3)] flex items-center justify-center flex-shrink-0">
         <Image

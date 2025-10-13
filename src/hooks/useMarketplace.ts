@@ -6,14 +6,18 @@ import { MarketPlacePaginationInput } from "@/lib/validations";
 import { toast } from "sonner";
 
 interface UseMarketplaceReturn {
+  filters: MarketPlacePaginationInput;
   products: ProductResponseDTO[];
   total: number;
+  openDialog: boolean;
+  selectedProduct: ProductResponseDTO | null;
   loading: boolean;
   error: string | null;
-  filters: MarketPlacePaginationInput;
   setFilters: (filters: Partial<MarketPlacePaginationInput>) => void;
   refetch: () => void;
   loadMore: () => void;
+  setSelectedProduct: (product: ProductResponseDTO) => void;
+  setOpenDialog: (open: boolean) => void;
 }
 
 export function useMarketplace(): UseMarketplaceReturn {
@@ -29,6 +33,8 @@ export function useMarketplace(): UseMarketplaceReturn {
   const [filters, setFiltersState] = useState<MarketPlacePaginationInput>(initialFilters);
   const [products, setProducts] = useState<ProductResponseDTO[]>([]);
   const [total, setTotal] = useState(0);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<ProductResponseDTO | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,14 +85,26 @@ export function useMarketplace(): UseMarketplaceReturn {
     setFiltersState((prev) => ({ ...prev, page: prev.page + 1 }));
   }, []);
 
+  const setSelectedProductState = useCallback((product: ProductResponseDTO) => {
+    setSelectedProduct(product);
+  }, []);
+
+  const setOpenDialogState = useCallback((open: boolean) => {
+    setOpenDialog(open);
+  }, []);
+
   return {
     products,
     total,
+    openDialog,
+    selectedProduct,
     loading,
     error,
     filters,
     setFilters,
     refetch: fetchProducts,
     loadMore,
+    setSelectedProduct: setSelectedProductState,
+    setOpenDialog: setOpenDialogState,
   };
 }
