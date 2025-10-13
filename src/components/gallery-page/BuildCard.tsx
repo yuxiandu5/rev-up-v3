@@ -7,7 +7,7 @@ import CarDisplay from "../mod-page/sub-comp/carDisplay";
 import CarSpecDisplay from "../mod-page/sub-comp/carSpecDisplay";
 import { CarSpecs, SelectedCar } from "@/types/carTypes";
 import type { Mod, ModCompatibility } from "@/types/modTypes";
-import ConfirmationDialog from "../ui/ConfirmationDialog";
+import ConfirmationDialog from "../ConfirmationDialog";
 import { useApiClient } from "@/hooks/useApiClient";
 import { Loading } from "../ui/Loading";
 import ModCard from "../mod-page/sub-comp/modCard";
