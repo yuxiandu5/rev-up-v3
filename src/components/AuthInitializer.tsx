@@ -6,7 +6,7 @@ import { useCartStore } from "@/stores/cartStore";
 
 export function AuthInitializer({ children }: { children: React.ReactNode }) {
   const { initializeAuth, isInitialized, isLoading, user } = useAuthStore();
-  
+
   const guestCart = useCartStore((state) => state.guestCart);
   const syncGuestCart = useCartStore((state) => state.syncGuestCart);
 
