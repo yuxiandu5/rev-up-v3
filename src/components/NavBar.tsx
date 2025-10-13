@@ -5,13 +5,16 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
-import { LogOut } from "lucide-react";
+import { LogOut, ShoppingCart } from "lucide-react";
+import { useCartStore } from "@/stores/cartStore";
 
 export default function NavBar() {
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, logout, isLoading } = useAuthStore();
   const isStaffRole = user?.role === "ADMIN" || user?.role === "MODERATOR";
+  const getItemCount = useCartStore((state) => state.getItemCount);
+  const itemCount = getItemCount();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -105,6 +108,24 @@ export default function NavBar() {
       </div>
 
       <div className="hidden md:flex items-center space-x-4">
+        <Link
+          href="/cart"
+          className="relative p-2 text-[var(--text1)] hover:text-[var(--highlight)] 
+                    hover:bg-[var(--bg-dark2)] rounded-md transition-all duration-200
+                    hover:scale-105 active:scale-95"
+          title="Shopping Cart"
+        >
+          <ShoppingCart size={24} />
+          {itemCount > 0 && (
+            <span
+              className="absolute -top-1 -right-1 bg-[var(--accent)] text-white 
+                            text-xs font-bold rounded-full w-5 h-5 flex items-center 
+                            justify-center"
+            >
+              {itemCount > 99 ? "99+" : itemCount}
+            </span>
+          )}
+        </Link>
         {isLoading ? (
           <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
         ) : user ? (
