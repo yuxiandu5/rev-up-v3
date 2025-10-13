@@ -17,7 +17,7 @@ export default function CartPage() {
   const removeItem = useCartStore((state) => state.removeItem);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
-  
+
   useEffect(() => {
     setHydrated(true);
   }, []);
@@ -39,7 +39,7 @@ export default function CartPage() {
 
   const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
-  if(!hydrated) return;
+  if (!hydrated) return;
 
   return (
     <div className="flex flex-col max-w-7xl mx-auto h-full w-full px-4 pt-4 pb-14">

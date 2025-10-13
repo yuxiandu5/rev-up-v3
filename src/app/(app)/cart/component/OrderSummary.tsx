@@ -20,7 +20,6 @@ export default function OrderSummary({
   itemCount,
   subtotalCents,
 }: OrderSummaryProps) {
-
   const router = useRouter();
   return (
     <div className="lg:col-span-1">
@@ -71,7 +70,12 @@ export default function OrderSummary({
             )}
           </Button>
 
-          <Button variant="outline" className="w-full" disabled={isLoading} onClick={() => router.push("/market-place")}>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={isLoading}
+            onClick={() => router.push("/market-place")}
+          >
             Continue Shopping
           </Button>
         </div>
