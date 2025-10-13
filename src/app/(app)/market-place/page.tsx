@@ -7,16 +7,49 @@ import SearchBar from "./components/SearchBar";
 import CategoryFilters from "./components/CategoryFilters";
 import { LoadingCard } from "@/components/ui/Loading";
 import SortSelector from "./components/SortSelector";
+import { ProductResponseDTO } from "@/types/DTO/MarketPlaceDTO";
+import ProductDialog from "./ProductDialog";
+import { useCartStore } from "@/stores/cartStore";
+import { productToCartItem } from "./helpers";
 
 export default function MarketPlacePage() {
-  const { products, total, loading, filters, setFilters, loadMore } = useMarketplace();
+  const {
+    products,
+    total,
+    loading,
+    filters,
+    setFilters,
+    loadMore,
+    setSelectedProduct,
+    setOpenDialog,
+    openDialog,
+    selectedProduct,
+  } = useMarketplace();
+  const addItem = useCartStore((state) => state.addItem);
 
   const handleLoadMore = () => {
     loadMore();
   };
 
+  const handleOpenDialog = (product: ProductResponseDTO) => {
+    setSelectedProduct(product);
+    setOpenDialog(true);
+  };
+
+  const handleAddToCart = (selectedProduct: ProductResponseDTO, quantity: number) => {
+    if (!selectedProduct) return;
+    const convertedCartItem = productToCartItem(selectedProduct, quantity);
+    addItem(convertedCartItem);
+  };
+
   return (
     <div className="max-w-7xl mx-auto h-full w-full">
+      <ProductDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        selectedProduct={selectedProduct}
+        addProductToCart={(quantity: number) => handleAddToCart(selectedProduct!, quantity)}
+      />
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-[var(--text1)] mb-2">Market Place</h1>
         <p className="text-[var(--text2)]">Discover and purchase amazing mods for your vehicle</p>
@@ -52,7 +85,11 @@ export default function MarketPlacePage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12 w-full min-h-[600px]">
           {products.map((item) => (
-            <MarketPlaceProductCard key={item.id} product={item} />
+            <MarketPlaceProductCard
+              key={item.id}
+              product={item}
+              handleOpenDialog={() => handleOpenDialog(item)}
+            />
           ))}
         </div>
       )}
