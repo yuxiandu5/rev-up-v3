@@ -30,7 +30,7 @@ export default function CartItem({
       transition={{ delay: index * 0.1 }}
       className="p-6 hover:bg-[var(--bg-dark2)] transition-colors"
     >
-      <div className="grid grid-cols-16 gap-4 items-center">
+      <div className="grid grid-cols-12 gap-4 items-center">
         <div className="col-span-2">
           <div className="w-20 h-20 bg-[var(--bg-dark2)] rounded-lg overflow-hidden">
             <Image
@@ -43,25 +43,25 @@ export default function CartItem({
           </div>
         </div>
 
-        <div className="col-span-8">
+        <div className="col-span-5">
           <h3 className="font-semibold text-[var(--text1)] mb-1 text-wrap">{item.productName}</h3>
           <div className="text-md font-bold text-[var(--text1)] mt-2">
             {formatPrice(item.unitPriceCents)}
           </div>
         </div>
 
-        <div className="col-span-4 flex items-center justify-center gap-3">
+        <div className="col-span-3 flex items-center justify-center gap-3">
           <div className="flex items-center bg-[var(--bg-dark2)] rounded-lg border border-[var(--bg-dark1)]">
             <Button
               variant="ghost"
               size="icon"
               className="h-8 w-8 hover:bg-[var(--bg-dark1)]"
               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-              disabled={isLoading}
+              disabled={isLoading || item.quantity <= 1}
             >
               <Minus className="w-4 h-4" />
             </Button>
-            <span className="px-3 text-sm font-medium text-[var(--text1)] min-w-[2rem] text-center">
+            <span className="px-3 text-sm font-medium text-[var(--text1)] min-w-[2rem] text-center w-[3rem]">
               {item.quantity}
             </span>
             <Button
@@ -69,7 +69,7 @@ export default function CartItem({
               size="icon"
               className="h-8 w-8 hover:bg-[var(--bg-dark1)]"
               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-              disabled={isLoading}
+              disabled={isLoading || item.quantity >= 99}
             >
               <Plus className="w-4 h-4" />
             </Button>
@@ -80,7 +80,7 @@ export default function CartItem({
             size="icon"
             className="h-8 w-8 text-[var(--text2)] hover:text-red-400 hover:bg-red-400/10"
             onClick={() => removeItem(item.id)}
-            disabled={isLoading}
+            disabled={isLoading || item.quantity < 1}
           >
             <Trash2 className="w-4 h-4" />
           </Button>

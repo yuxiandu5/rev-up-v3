@@ -1,15 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import OrderSummary from "./component/OrderSummary";
 import Cart from "./component/Cart";
 import { toast } from "sonner";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 export default function CartPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const itemCount = useCartStore((state) => state.getItemCount());
   const cartItems = useCartStore((state) => state.getActiveCart());
@@ -18,16 +20,16 @@ export default function CartPage() {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
 
+  const productCount = cartItems.length;
+
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  const handleRemoveItem = useCallback(
-    (itemId: string) => {
-      removeItem(itemId);
-    },
-    [removeItem]
-  );
+  const handleClearCart = () => {
+    clearCart();
+    setOpenDialog(false);
+  };
 
   const handleCheckout = () => {
     setIsLoading(true);
@@ -49,8 +51,8 @@ export default function CartPage() {
           Shopping Cart
         </h1>
         <p className="text-[var(--text2)]">
-          {itemCount > 0 && hydrated
-            ? `${itemCount} item${itemCount > 1 ? "s" : ""} in your cart`
+          {productCount > 0 && hydrated
+            ? `${productCount} item${productCount > 1 ? "s" : ""} in your cart`
             : "Your cart is empty"}
         </p>
       </div>
@@ -59,10 +61,10 @@ export default function CartPage() {
         <Cart
           cartItems={cartItems}
           isLoading={isLoading}
-          clearCart={clearCart}
           formatPrice={formatPrice}
-          removeItem={handleRemoveItem}
+          removeItem={removeItem}
           updateQuantity={updateQuantity}
+          setOpenDialog={setOpenDialog}
         />
 
         <OrderSummary
@@ -74,6 +76,17 @@ export default function CartPage() {
           subtotalCents={subtotalCents}
         />
       </div>
+
+      <ConfirmationDialog
+        isOpen={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onConfirm={handleClearCart}
+        title="Confirm Clear Cart"
+        message="Are you sure you want to clear your cart?"
+        confirmText="Clear"
+        cancelText="Cancel"
+        isLoading={isLoading}
+      />
     </div>
   );
 }
