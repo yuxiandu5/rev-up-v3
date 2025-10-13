@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
 import { LogOut, ShoppingCart } from "lucide-react";
@@ -10,11 +10,26 @@ import { useCartStore } from "@/stores/cartStore";
 
 export default function NavBar() {
   const router = useRouter();
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, logout, isLoading } = useAuthStore();
+  const [hydrated, setHydrated] = useState(false);
+
+  const { user, logout, isLoading, isInitialized } = useAuthStore();
   const isStaffRole = user?.role === "ADMIN" || user?.role === "MODERATOR";
-  const getItemCount = useCartStore((state) => state.getItemCount);
-  const itemCount = getItemCount();
+  const cartItems = useCartStore((state) => state.getActiveCart());
+  const itemCount = cartItems.length;
+  const fetchCart = useCartStore((state) => state.fetchCart);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+    if (user) {
+      fetchCart();
+    }
+  }, [user, isInitialized]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -116,16 +131,17 @@ export default function NavBar() {
           title="Shopping Cart"
         >
           <ShoppingCart size={24} />
-          {itemCount > 0 && (
+          {itemCount > 0 && hydrated && (
             <span
               className="absolute -top-1 -right-1 bg-[var(--accent)] text-white 
-                            text-xs font-bold rounded-full w-5 h-5 flex items-center 
-                            justify-center"
+                              text-xs font-bold rounded-full w-5 h-5 flex items-center 
+                              justify-center"
             >
               {itemCount > 99 ? "99+" : itemCount}
             </span>
           )}
         </Link>
+
         {isLoading ? (
           <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse"></div>
         ) : user ? (

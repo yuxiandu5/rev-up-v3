@@ -63,9 +63,7 @@ export function useMarketplace(): UseMarketplaceReturn {
     } catch (e) {
       toast.error("Failed to fetch products");
     } finally {
-      setTimeout(() => {
         setLoading(false);
-      }, 1000);
     }
   }, [filters]);
 

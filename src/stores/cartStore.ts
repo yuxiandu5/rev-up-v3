@@ -50,7 +50,8 @@ export const useCartStore = create<CartState>()(
 
       getItemCount: () => {
         const activeCart = get().getActiveCart();
-        return activeCart.reduce((sum, item) => (sum += item.quantity), 0);
+        const total = activeCart.reduce((sum, item) => (sum += item.quantity), 0);
+        return total;
       },
 
       fetchCart: async () => {
@@ -88,6 +89,7 @@ export const useCartStore = create<CartState>()(
           } else {
             set({ guestCart: [...get().guestCart, cartItem] });
           }
+          toast.success("Item added to cart");
           return;
         }
 
@@ -109,6 +111,7 @@ export const useCartStore = create<CartState>()(
           if (!res.ok) throw new Error("Failed to add item");
 
           await get().fetchCart();
+          toast.success("Item added to cart");
         } catch (e) {
           set({ dbCart: originalCart });
           if (e instanceof Error) {
@@ -157,7 +160,7 @@ export const useCartStore = create<CartState>()(
             }),
           });
           if (!res.ok) throw new Error("Failed to update item quantity");
-
+          toast.success("Item quantity updated");
           await get().fetchCart();
         } catch (e) {
           set({ dbCart: originalCart });
@@ -199,7 +202,7 @@ export const useCartStore = create<CartState>()(
             }),
           });
           if (!res.ok) throw new Error("Failed to remove item");
-
+          toast.success("Item removed from cart");
           await get().fetchCart();
         } catch (e) {
           set({ dbCart: originalCart });
@@ -215,7 +218,7 @@ export const useCartStore = create<CartState>()(
 
       clearCart: async () => {
         const { user } = useAuthStore.getState();
-
+        console.log("clearCart", user);
         if (!user) {
           set({ guestCart: [] });
           return;
@@ -229,6 +232,7 @@ export const useCartStore = create<CartState>()(
             method: "DELETE",
           });
           if (!res.ok) throw new Error("Failed to clear cart");
+          toast.success("Cart cleared");
           await get().fetchCart();
         } catch (e) {
           set({ dbCart: originalCart });
@@ -259,6 +263,7 @@ export const useCartStore = create<CartState>()(
             }),
           });
           if (!res.ok) throw new Error("Failed to sync cart");
+          toast.success("Cart synced");
           await get().fetchCart();
           set({ guestCart: [] });
         } catch (e) {

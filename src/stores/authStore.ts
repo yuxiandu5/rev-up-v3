@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 import { UserDTO } from "@/types/DTO/dtos";
+import { useCartStore } from "./cartStore";
 
 interface AuthState {
   user: UserDTO | null;
@@ -46,14 +47,16 @@ export const useAuthStore = create<AuthState>()(
       logout: async () => {
         set({ isLoading: true });
 
-        setTimeout(() => {
-          set({
-            accessToken: null,
-            user: null,
-            isLoading: false,
-          });
-        }, 500);
+        set({
+          accessToken: null,
+          user: null,
+          isLoading: false,
+        });
 
+        useCartStore.setState({
+          dbCart: null,
+          guestCart: [],
+        });
         try {
           await fetch("/api/auth/logout", {
             method: "POST",
