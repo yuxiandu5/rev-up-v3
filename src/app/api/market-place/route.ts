@@ -44,20 +44,20 @@ export async function GET(req: NextRequest) {
       }),
     };
 
-    let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: "asc" };
+    let orderBy: Prisma.ProductOrderByWithRelationInput[] = [{ createdAt: "asc" }, { id: "asc" }];
 
     switch (sort) {
       case "price_asc":
-        orderBy = { priceCents: "asc" };
+        orderBy = [{ priceCents: "asc" }, { id: "asc" }];
         break;
       case "price_desc":
-        orderBy = { priceCents: "desc" };
+        orderBy = [{ priceCents: "desc" }, { id: "desc" }];
         break;
       case "createdAt_asc":
-        orderBy = { createdAt: "asc" };
+        orderBy = [{ createdAt: "asc" }, { id: "asc" }];
         break;
       case "createdAt_desc":
-        orderBy = { createdAt: "desc" };
+        orderBy = [{ createdAt: "desc" }, { id: "desc" }];
         break;
     }
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 
 export default function SearchBar({
   handleSearch,
@@ -32,10 +32,17 @@ export default function SearchBar({
           onChange={(e) => {
             setSearchQuery(e.target.value);
           }}
+          value={searchQuery}
         />
       </div>
-      <Button variant="outline" className="px-4 py-3">
-        <Search size={18} />
+      <Button
+        variant="outline"
+        className="px-4 py-3"
+        onClick={() => {
+          setSearchQuery("");
+        }}
+      >
+        <X size={18} />
       </Button>
     </div>
   );
