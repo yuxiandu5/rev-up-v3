@@ -3,13 +3,13 @@ import { useModStore } from "@/stores/modStore";
 import { useEffect } from "react";
 
 interface CategoryFiltersProps {
-  handleCategoryFilter: (category: string) => void;
+  setCategory: (category: string) => void;
   selectedCategory: string;
   loading: boolean;
 }
 
 export default function CategoryFilters({
-  handleCategoryFilter,
+  setCategory,
   selectedCategory,
   loading,
 }: CategoryFiltersProps) {
@@ -17,6 +17,7 @@ export default function CategoryFilters({
   const fetchCategories = useModStore((state) => state.fetchCategories);
   useEffect(() => {
     fetchCategories();
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -25,7 +26,7 @@ export default function CategoryFilters({
         variant={selectedCategory === "" ? "default" : "outline"}
         className="whitespace-nowrap px-4 py-2 border border-transparent data-[variant=default]:border-primary data-[variant=outline]:border-input"
         onClick={() => {
-          handleCategoryFilter("");
+          setCategory("");
         }}
       >
         All Categories
@@ -38,7 +39,7 @@ export default function CategoryFilters({
           }
           className="whitespace-nowrap px-4 py-2 border border-transparent data-[variant=default]:border-primary data-[variant=outline]:border-input"
           onClick={() => {
-            handleCategoryFilter(category.name.toLowerCase());
+            setCategory(category.name.toLowerCase());
           }}
           disabled={loading}
         >

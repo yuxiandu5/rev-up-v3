@@ -6,16 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 
-export default function SearchBar({
-  handleSearch,
-}: {
-  handleSearch: (searchQuery: string) => void;
-}) {
+export default function SearchBar({ setSearch }: { setSearch: (searchQuery: string) => void }) {
   const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    handleSearch(debouncedSearchQuery);
+    setSearch(debouncedSearchQuery);
   }, [debouncedSearchQuery]);
 
   return (

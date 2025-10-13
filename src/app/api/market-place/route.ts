@@ -48,16 +48,16 @@ export async function GET(req: NextRequest) {
 
     switch (sort) {
       case "price_asc":
-        orderBy = [{ priceCents: "asc" }, { id: "asc" }];
+        orderBy = [{ priceCents: "asc" }];
         break;
       case "price_desc":
-        orderBy = [{ priceCents: "desc" }, { id: "desc" }];
+        orderBy = [{ priceCents: "desc" }];
         break;
       case "createdAt_asc":
         orderBy = [{ createdAt: "asc" }, { id: "asc" }];
         break;
       case "createdAt_desc":
-        orderBy = [{ createdAt: "desc" }, { id: "desc" }];
+        orderBy = [{ createdAt: "desc" }, { id: "asc" }];
         break;
     }
 
