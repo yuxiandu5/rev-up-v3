@@ -20,6 +20,7 @@ export default function CartPage() {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
 
+  const sortedCartItems = [...cartItems].sort((a, b) => a.id.localeCompare(b.id));
   const productCount = cartItems.length;
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function CartPage() {
 
       <div className="flex-10 grid grid-cols-1 lg:grid-cols-3 gap-8 ">
         <Cart
-          cartItems={cartItems}
+          cartItems={sortedCartItems}
           isLoading={isLoading}
           formatPrice={formatPrice}
           removeItem={removeItem}
@@ -68,7 +69,7 @@ export default function CartPage() {
         />
 
         <OrderSummary
-          cartItems={cartItems}
+          cartItems={sortedCartItems}
           isLoading={isLoading}
           handleCheckout={handleCheckout}
           formatPrice={formatPrice}

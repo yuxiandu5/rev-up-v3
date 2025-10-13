@@ -2,7 +2,6 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
 import { UserDTO } from "@/types/DTO/dtos";
 import { useCartStore } from "./cartStore";
 
@@ -102,23 +101,18 @@ export const useAuthStore = create<AuthState>()(
 
       initializeAuth: async () => {
         const { isInitialized } = get();
-
         if (isInitialized) return;
 
         set({ isLoading: true });
-
         try {
           const success = await get().refreshAccessToken();
-
           if (!success) {
-            // If refresh fails, clear any stale data
             set({
               user: null,
               accessToken: null,
             });
           }
         } catch {
-          // Silently handle initialization errors
           set({
             user: null,
             accessToken: null,
@@ -131,11 +125,11 @@ export const useAuthStore = create<AuthState>()(
         }
       },
     }),
+
     {
-      name: "auth-storage", // unique name for localStorage key
-      storage: createJSONStorage(() => localStorage), // use localStorage
+      name: "auth-storage",
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        // Only persist user and accessToken, not loading/initialization states
         user: state.user,
       }),
     }

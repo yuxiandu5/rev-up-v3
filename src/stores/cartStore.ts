@@ -38,7 +38,8 @@ export const useCartStore = create<CartState>()(
 
       getActiveCart: () => {
         const { dbCart, guestCart } = get();
-        return dbCart ? dbCart.items : guestCart;
+        const items = dbCart ? dbCart.items : guestCart;
+        return items;
       },
 
       getSubtotalCents: () => {
@@ -160,7 +161,6 @@ export const useCartStore = create<CartState>()(
             }),
           });
           if (!res.ok) throw new Error("Failed to update item quantity");
-          toast.success("Item quantity updated");
           await get().fetchCart();
         } catch (e) {
           set({ dbCart: originalCart });
@@ -287,7 +287,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "cart-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         guestCart: state.guestCart,
       }),
