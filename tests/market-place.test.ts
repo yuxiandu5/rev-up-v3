@@ -189,7 +189,7 @@ describe("Market Place API Route", () => {
 
     expect(prisma.product.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        orderBy: { priceCents: "desc" },
+        orderBy: [{ priceCents: "desc" }],
       })
     );
   });

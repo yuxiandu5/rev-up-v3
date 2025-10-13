@@ -5,19 +5,16 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { ModCategory, Mod, SelectedModsByCategory } from "@/types/modTypes";
 
 interface ModState {
-  // Data
   categories: ModCategory[];
   mods: Mod[];
   currentCategory: string;
   selectedMods: SelectedModsByCategory;
 
-  // Loading states
   loading: {
     categories: boolean;
     mods: boolean;
   };
 
-  // Actions
   fetchCategories: () => Promise<void>;
   fetchModsForCategory: (categoryId: string, yearRangeId: string) => Promise<void>;
   setCurrentCategory: (category: string) => void;
@@ -26,7 +23,6 @@ interface ModState {
   toggleMod: (categoryId: string, mod: Mod) => void;
   clearAllMods: () => void;
 
-  // Calculations
   getTotalSpecsGained: () => {
     hpGain: number;
     torqueGain: number;
@@ -40,7 +36,6 @@ interface ModState {
 export const useModStore = create<ModState>()(
   persist(
     (set, get) => ({
-      // Initial state
       categories: [],
       mods: [],
       currentCategory: "",
@@ -50,7 +45,6 @@ export const useModStore = create<ModState>()(
         mods: false,
       },
 
-      // API calls
       fetchCategories: async () => {
         set((state) => ({
           loading: { ...state.loading, categories: true },
@@ -77,7 +71,6 @@ export const useModStore = create<ModState>()(
         }));
 
         try {
-          // Fetch compatible mods for this car
           const response = await fetch(
             `/api/mod/?categoryId=${categoryId}&yearRangeId=${yearRangeId}`
           );
@@ -100,7 +93,6 @@ export const useModStore = create<ModState>()(
         set({ currentCategory: category });
       },
 
-      // Mod selection
       selectMod: (categoryId: string, mod: Mod) => {
         const { selectedMods } = get();
 
@@ -118,12 +110,10 @@ export const useModStore = create<ModState>()(
         const newSelectedMods = { ...selectedMods };
         delete newSelectedMods[categoryId];
 
-        // Check for dependent mods that need to be deselected
         const modsToDeselect: string[] = [];
 
         Object.entries(newSelectedMods).forEach(([catId, mod]) => {
           if (mod && mod.dependentOn && mod.dependentOn.length > 0) {
-            // Check if this mod depends on the category we're deselecting
             const dependsOnDeselectedCategory = mod.dependentOn.some(
               (dependency) => dependency.prerequisiteCategory.id === categoryId
             );
@@ -134,7 +124,6 @@ export const useModStore = create<ModState>()(
           }
         });
 
-        // Remove all dependent mods
         modsToDeselect.forEach((catId) => {
           delete newSelectedMods[catId];
         });
@@ -145,11 +134,9 @@ export const useModStore = create<ModState>()(
       toggleMod: (categoryId: string, mod: Mod) => {
         const { selectedMods } = get();
 
-        // If the mod is already selected in this category, deselect it
         if (selectedMods[categoryId]?.id === mod.id) {
           get().deselectMod(categoryId);
         } else {
-          // Otherwise, select this mod
           get().selectMod(categoryId, mod);
         }
       },
@@ -158,7 +145,6 @@ export const useModStore = create<ModState>()(
         set({ selectedMods: {} as SelectedModsByCategory });
       },
 
-      // Calculations
       getTotalSpecsGained: () => {
         const { selectedMods } = get();
 
@@ -207,7 +193,6 @@ export const useModStore = create<ModState>()(
       name: "mod-storage",
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        // Persist mod selections
         selectedMods: state.selectedMods,
       }),
     }

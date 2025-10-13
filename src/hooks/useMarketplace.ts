@@ -42,7 +42,6 @@ export function useMarketplace(): UseMarketplaceReturn {
       );
       const params = new URLSearchParams(validFilters as Record<string, string>);
       const searchQuery = params.toString() ? `?${params.toString()}` : "";
-
       const res = await fetch(`/api/market-place${searchQuery}`);
       if (!res.ok) throw new Error("Failed to fetch products");
 
@@ -58,7 +57,9 @@ export function useMarketplace(): UseMarketplaceReturn {
     } catch (e) {
       toast.error("Failed to fetch products");
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
     }
   }, [filters]);
 
@@ -70,7 +71,7 @@ export function useMarketplace(): UseMarketplaceReturn {
     setFiltersState((prev) => ({
       ...prev,
       ...newFilters,
-      page: newFilters.page ? newFilters.page : 1,
+      page: newFilters.page !== undefined ? newFilters.page : 1,
     }));
   }, []);
 
