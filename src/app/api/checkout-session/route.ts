@@ -31,20 +31,20 @@ export async function POST(req: NextRequest) {
 
     const totalCents = calculateTotalPrice(cart.items);
     const lineItems = createStripeLineItems(cart.items);
+    const orderItems = cart.items.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      unitPriceCents: item.unitPriceCents,
+    }));
 
-    const result: CreateCheckoutSessionResponseDTO = await prisma.$transaction(async (tx) => {
-      const order = await tx.order.create({
+      const order = await prisma.order.create({
         data: {
           userId,
           totalCents,
           currency: CURRENCY,
           status: "PENDING",
           orderItems: {
-            create: cart.items.map((item) => ({
-              productId: item.productId,
-              quantity: item.quantity,
-              unitPriceCents: item.unitPriceCents,
-            })),
+            create: orderItems,
           },
         },
       });
@@ -68,18 +68,15 @@ export async function POST(req: NextRequest) {
         throw new Error("Failed to create Stripe checkout session");
       }
 
-      await tx.order.update({
+      await prisma.order.update({
         where: { id: order.id },
         data: { stripeSessionId: session.id },
       });
 
-      return {
-        sessionId: session.id,
-        stripeUrl: session.url,
-      };
-    });
-
-    return ok(result, "Checkout session created successfully");
+    return ok({
+      sessionId: session.id,
+      stripeUrl: session.url,
+    }, "Checkout session created successfully");
   } catch (e) {
     console.log("POST /api/checkout-session error:", e);
     return errorToResponse(e);

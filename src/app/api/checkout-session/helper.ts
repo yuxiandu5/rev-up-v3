@@ -39,3 +39,4 @@ export const createStripeLineItems = (
 export const calculateTotalPrice = (items: PrismaCartItem[]): number => {
   return items.reduce((total, item) => total + item.unitPriceCents * item.quantity, 0);
 };
+
