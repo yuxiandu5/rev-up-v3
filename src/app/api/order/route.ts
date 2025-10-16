@@ -47,7 +47,6 @@ export async function GET(req: NextRequest) {
         break;
     }
 
-
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
         where,
@@ -67,13 +66,7 @@ export async function GET(req: NextRequest) {
 
     const formattedOrders: OrderResponseDTO[] = orders.map(toOrderDTO);
 
-    return okPaginated(
-      formattedOrders,
-      page,
-      pageSize,
-      total,
-      "Successfully fetched orders!"
-    );
+    return okPaginated(formattedOrders, page, pageSize, total, "Successfully fetched orders!");
   } catch (error) {
     console.log("Error GET/order", error);
     return errorToResponse(error);
