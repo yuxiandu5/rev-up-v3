@@ -10,7 +10,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
   try {
     const userPayload = await requireAuth(req);
     const userId = userPayload.sub;
-    if (!userId) throw new UnauthorizedError("You are not authorized to access this resource!");
 
     const { id } = IdSchema.parse(await context.params);
 

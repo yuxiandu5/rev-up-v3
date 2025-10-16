@@ -16,7 +16,6 @@ export async function GET(req: NextRequest) {
 
     const userPayload = await requireAuth(req);
     const userId = userPayload.sub;
-    if (!userId) throw new UnauthorizedError("You are not authorized to access this resource!");
 
     const order = await prisma.order.findFirst({
       where: {

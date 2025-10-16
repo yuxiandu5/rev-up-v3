@@ -47,29 +47,31 @@ export async function GET(req: NextRequest) {
         break;
     }
 
-    const orders = await prisma.order.findMany({
-      where,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      orderBy,
-      include: {
-        orderItems: {
-          include: {
-            product: true,
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy,
+        include: {
+          orderItems: {
+            include: {
+              product: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.order.count({ where }),
+    ]);
 
     const formattedOrders: OrderResponseDTO[] = orders.map(toOrderDTO);
-
-    const totalOrders = await prisma.order.count({ where });
 
     return okPaginated(
       formattedOrders,
       page,
       pageSize,
-      totalOrders,
+      total,
       "Successfully fetched orders!"
     );
   } catch (error) {
