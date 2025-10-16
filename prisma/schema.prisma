@@ -31,7 +31,6 @@ model User {
   Order         Order[]
 }
 
-// Rotating, single‑use refresh tokens. Store **hashes** only.
 model RefreshToken {
   id            String    @id @default(cuid())
   userId        String
@@ -48,9 +47,6 @@ model RefreshToken {
   @@index([userId, expiresAt])
 }
 
-// ----------------------
-// Car hierarchy
-// ----------------------
 model Make {
   id     String  @id @default(cuid())
   name   String  @unique // e.g. "BMW"
@@ -97,10 +93,6 @@ model ModelYearRange {
   mediaAsset       MediaAsset?
   ModCompatibility ModCompatibility[]
 }
-
-// ----------------------
-// Mods
-// ----------------------
 
 model ModCategory {
   id              String           @id @default(cuid())
@@ -168,9 +160,6 @@ model ModRequirement {
   dependent   Mod    @relation("Requirement_dependent", fields: [dependentId], references: [id])
 }
 
-// ----------------------
-// Media
-// ----------------------
 model MediaAsset {
   id   String  @id @default(cuid())
   name String
@@ -186,9 +175,6 @@ model MediaAsset {
   modelYearRange   ModelYearRange? @relation(fields: [modelYearRangeId], references: [id], onDelete: Cascade)
 }
 
-// ----------------------
-// User builds (saved configurations)
-// ----------------------
 model UserBuild {
   id     String @id @default(cuid())
   userId String
@@ -207,9 +193,6 @@ model UserBuild {
   @@index([userId])
 }
 
-// -----------------------------------
-// Product: what's for sale
-// -----------------------------------
 model Product {
   id          String  @id @default(cuid())
   name        String
@@ -238,9 +221,6 @@ model Product {
   @@index([isActive, priceCents])
 }
 
-// -----------------------------------
-// Cart: one per user
-// -----------------------------------
 model Cart {
   id        String     @id @default(cuid())
   userId    String?    @unique
@@ -266,9 +246,6 @@ model CartItem {
   @@unique([cartId, productId]) // no duplicate products in same cart
 }
 
-// -----------------------------------
-// Order: checkout receipt
-// -----------------------------------
 model Order {
   id     String @id @default(cuid())
   userId String
@@ -298,9 +275,6 @@ enum OrderStatus {
   CANCELLED
 }
 
-// -----------------------------------
-// OrderItem: products inside an order
-// -----------------------------------
 model OrderItem {
   id      String @id @default(cuid())
   orderId String

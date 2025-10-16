@@ -162,3 +162,8 @@ export function toCartDTO(cart: PrismaCartWithItems): CartResponseDTO {
     itemCount: itemCount,
   };
 }
+
+export interface CreateCheckoutSessionResponseDTO {
+  sessionId: string;
+  stripeUrl: string;
+}

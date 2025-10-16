@@ -155,6 +155,10 @@ jobs:
       AWS_SECRET_ACCESS_KEY: dummy-secret-for-build
       AWS_REGION: ap-southeast-2
       S3_BUCKET_NAME: dummy-bucket
+      APP_BASE_URL: http://localhost:3000
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
 
     steps:
       - name: Checkout code
