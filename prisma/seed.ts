@@ -15,6 +15,9 @@ async function main() {
     console.log("🌱 Running product seed...");
     execSync("npx tsx prisma/seedProducts.ts", { stdio: "inherit" });
 
+    console.log("🌱 Running order seed...");
+    execSync("npx tsx prisma/seedOrders.ts", { stdio: "inherit" });
+
     console.log("✅ All seeds completed successfully");
   } catch (err) {
     console.error("❌ Seed failed:", err);

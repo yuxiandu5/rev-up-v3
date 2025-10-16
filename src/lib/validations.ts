@@ -188,7 +188,7 @@ export const MarketPlacePaginationSchema = z.object({
 
 // General Validation
 export const IdSchema = z.object({
-  id: z.string().cuid(),
+  id: z.string(),
 });
 
 export const ManyIdSchema = z.object({
@@ -390,6 +390,27 @@ export const syncCartSchema = z.object({
     .max(50),
 });
 
+// order
+export const OrderPaginationSchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(1000).default(50),
+  sort: z
+    .enum([
+      "updatedAt_asc",
+      "updatedAt_desc",
+      "totalCents_asc",
+      "totalCents_desc",
+      "status_asc",
+      "status_desc",
+    ])
+    .default("updatedAt_desc"),
+  status: z.enum(["PENDING", "PAID", "FAILED", "CANCELLED"]).optional(),
+});
+
+export const OrderConfirmationSchema = z.object({
+  sessionId: z.string().min(1),
+});
+
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
@@ -446,3 +467,7 @@ export type syncCartInput = z.infer<typeof syncCartSchema>;
 
 // market place
 export type MarketPlacePaginationInput = z.infer<typeof MarketPlacePaginationSchema>;
+
+// order
+export type OrderPaginationInput = z.infer<typeof OrderPaginationSchema>;
+export type OrderConfirmationInput = z.infer<typeof OrderConfirmationSchema>;
