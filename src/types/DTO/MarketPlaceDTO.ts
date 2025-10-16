@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client";
+import { OrderStatus, Product } from "@prisma/client";
 
 export interface ProductResponseDTO {
   id: string;
@@ -166,4 +166,37 @@ export function toCartDTO(cart: PrismaCartWithItems): CartResponseDTO {
 export interface CreateCheckoutSessionResponseDTO {
   sessionId: string;
   stripeUrl: string;
+}
+
+export interface OrderResponseDTO {
+  id: string;
+  userId: string;
+  status: OrderStatus;
+  totalCents: number;
+  currency: string;
+
+  stripeSessionId: string | null;
+  stripePaymentId: string | null;
+
+  orderItems: OrderItemDTO[];
+  itemCount: number;
+  
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderItemDTO {
+  id: string;
+  orderId: string;
+  unitPriceCents: number;
+  quantity: number;
+  totalPriceCents: number;
+
+  productId: string;
+  productName: string;
+  productDescription: string;
+  productImageUrl: string;
+  
+  createdAt: string;
+  updatedAt: string;
 }
