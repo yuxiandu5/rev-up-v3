@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
     }
 
     return ok({ received: true }, "Webhook processed successfully");
-
   } catch (error) {
     console.error("Webhook error:", error);
     return errorToResponse(error);
@@ -66,7 +65,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     throw new NotFoundError(`Order with id ${orderId} not found`);
   }
 
-  if(order.status === "PAID") {
+  if (order.status === "PAID") {
     console.log(`Order ${orderId} already marked as PAID, skipping...`);
     return;
   }

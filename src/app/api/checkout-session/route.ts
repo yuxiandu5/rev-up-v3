@@ -37,46 +37,49 @@ export async function POST(req: NextRequest) {
       unitPriceCents: item.unitPriceCents,
     }));
 
-      const order = await prisma.order.create({
-        data: {
-          userId,
-          totalCents,
-          currency: CURRENCY,
-          status: "PENDING",
-          orderItems: {
-            create: orderItems,
-          },
+    const order = await prisma.order.create({
+      data: {
+        userId,
+        totalCents,
+        currency: CURRENCY,
+        status: "PENDING",
+        orderItems: {
+          create: orderItems,
         },
-      });
+      },
+    });
 
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: lineItems,
-        mode: "payment",
-        success_url: `${process.env.APP_BASE_URL}/orders/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.APP_BASE_URL}/cart`,
-        metadata: {
-          orderId: order.id,
-          cartId: cart.id,
-        },
-        branding_settings: {
-          background_color: "#1a1a1a",
-        },
-      });
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      success_url: `${process.env.APP_BASE_URL}/orders/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.APP_BASE_URL}/cart`,
+      metadata: {
+        orderId: order.id,
+        cartId: cart.id,
+      },
+      branding_settings: {
+        background_color: "#1a1a1a",
+      },
+    });
 
-      if (!session.id || !session.url) {
-        throw new Error("Failed to create Stripe checkout session");
-      }
+    if (!session.id || !session.url) {
+      throw new Error("Failed to create Stripe checkout session");
+    }
 
-      await prisma.order.update({
-        where: { id: order.id },
-        data: { stripeSessionId: session.id },
-      });
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { stripeSessionId: session.id },
+    });
 
-    return ok({
-      sessionId: session.id,
-      stripeUrl: session.url,
-    }, "Checkout session created successfully");
+    return ok(
+      {
+        sessionId: session.id,
+        stripeUrl: session.url,
+      },
+      "Checkout session created successfully"
+    );
   } catch (e) {
     console.log("POST /api/checkout-session error:", e);
     return errorToResponse(e);
