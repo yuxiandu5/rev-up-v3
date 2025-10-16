@@ -1,4 +1,4 @@
-import { OrderStatus, Product } from "@prisma/client";
+import { OrderItem, Order, OrderStatus, Product } from "@prisma/client";
 
 export interface ProductResponseDTO {
   id: string;
@@ -179,8 +179,7 @@ export interface OrderResponseDTO {
   stripePaymentId: string | null;
 
   orderItems: OrderItemDTO[];
-  itemCount: number;
-  
+
   createdAt: string;
   updatedAt: string;
 }
@@ -196,7 +195,40 @@ export interface OrderItemDTO {
   productName: string;
   productDescription: string;
   productImageUrl: string;
-  
+
   createdAt: string;
-  updatedAt: string;
+}
+
+export function toOrderDTO(
+  order: Order & {
+    orderItems: (OrderItem & { product: Product })[];
+  }
+): OrderResponseDTO {
+  return {
+    id: order.id,
+    userId: order.userId,
+    status: order.status,
+    totalCents: order.totalCents,
+    currency: order.currency,
+    stripeSessionId: order.stripeSessionId,
+    stripePaymentId: order.stripePaymentId,
+    orderItems: order.orderItems.map(toOrderItemDTO),
+    createdAt: order.createdAt.toISOString(),
+    updatedAt: order.updatedAt.toISOString(),
+  };
+}
+
+export function toOrderItemDTO(orderItem: OrderItem & { product: Product }): OrderItemDTO {
+  return {
+    id: orderItem.id,
+    orderId: orderItem.orderId,
+    unitPriceCents: orderItem.unitPriceCents,
+    quantity: orderItem.quantity,
+    totalPriceCents: orderItem.unitPriceCents * orderItem.quantity,
+    productId: orderItem.productId,
+    productName: orderItem.product.name,
+    productDescription: orderItem.product.description ?? "",
+    productImageUrl: orderItem.product.imageUrl,
+    createdAt: orderItem.createdAt.toISOString(),
+  };
 }

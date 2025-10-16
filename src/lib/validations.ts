@@ -188,7 +188,7 @@ export const MarketPlacePaginationSchema = z.object({
 
 // General Validation
 export const IdSchema = z.object({
-  id: z.string().cuid(),
+  id: z.string(),
 });
 
 export const ManyIdSchema = z.object({
@@ -394,7 +394,16 @@ export const syncCartSchema = z.object({
 export const OrderPaginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(1000).default(50),
-  sort: z.enum(["createdAt_asc", "createdAt_desc"]).default("createdAt_asc"),
+  sort: z
+    .enum([
+      "updatedAt_asc",
+      "updatedAt_desc",
+      "totalCents_asc",
+      "totalCents_desc",
+      "status_asc",
+      "status_desc",
+    ])
+    .default("updatedAt_desc"),
   status: z.enum(["PENDING", "PAID", "FAILED", "CANCELLED"]).optional(),
 });
 
