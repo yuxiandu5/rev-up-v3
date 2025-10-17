@@ -128,12 +128,6 @@ export function OrderDetail({ order, onBack }: OrderDetailProps) {
         <div className="border-t border-[var(--bg-dark3)] mt-6 pt-4">
           <div className="flex justify-end">
             <div className="w-64">
-              <div className="flex justify-between py-2">
-                <span className="text-[var(--text2)]">Subtotal</span>
-                <span className="font-medium text-[var(--text1)]">
-                  {formatCurrency(order.totalCents, order.currency)}
-                </span>
-              </div>
               <div className="flex justify-between py-2 text-lg font-semibold border-t border-[var(--bg-dark3)]">
                 <span className="text-[var(--text1)]">Total</span>
                 <span className="text-[var(--highlight)]">
