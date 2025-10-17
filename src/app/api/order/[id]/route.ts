@@ -1,6 +1,6 @@
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { requireAuth } from "@/lib/auth-guard";
-import { NotFoundError, UnauthorizedError } from "@/lib/errors/AppError";
+import { NotFoundError } from "@/lib/errors/AppError";
 import { prisma } from "@/lib/prisma";
 import { IdSchema } from "@/lib/validations";
 import { OrderResponseDTO, toOrderDTO } from "@/types/DTO/MarketPlaceDTO";
