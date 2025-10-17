@@ -17,8 +17,7 @@ export default function MarketPlaceSideBar() {
     {
       section: "My Account",
       items: [
-        { href: "/market-place/my-listings", label: "My Listings", icon: Package },
-        { href: "/market-place/purchases", label: "My Purchases", icon: ShoppingBag },
+        { href: "/market-place/orders", label: "My Orders", icon: ShoppingBag },
         { href: "/market-place/favorites", label: "Favorites", icon: Heart },
       ],
     },

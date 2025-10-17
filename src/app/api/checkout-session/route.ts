@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { calculateTotalPrice, createStripeLineItems } from "@/app/api/checkout-session/helper";
 import { NextRequest } from "next/server";
-import { CreateCheckoutSessionResponseDTO } from "@/types/DTO/MarketPlaceDTO";
 
 const CURRENCY = "AUD";
 
