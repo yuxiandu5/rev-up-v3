@@ -3,6 +3,8 @@ import { Loading } from "@/components/ui/Loading";
 import { CreditCard } from "lucide-react";
 import { CartItemDTO } from "@/types/DTO/MarketPlaceDTO";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
+import ShowSignIn from "@/components/ShowSignIn";
 
 interface OrderSummaryProps {
   cartItems: CartItemDTO[];
@@ -21,6 +23,21 @@ export default function OrderSummary({
   subtotalCents,
 }: OrderSummaryProps) {
   const router = useRouter();
+  const { user, isInitialized } = useAuthStore();
+
+  if (!isInitialized) {
+    return (
+      <div className="lg:col-span-1">
+        <div className="flex flex-col justify-center items-center bg-[var(--bg-dark3)] rounded-lg p-6 sticky top-4 h-full">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--highlight)]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <ShowSignIn />;
+  }
   return (
     <div className="lg:col-span-1">
       <div className="flex flex-col justify-between bg-[var(--bg-dark3)] rounded-lg p-6 sticky top-4 h-full">

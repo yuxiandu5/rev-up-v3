@@ -22,6 +22,7 @@ interface CartState {
   clearCart: () => Promise<void>;
   syncGuestCart: () => Promise<void>;
   fetchCart: () => Promise<void>;
+  checkout: () => Promise<void>;
 
   revertOptimisticUpdate: () => void;
   showError: (message: string) => void;
@@ -271,6 +272,27 @@ export const useCartStore = create<CartState>()(
             get().showError(e.message);
           } else {
             get().showError("Unexpected error");
+          }
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
+      checkout: async () => {
+        set({ isLoading: true });
+        try {
+          const res = await apiCall("/api/checkout-session", {
+            method: "POST",
+          });
+          if (!res.ok) throw new Error("Failed to create checkout session");
+
+          const { data } = await res.json();
+          window.location.href = data.stripeUrl;
+        } catch (e) {
+          if (e instanceof Error) {
+            get().showError(e.message);
+          } else {
+            get().showError("Failed to initiate checkout");
           }
         } finally {
           set({ isLoading: false });

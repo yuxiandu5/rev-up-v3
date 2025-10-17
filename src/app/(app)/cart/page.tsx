@@ -5,11 +5,9 @@ import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import OrderSummary from "./component/OrderSummary";
 import Cart from "./component/Cart";
-import { toast } from "sonner";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
 
 export default function CartPage() {
-  const [isLoading, setIsLoading] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -19,7 +17,8 @@ export default function CartPage() {
   const removeItem = useCartStore((state) => state.removeItem);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
-
+  const checkout = useCartStore((state) => state.checkout);
+  const isLoading = useCartStore((state) => state.isLoading);
   const sortedCartItems = [...cartItems].sort((a, b) => a.id.localeCompare(b.id));
   const productCount = cartItems.length;
 
@@ -33,11 +32,7 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast("Checkout functionality would be implemented here!");
-    }, 1000);
+    checkout();
   };
 
   const formatPrice = (cents: number) => `$${(cents / 100).toFixed(2)}`;
