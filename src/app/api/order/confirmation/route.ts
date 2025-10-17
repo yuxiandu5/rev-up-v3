@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { OrderConfirmationSchema } from "@/lib/validations";
 import { prisma } from "@/lib/prisma";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "@/lib/errors/AppError";
+import { BadRequestError, NotFoundError } from "@/lib/errors/AppError";
 import { requireAuth } from "@/lib/auth-guard";
 import { errorToResponse, ok } from "@/lib/apiResponse";
 import { OrderResponseDTO, toOrderDTO } from "@/types/DTO/MarketPlaceDTO";
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
     const { sessionId } = OrderConfirmationSchema.parse({
-      sessionId: searchParams.get("sessionId") ?? "",
+      sessionId: searchParams.get("session_id") ?? "",
     });
     if (!sessionId) throw new BadRequestError("Session ID is required!");
 
