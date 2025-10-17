@@ -29,13 +29,9 @@ export default function ShowSignIn({
               <LogIn className="w-8 h-8 text-[var(--text2)]" />
             </div>
 
-            <h3 className="text-lg font-medium text-[var(--text1)]">
-              Sign In Required
-            </h3>
+            <h3 className="text-lg font-medium text-[var(--text1)]">Sign In Required</h3>
 
-            <p className="text-[var(--text2)] text-sm max-w-xs leading-relaxed">
-              {message}
-            </p>
+            <p className="text-[var(--text2)] text-sm max-w-xs leading-relaxed">{message}</p>
           </div>
         </div>
 
