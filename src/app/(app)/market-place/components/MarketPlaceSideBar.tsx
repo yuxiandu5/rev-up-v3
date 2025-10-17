@@ -10,22 +10,8 @@ export default function MarketPlaceSideBar() {
       section: "Browse",
       items: [
         { href: "/market-place", label: "All Items", icon: Grid3X3 },
-        { href: "/market-place/categories", label: "Categories", icon: Tag },
-        { href: "/market-place/deals", label: "Deals & Offers", icon: ShoppingBag },
-      ],
-    },
-    {
-      section: "My Account",
-      items: [
+        { href: "/profile", label: "Profile", icon: User },
         { href: "/market-place/orders", label: "My Orders", icon: ShoppingBag },
-        { href: "/market-place/favorites", label: "Favorites", icon: Heart },
-      ],
-    },
-    {
-      section: "Settings",
-      items: [
-        { href: "/market-place/profile", label: "Profile", icon: User },
-        { href: "/market-place/settings", label: "Market Settings", icon: Settings },
       ],
     },
   ];
