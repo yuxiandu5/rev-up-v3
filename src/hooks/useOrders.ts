@@ -109,11 +109,6 @@ export function useOrders(): UseOrdersReturn {
     fetchOrders(filters, false);
   }, [filters.sort, filters.status, isInitialized]);
 
-  useEffect(() => {
-    if (!isInitialized) return;
-    fetchOrders(initialFilters, false);
-  }, [isInitialized]);
-
   return {
     orders,
     total,
